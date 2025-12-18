@@ -2101,7 +2101,8 @@ input#switch-close:checked~.register .inner {
 
 @media (max-width:576px){
   .panel .login{
-    margin-left: 10px;
+  transform: translateX(150px);
+
   }
 }
 /* ----- RESPONSIVE END ----- */
