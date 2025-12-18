@@ -19,6 +19,15 @@ const Header = ({ cartCount }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const searchRef = useRef(null);
 
+  const closeMobileMenu = () => {
+    if (isMobile) {
+      setMenuOpen(false);
+      setBrandOpen(false);
+      setColOpen(false);
+      setFaqOpen(false);
+    }
+  };
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 991);
   console.log(megaOpen);
 
@@ -42,21 +51,25 @@ const Header = ({ cartCount }) => {
           <button
             className="navbar-toggler"
             onClick={() => {
-              setMenuOpen(!menuOpen);
-              setMegaOpen(false);
-            }}>
-            <FiMenu size={22} />
+              setMenuOpen(prev => !prev);
+              setBrandOpen(false);
+              setColOpen(false);
+              setFaqOpen(false);
+            }}
+          >
+            {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
+
 
           <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
             <ul className="navbar-nav mx-auto">
 
               <li className="nav-item my-1 my-lg-0">
-                <NavLink className="c-nav-link" to="/">Home</NavLink>
+                <NavLink className="c-nav-link" to="/" onClick={closeMobileMenu}>Home</NavLink>
               </li>
 
               <li className="nav-item my-1 my-lg-0">
-                <NavLink className="c-nav-link" to="/product">Product</NavLink>
+                <NavLink className="c-nav-link" to="/product" onClick={closeMobileMenu}>Product</NavLink>
               </li>
 
               <li
@@ -72,8 +85,8 @@ const Header = ({ cartCount }) => {
                     setFaqOpen(false);
                   }}
                 >
-                  <NavLink to='/brand' className='c-nav-link d-flex align-items-center'>
-                    Brand <IoIosArrowDown className="d-lg-flex d-none ms-1"/>
+                  <NavLink to='/brand' onClick={closeMobileMenu} className='c-nav-link d-flex align-items-center' >
+                    Brand <IoIosArrowDown className="d-lg-flex d-none ms-1" />
                   </NavLink>
                   {isMobile && (
                     <span className={`arrow ${brandOpen ? "rotate" : ""}`}>▾</span>
@@ -85,28 +98,28 @@ const Header = ({ cartCount }) => {
                     <div className="row text-lg-center">
 
                       <div className="p-0 col-md-3 col-12">
-                        <Link to='/brand/durex' className="text-uppercase m-0 my-1">durex</Link>
+                        <Link to='/brand/durex' onClick={closeMobileMenu} className="text-uppercase m-0 my-1">durex</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12">
-                        <Link to='/brand/manforce' className="text-uppercase m-0 my-1">manforce</Link>
+                        <Link to='/brand/manforce' onClick={closeMobileMenu} className="text-uppercase m-0 my-1">manforce</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12">
-                        <Link to='/brand/mschief' className="text-uppercase m-0 my-1">mschief</Link>
+                        <Link to='/brand/mschief' onClick={closeMobileMenu} className="text-uppercase m-0 my-1">mschief</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12">
-                        <Link to='/brand/sensation' className="text-uppercase m-0 my-1">sensation</Link>
+                        <Link to='/brand/sensation' onClick={closeMobileMenu} className="text-uppercase m-0 my-1">sensation</Link>
                       </div>
                       <div className="p-0 col-md-3 col-12">
-                        <Link to='/brand/skore' className="text-uppercase m-0 my-1">skore</Link>
+                        <Link to='/brand/skore' onClick={closeMobileMenu} className="text-uppercase m-0 my-1">skore</Link>
                       </div>
                       <div className="p-0 col-md-3 col-12">
-                        <Link to='/brand/ramp' className="text-uppercase m-0 my-1">ramp</Link>
+                        <Link to='/brand/ramp' onClick={closeMobileMenu} className="text-uppercase m-0 my-1">ramp</Link>
                       </div>
                       <div className="p-0 col-md-3 col-12">
-                        <Link to='/brand/iroha' className="text-uppercase m-0 my-1">iroha</Link>
+                        <Link to='/brand/iroha' onClick={closeMobileMenu} className="text-uppercase m-0 my-1">iroha</Link>
                       </div>
 
                     </div>
@@ -128,8 +141,8 @@ const Header = ({ cartCount }) => {
                     setFaqOpen(false);
                   }}
                 >
-                  <NavLink to='/collection' className='c-nav-link d-flex align-items-center'>
-                    Collection <IoIosArrowDown className="d-lg-flex d-none ms-1"/>
+                  <NavLink to='/collection' onClick={closeMobileMenu} className='c-nav-link d-flex align-items-center'>
+                    Collection <IoIosArrowDown className="d-lg-flex d-none ms-1" />
                   </NavLink>
                   {isMobile && (
                     <span className={`arrow ${colOpen ? "rotate" : ""}`}>▾</span>
@@ -142,42 +155,42 @@ const Header = ({ cartCount }) => {
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c1.png')} alt="" />
-                        <Link to='/collection/new-arrivals' className="text-uppercase m-0 ms-4">new arrivals</Link>
+                        <Link onClick={closeMobileMenu} to='/collection/new-arrivals' className="text-uppercase m-0 ms-4">new arrivals</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c2.png')} alt="" />
-                        <Link to='/collection/best-sellers' className="text-uppercase m-0 ms-4">best sellers</Link>
+                        <Link onClick={closeMobileMenu} to='/collection/best-sellers' className="text-uppercase m-0 ms-4">best sellers</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c3.png')} alt="" />
-                        <Link to='/collection/deals' className="text-uppercase m-0 ms-4 ">deals</Link>
+                        <Link onClick={closeMobileMenu} to='/collection/deals' className="text-uppercase m-0 ms-4 ">deals</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c4.png')} alt="" />
-                        <Link to='/collection/feature-products' className="text-uppercase m-0 ms-4">featured products</Link>
+                        <Link onClick={closeMobileMenu} to='/collection/feature-products' className="text-uppercase m-0 ms-4">featured products</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c5.png')} alt="" />
-                        <Link to='/collection/combos' className="text-uppercase m-0 ms-4">combos</Link>
+                        <Link onClick={closeMobileMenu} to='/collection/combos' className="text-uppercase m-0 ms-4">combos</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c6.png')} alt="" />
-                        <Link to='#' className="text-uppercase m-0 ms-4">shop under 1599</Link>
+                        <Link onClick={closeMobileMenu} to='#' className="text-uppercase m-0 ms-4">shop under 1599</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c7.png')} alt="" />
-                        <Link to='#' className="text-uppercase m-0 ms-4">shop under 2599</Link>
+                        <Link onClick={closeMobileMenu} to='#' className="text-uppercase m-0 ms-4">shop under 2599</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={require('../Img/c8.png')} alt="" />
-                        <Link to='#' className="text-uppercase m-0 ms-4">shop under 5999</Link>
+                        <Link onClick={closeMobileMenu} to='#' className="text-uppercase m-0 ms-4">shop under 5999</Link>
                       </div>
 
                     </div>
@@ -186,7 +199,7 @@ const Header = ({ cartCount }) => {
               </li>
 
               <li className="nav-item my-1 my-lg-0">
-                <NavLink className="c-nav-link" to="/about-us">About</NavLink>
+                <NavLink className="c-nav-link" onClick={closeMobileMenu} to="/about-us">About</NavLink>
               </li>
 
               <li
@@ -202,8 +215,8 @@ const Header = ({ cartCount }) => {
                     setColOpen(false);
                   }}
                 >
-                  <NavLink to='/shop' className='c-nav-link d-flex align-items-center'>
-                    Shopping & FAQs <IoIosArrowDown className="d-lg-flex d-none ms-1"/>
+                  <NavLink to='/shop' onClick={closeMobileMenu} className='c-nav-link d-flex align-items-center'>
+                    Shopping & FAQs <IoIosArrowDown className="d-lg-flex d-none ms-1" />
                   </NavLink>
                   {isMobile && (
                     <span className={`arrow ${faqOpen ? "rotate" : ""}`}>▾</span>
@@ -216,22 +229,22 @@ const Header = ({ cartCount }) => {
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={f1} alt="" />
-                        <Link to='/how-we-deliver' className="text-uppercase m-0 ms-4">how we deliver</Link>
+                        <Link onClick={closeMobileMenu} to='/how-we-deliver' className="text-uppercase m-0 ms-4">how we deliver</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={f2} alt="" />
-                        <Link to='/track-my-order' className="text-uppercase m-0 ms-4">track my order</Link>
+                        <Link onClick={closeMobileMenu} to='/track-my-order' className="text-uppercase m-0 ms-4">track my order</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={f3} alt="" />
-                        <Link to='/return-&-refund' className="text-uppercase m-0 ms-4 ">return & refunds</Link>
+                        <Link onClick={closeMobileMenu} to='/return-&-refund' className="text-uppercase m-0 ms-4 ">return & refunds</Link>
                       </div>
 
                       <div className="p-0 col-md-3 col-12 d-flex align-items-center">
                         <img src={f4} alt="" />
-                        <Link to='/faq' className="text-uppercase m-0 ms-4">FAQ</Link>
+                        <Link onClick={closeMobileMenu} to='/faq' className="text-uppercase m-0 ms-4">FAQ</Link>
                       </div>
 
                     </div>
@@ -266,9 +279,9 @@ const Header = ({ cartCount }) => {
                 <FiSearch size={20} />
               </button>
 
-              <Link to="/wishlist"><FiHeart size={20} /></Link>
-              <Link to="/account"><FaRegCircleUser size={20} /></Link>
-              <Link to="/add-to-cart" className="position-relative">
+              <Link onClick={closeMobileMenu} to="/wishlist"><FiHeart size={20} /></Link>
+              <Link onClick={closeMobileMenu} to="/account"><FaRegCircleUser size={20} /></Link>
+              <Link onClick={closeMobileMenu} to="/add-to-cart" className="position-relative">
                 <FiShoppingCart size={20} />
                 {cartCount > 0 && (
                   <span className="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

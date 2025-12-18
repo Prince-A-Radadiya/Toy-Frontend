@@ -89,7 +89,13 @@ header {
   color: var(--col-card-bg);
 
 }
-
+.navbar-toggler{
+  border: none!important;
+}
+.navbar-toggler:focus{
+  border: none!important;
+  box-shadow: none!important;
+}
 .mega-menu.open {
   opacity: 1;
   visibility: visible;
