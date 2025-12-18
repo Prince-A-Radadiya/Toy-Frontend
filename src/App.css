@@ -6,6 +6,12 @@
   box-sizing: border-box;
   font-family: "Open Sans", sans-serif !important;
   outline: none !important;
+
+    --border-radius: 12px;
+  --spacing-lg: 24px;
+  --spacing-md: 16px;
+  --spacing-sm: 8px;
+
 }
 
 :root {
@@ -1664,7 +1670,7 @@ CURATED SECTION
 
 /* PANEL */
 .panel {
-  width: 640px;
+  width: 640;
   height: auto;
   display: flex;
   justify-content: center;
@@ -2048,6 +2054,7 @@ input#switch-close:checked~.register .inner {
 }
 
 @media (max-width: 991px) {
+  
   .custom-dropdown {
     position: static;
     transform: none;

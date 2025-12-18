@@ -18,6 +18,8 @@ const Header = ({ cartCount }) => {
   const [faqOpen, setFaqOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchRef = useRef(null);
+  
+  console.log(setMegaOpen);
 
   const closeMobileMenu = () => {
     if (isMobile) {
