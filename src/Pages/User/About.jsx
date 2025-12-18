@@ -88,7 +88,7 @@ const About = () => {
             {/* LEFT IMAGE */}
             <div className="curated-image">
               {/* you will add image here */}
-              <img src={require('../Img/about.png')} alt="Curated products" />
+              <img src={require('../../Img/about.png')} alt="Curated products" />
             </div>
 
             {/* RIGHT CONTENT */}

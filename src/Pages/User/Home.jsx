@@ -17,7 +17,7 @@ const Home = ({ setCartCount }) => {
             rating: 4.9,
             reviews: 128,
             tag: "BEST SELLER",
-            image: require('../Img/t1.png'),
+            image: require('../../Img/t1.png'),
         },
         {
             id: 2,
@@ -26,7 +26,7 @@ const Home = ({ setCartCount }) => {
             price: 89,
             rating: 4.7,
             reviews: 84,
-            image: require('../Img/t2.png'),
+            image: require('../../Img/t2.png'),
         },
         {
             id: 3,
@@ -36,7 +36,7 @@ const Home = ({ setCartCount }) => {
             rating: 5.0,
             reviews: 21,
             tag: "NEW",
-            image: require('../Img/t3.png'),
+            image: require('../../Img/t3.png'),
         },
         {
             id: 4,
@@ -45,7 +45,7 @@ const Home = ({ setCartCount }) => {
             price: 24,
             rating: 4.8,
             reviews: 340,
-            image: require('../Img/t4.png'),
+            image: require('../../Img/t4.png'),
         },
     ];
 
@@ -69,8 +69,8 @@ const Home = ({ setCartCount }) => {
 
                 <section className="hero-banner">
                     <Link to='/shop'>
-                        <img className="d-md-block d-none" src={require('../Img/homebanner.jpg')} alt="" />
-                        <img className="d-md-none" src={require('../Img/homebanner2.jpg')} alt="" />
+                        <img className="d-md-block d-none" src={require('../../Img/homebanner.jpg')} alt="" />
+                        <img className="d-md-none" src={require('../../Img/homebanner2.jpg')} alt="" />
                     </Link>
                 </section>
 

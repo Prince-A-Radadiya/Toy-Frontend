@@ -5,8 +5,8 @@ const Deliver = () => {
     <div className="deliver">
       <section className="hero-banner">
         <Link to='/shop'>
-          <img className="d-md-block d-none w-100" src={require('../Img/deliver.jpg')} alt="" />
-          <img className="d-md-none w-100" src={require('../Img/deliver2.jpg')} alt="" />
+          <img className="d-md-block d-none w-100" src={require('../../Img/deliver.jpg')} alt="" />
+          <img className="d-md-none w-100" src={require('../../Img/deliver2.jpg')} alt="" />
         </Link>
       </section>
 
@@ -17,7 +17,7 @@ const Deliver = () => {
               <div className="box d-flex flex-column flex-lg-row align-items-center">
                 <div className="left mb-3 mb-lg-0">
                   <img
-                    src={require('../Img/box.png')}
+                    src={require('../../Img/box.png')}
                     alt="Discreet Packaging"
                     className="img-fluid"
                   />
@@ -38,7 +38,7 @@ const Deliver = () => {
             </div>
             <div className="col-12 text-center mt-4">
               <img
-                src={require('../Img/label.png')}
+                src={require('../../Img/label.png')}
                 alt="Label"
                 className="img-fluid"
               />

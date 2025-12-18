@@ -1,10 +1,10 @@
 import { useState } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [name, setname] = useState("");
     const [email, setemail] = useState("");
@@ -12,58 +12,58 @@ const Account = () => {
 
     // Login
     const login = async (e) => {
-    //     e.preventDefault();
+        e.preventDefault();
 
-    //     try {
-    //         const res = await axios.post("http://localhost:9000/login", {
-    //             email,
-    //             password,
-    //         });
+        try {
+            const res = await axios.post("http://localhost:9000/login", {
+                email,
+                password,
+            });
 
-    //         if (res.data.token) {
-    //             alert(res.data.message);
+            if (res.data.token) {
+                alert(res.data.message);
 
-    //             localStorage.setItem("token", res.data.token);  // FIXED
-    //             localStorage.setItem("role", res.data.role);
+                localStorage.setItem("token", res.data.token);  // FIXED
+                localStorage.setItem("role", res.data.role);
 
-    //             // Redirect by role
-    //             if (res.data.role === "admin") {
-    //                 navigate("/adminpanel");
-    //             } else {
-    //                 navigate("/");
-    //             }
-    //         }
-    //     } catch (err) {
-    //         alert(err.response?.data?.message || "Server error");
-    //     }
+                // Redirect by role
+                if (res.data.role === "admin") {
+                    navigate("/adminpanel");
+                } else {
+                    navigate("/");
+                }
+            }
+        } catch (err) {
+            alert(err.response?.data?.message || "Server error");
+        }
     };
 
     // Register
     const register = async (e) => {
-        // e.preventDefault();
+        e.preventDefault();
 
-        // try {
-        //     const res = await axios.post("http://localhost:9000/register", {
-        //         fullname: name,
-        //         email,
-        //         password,
-        //     });
+        try {
+            const res = await axios.post("http://localhost:9000/register", {
+                fullname: name,
+                email,
+                password,
+            });
 
-        //     if (res.data.token) {
-        //         alert(res.data.message);
+            if (res.data.token) {
+                alert(res.data.message);
 
-        //         localStorage.setItem("token", res.data.token);  // FIXED
-        //         localStorage.setItem("role", res.data.role);
+                localStorage.setItem("token", res.data.token);  // FIXED
+                localStorage.setItem("role", res.data.role);
 
-        //         if (res.data.role === "admin") {
-        //             navigate("/adminpanel");
-        //         } else {
-        //             navigate("/");
-        //         }
-        //     }
-        // } catch (err) {
-        //     alert(err.response?.data?.message || "Server error");
-        // }
+                if (res.data.role === "admin") {
+                    navigate("/adminpanel");
+                } else {
+                    navigate("/");
+                }
+            }
+        } catch (err) {
+            alert(err.response?.data?.message || "Server error");
+        }
     };
 
     return (

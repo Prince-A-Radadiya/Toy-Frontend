@@ -13,21 +13,21 @@ import Header from './Component/Header';
 import Footer from './Component/Footer';
 
 // ------ USER PAGES -------
-import Home from './Pages/Home';
-import Product from './Pages/Product';
-import Brand from './Pages/Brand';
-import Collection from './Pages/Collection';
-import About from './Pages/About';
-import Deliver from './Pages/Deliver';
-import Trackorder from './Pages/Trackorder';
-import ReturnnRefund from './Pages/ReturnnRefund';
-import Wishlist from './Pages/Wishlist';
-import Account from './Pages/Account';
-import Addtocart from './Pages/Addtocart';
-import AgeGate from './Pages/AgeGate';
-import Faq from './Pages/Faq';
-import Error404 from './Pages/Error404';
-import Shop from './Pages/Shop';
+import Home from './Pages/User/Home';
+import Product from './Pages/User/Product';
+import Brand from './Pages/User/Brand';
+import Collection from './Pages/User/Collection';
+import About from './Pages/User/About';
+import Deliver from './Pages/User/Deliver';
+import Trackorder from './Pages/User/Trackorder';
+import ReturnnRefund from './Pages/User/ReturnnRefund';
+import Wishlist from './Pages/User/Wishlist';
+import Account from './Pages/User/Account';
+import Addtocart from './Pages/User/Addtocart';
+import AgeGate from './Pages/User/AgeGate';
+import Faq from './Pages/User/Faq';
+import Error404 from './Pages/User/Error404';
+import Shop from './Pages/User/Shop';
 
 function App() {
 

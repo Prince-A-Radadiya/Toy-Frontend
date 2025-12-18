@@ -15,7 +15,7 @@ const PRODUCTS = Array.from({ length: 148 }, (_, i) => ({
   oldPrice: 4668 + i * 5,
   discount: `${(i % 50) + 1}% Off`,
   rating: 5,
-  image: require("../Img/t1.png"),
+  image: require("../../Img/t1.png"),
   freeLube: i % 2 === 0,
 
   // ✅ ADD THESE
@@ -412,12 +412,12 @@ const Product = ({ setCartCount }) => {
       <section className="hero-banner">
         <img
           className="d-md-block d-none w-100"
-          src={require("../Img/banner.jpg")}
+          src={require("../../Img/banner.jpg")}
           alt=""
         />
         <img
           className="d-md-none w-100"
-          src={require("../Img/banner2.jpg")}
+          src={require("../../Img/banner2.jpg")}
           alt=""
         />
       </section>
