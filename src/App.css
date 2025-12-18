@@ -2117,6 +2117,7 @@ html, body {
   .panel .login {
     transform: translateX(95px);
      width: 240px;
+     background-color: #1abc9c;
     /* height: auto; */
   }
 
