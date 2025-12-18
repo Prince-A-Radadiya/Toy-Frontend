@@ -2104,5 +2104,8 @@ input#switch-close:checked~.register .inner {
   transform: translateX(150px);
 
   }
+  .panel .register{
+    transform: translateX(-10px);
+  }
 }
 /* ----- RESPONSIVE END ----- */
