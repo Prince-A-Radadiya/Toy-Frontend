@@ -2120,6 +2120,7 @@ html, body {
 @media (max-width: 576px) {
   .panel .login {
     transform: translateX(80px);
+    background-color: #1abc9c;
   }
 
   .panel .register {
