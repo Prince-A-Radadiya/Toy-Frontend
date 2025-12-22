@@ -1,146 +1,144 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../Context/CartContext";
 
 const Account = () => {
+  const navigate = useNavigate();
+  const { setUser } = useCart(); // <-- CartContext
 
-    const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const [name, setname] = useState("");
-    const [email, setemail] = useState("");
-    const [password, setpassword] = useState("");
+  // Login
+  const login = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:9000/login", { email, password });
 
-    // Login
-    const login = async (e) => {
-        e.preventDefault();
+      if (res.data.token) {
+        alert(res.data.message);
 
-        try {
-            const res = await axios.post("http://localhost:9000/login", {
-                email,
-                password,
-            });
+        // Save token and role
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", res.data.role);
 
-            if (res.data.token) {
-                alert(res.data.message);
+        // Save user for CartContext
+        const loggedInUser = {
+          id: res.data.user.id || res.data.user._id, // support backend user.id or _id
+          name: res.data.user.fullname || res.data.user.email,
+        };
+        localStorage.setItem("user", JSON.stringify(loggedInUser));
+        setUser(loggedInUser); // <-- CartContext updates immediately
 
-                localStorage.setItem("token", res.data.token);  // FIXED
-                localStorage.setItem("role", res.data.role);
+        // Redirect
+        if (res.data.role === "admin") navigate("/admin-dashboard");
+        else navigate("/");
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Server error");
+    }
+  };
 
-                // Redirect by role
-                if (res.data.role === "admin") {
-                    navigate("/admin-dashboard");
-                } else {
-                    navigate("/");
-                }
-            }
-        } catch (err) {
-            alert(err.response?.data?.message || "Server error");
-        }
-    };
+  // Register
+  const register = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:9000/register", {
+        fullname: name,
+        email,
+        password,
+      });
 
-    // Register
-    const register = async (e) => {
-        e.preventDefault();
+      if (res.data.token) {
+        alert(res.data.message);
 
-        try {
-            const res = await axios.post("http://localhost:9000/register", {
-                fullname: name,
-                email,
-                password,
-            });
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", res.data.role);
 
-            if (res.data.token) {
-                alert(res.data.message);
+        const newUser = {
+          id: res.data.user.id || res.data.user._id,
+          name: res.data.user.fullname,
+        };
+        localStorage.setItem("user", JSON.stringify(newUser));
+        setUser(newUser); // <-- CartContext updates immediately
 
-                localStorage.setItem("token", res.data.token);  // FIXED
-                localStorage.setItem("role", res.data.role);
+        if (res.data.role === "admin") navigate("/admin-dashboard");
+        else navigate("/");
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Server error");
+    }
+  };
 
-                if (res.data.role === "admin") {
-                    navigate("/admin-dashboard");
-                } else {
-                    navigate("/");
-                }
-            }
-        } catch (err) {
-            alert(err.response?.data?.message || "Server error");
-        }
-    };
+  return (
+    <div className="container">
+      <div className="account">
+        <div className="bg"></div>
+        <div className="panel">
+          <input type="radio" id="switch-open" name="switch" />
+          <input type="radio" id="switch-close" name="switch" />
 
-    return (
-        <div className="container">
-            <div className="account">
-                <div className="bg"></div>
-
-                <div className="panel">
-                    <input type="radio" id="switch-open" name="switch" />
-                    <input type="radio" id="switch-close" name="switch" />
-
-                    {/* LOGIN */}
-                    <div className="login">
-                        <h1>LOGIN</h1>
-
-                        <div className="group">
-                            <input type="text"
-                                placeholder="E-Mail"
-                                value={email}
-                                onChange={(e) => setemail(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="group">
-                            <input type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setpassword(e.target.value)}
-                            />
-                        </div>
-
-                        <input type="submit" value="LOGIN" onClick={login} />
-                    </div>
-
-                    {/* REGISTER */}
-                    <div className="register">
-                        <label className="button-open" htmlFor="switch-open"></label>
-                        <label className="button-close" htmlFor="switch-close"></label>
-
-                        <div className="inner">
-                            <h1>REGISTER</h1>
-
-                            <div className="group">
-                                <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={name}
-                                    onChange={(e) => setname(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="group">
-                                <input
-                                    type="text"
-                                    placeholder="E-Mail"
-                                    value={email}
-                                    onChange={(e) => setemail(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="group">
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={(e) => setpassword(e.target.value)}
-                                />
-                            </div>
-
-                            <input type="submit" value="REGISTER" onClick={register} />
-                        </div>
-                    </div>
-
-                </div>
+          {/* LOGIN */}
+          <div className="login">
+            <h1>LOGIN</h1>
+            <div className="group">
+              <input
+                type="text"
+                placeholder="E-Mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
+            <div className="group">
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <input type="submit" value="LOGIN" onClick={login} />
+          </div>
+
+          {/* REGISTER */}
+          <div className="register">
+            <label className="button-open" htmlFor="switch-open"></label>
+            <label className="button-close" htmlFor="switch-close"></label>
+            <div className="inner">
+              <h1>REGISTER</h1>
+              <div className="group">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="group">
+                <input
+                  type="text"
+                  placeholder="E-Mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="group">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <input type="submit" value="REGISTER" onClick={register} />
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Account;

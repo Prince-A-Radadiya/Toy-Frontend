@@ -8,6 +8,8 @@ import f1 from '../Img/f1.svg'
 import f2 from '../Img/f2.svg'
 import f3 from '../Img/f3.svg'
 import f4 from '../Img/f4.svg'
+import { useCart } from "../Context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ cartCount }) => {
 
@@ -18,7 +20,20 @@ const Header = ({ cartCount }) => {
   const [faqOpen, setFaqOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchRef = useRef(null);
-  
+
+  const { user } = useCart();
+  const { cart } = useCart();
+
+  const navigate = useNavigate();
+
+  const handleAccountClick = () => {
+    if (user) {
+      navigate("/user-settings"); // user is logged in
+    } else {
+      navigate("/account"); // user is not logged in
+    }
+  };
+
   console.log(setMegaOpen);
 
   const closeMobileMenu = () => {
@@ -282,12 +297,22 @@ const Header = ({ cartCount }) => {
               </button>
 
               <Link onClick={closeMobileMenu} to="/wishlist"><FiHeart size={20} /></Link>
-              <Link onClick={closeMobileMenu} to="/account"><FaRegCircleUser size={20} /></Link>
+              {/* ACCOUNT ICON */}
+              <button
+                className="btn p-0"
+                onClick={() => {
+                  handleAccountClick(); // navigate based on user login
+                  closeMobileMenu();    // close mobile menu
+                }}
+              >
+                <FaRegCircleUser size={20} />
+              </button>
+
               <Link onClick={closeMobileMenu} to="/add-to-cart" className="position-relative">
                 <FiShoppingCart size={20} />
                 {cartCount > 0 && (
                   <span className="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {cartCount}
+                    {cart.length}
                   </span>
                 )}
               </Link>

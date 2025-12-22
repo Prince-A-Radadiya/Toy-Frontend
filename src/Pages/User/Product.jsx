@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaHeart, FaStar, FaFilter } from "react-icons/fa";
 import { useParams, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useCart } from "../../Context/CartContext";
 
 /* ------------------ PRODUCTS ------------------ */
 const BRANDS = ["MsChief", "Durex", "Manforce"];
@@ -259,7 +260,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
 
 /* ------------------ MAIN COMPONENT ------------------ */
 const Product = ({ setCartCount }) => {
-
+  const { addToCart } = useCart();
   const { brandSlug, collectionSlug } = useParams();
   const location = useLocation();
 
@@ -307,9 +308,9 @@ const Product = ({ setCartCount }) => {
   const [showFilter, setShowFilter] = useState(false);
   // const [cartCount, setCartCount] = useState(0);
 
-  const handleAddToCart = () => {
-    setCartCount((prev) => prev + 1);
-  };
+  // const handleAddToCart = () => {
+  //   setCartCount((prev) => prev + 1);
+  // };
 
   const [filters, setFilters] = useState({
     gender: [],
@@ -484,7 +485,7 @@ const Product = ({ setCartCount }) => {
 
               <div className="product-grid">
                 {sortedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
+                  <ProductCard key={product.id} product={product} onAddToCart={() => addToCart(product)} />
                 ))}
               </div>
 

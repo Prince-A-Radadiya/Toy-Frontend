@@ -30,6 +30,15 @@ import Shop from './Pages/User/Shop';
 import AdminDashboard from './Pages/Admin/AdminDashboard';
 import User from './Pages/Admin/User';
 import AdminProtected from './Protected/AdminProtected';
+import UserSettings from './Pages/User/UserSettings';
+import Coupen from './Pages/Admin/Coupen';
+import CoupenEdit from './Pages/Admin/CoupenEdit';
+import Inventory from './Pages/Admin/Inventory';
+import Orders from './Pages/Admin/Orders';
+import Payment from './Pages/Admin/Payment';
+import ProductAdd from './Pages/Admin/ProductAdd';
+import ProductManage from './Pages/Admin/ProductManage';
+import ReturnRefund from './Pages/Admin/ReturnRefund';
 
 function App() {
   const [allowed, setAllowed] = useState(false);
@@ -46,7 +55,7 @@ function App() {
     <Routes>
 
       {/* USER LAYOUT (with Header + Footer) */}
-      <Route element={<UserLayout cartCount={cartCount} />}>
+      <Route element={<UserLayout />}>
         <Route path='/' element={<Home setCartCount={setCartCount} />} />
         <Route path='/product' element={<Product setCartCount={setCartCount} />} />
 
@@ -64,6 +73,8 @@ function App() {
         <Route path='/wishlist' element={<Wishlist />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/faq' element={<Faq />} />
+        <Route path='/user-settings' element={<UserSettings />} />
+
       </Route>
 
       {/* ACCOUNT (NO HEADER / FOOTER) */}
@@ -72,7 +83,15 @@ function App() {
       {/* ADMIN (NO HEADER / FOOT<ER) */}
       <Route element={<AdminLayout />}>
         <Route path='/Admin-dashboard' element={<AdminProtected><AdminDashboard /></AdminProtected>} />
+        <Route path='/Admin-dashboard/product-add' element={<AdminProtected><ProductAdd /></AdminProtected>} />
+        <Route path='/Admin-dashboard/product-manage' element={<AdminProtected><ProductManage /></AdminProtected>} />
+        <Route path='/Admin-dashboard/inventory' element={<AdminProtected><Inventory /></AdminProtected>} />
+        <Route path='/Admin-dashboard/orders' element={<AdminProtected><Orders /></AdminProtected>} />
         <Route path='/Admin-dashboard/users' element={<AdminProtected><User /></AdminProtected>} />
+        <Route path='/Admin-dashboard/coupen' element={<AdminProtected><Coupen /></AdminProtected>} />
+        <Route path='/Admin-dashboard/coupen-edit' element={<AdminProtected><CoupenEdit /></AdminProtected>} />
+        <Route path='/Admin-dashboard/payments' element={<AdminProtected><Payment /></AdminProtected>} />
+        <Route path='/Admin-dashboard/return-and-refund' element={<AdminProtected><ReturnRefund /></AdminProtected>} />
       </Route>
 
       <Route path='/*' element={<Error404 />} />

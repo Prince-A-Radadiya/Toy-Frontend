@@ -18,13 +18,15 @@ import { Button, Menu } from "antd";
 
 const items = [
     { key: "/Admin-dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
-    { key: "/Admin-dashboard/users", icon: <TeamOutlined />, label: "Users" },
-    { key: "/Admin-dashboard/manage-cars", icon: <CarOutlined />, label: "Manage Cars" },
-    { key: "/Admin-dashboard/add-car", icon: <PlusSquareOutlined />, label: "Add New Car" },
-    { key: "/Admin-dashboard/bookings", icon: <CalendarOutlined />, label: "Bookings" },
-    { key: "/Admin-dashboard/contact-message", icon: <MailOutlined />, label: "Contact Message" },
-    { key: "/Admin-dashboard/settings", icon: <SettingOutlined />, label: "Settings" },
-    { key: "/Admin-dashboard/reviews", icon: <StarOutlined />, label: "Reviews" }
+    { key: "/Admin-dashboard/product-add", icon: <TeamOutlined />, label: "Product-Add" },
+    { key: "/Admin-dashboard/product-manage", icon: <CarOutlined />, label: "Product-Manage" },
+    { key: "/Admin-dashboard/inventory", icon: <PlusSquareOutlined />, label: "Inventory" },
+    { key: "/Admin-dashboard/orders", icon: <CalendarOutlined />, label: "Orders" },
+    { key: "/Admin-dashboard/users", icon: <MailOutlined />, label: "Users" },
+    { key: "/Admin-dashboard/coupen", icon: <SettingOutlined />, label: "Coupen" },
+    { key: "/Admin-dashboard/coupen-edit", icon: <StarOutlined />, label: "Coupen Edit" },
+    { key: "/Admin-dashboard/payments", icon: <StarOutlined />, label: "Payments" },
+    { key: "/Admin-dashboard/return-and-refund", icon: <StarOutlined />, label: "Return / Refund" }
 ];
 
 const Sidebar = () => {
