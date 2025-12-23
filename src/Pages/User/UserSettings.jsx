@@ -104,14 +104,14 @@ const UserSettings = () => {
       </button>
 
       <button
-  className="btn btn-secondary ms-2"
-  onClick={() => {
-    logout();           // clear user + cart
-    navigate("/"); // redirect to login/account page
-  }}
->
-  Logout
-</button>
+        className="btn btn-secondary ms-2"
+        onClick={() => {
+          logout();           // clear user + cart
+          navigate("/"); // redirect to login/account page
+        }}
+      >
+        Logout
+      </button>
 
     </div>
   );

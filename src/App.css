@@ -2175,21 +2175,501 @@ input#switch-close:checked~.register .inner {
 
 /* ------- FOR ADMIN PAGES LAYOUT ------- */
 
-.admin-layout {
+.admin {
   display: flex;
   min-height: 100vh;
+  background: var(--bg-main);
 }
 
 .admin-content {
-  border-left: 1px solid #374151;
-  flex-grow: 1;
-  padding: 20px;
-  background-color: #111825 !important;
-  /* background: #f5f5f5; */
-  color: var(--col-text1);
+  flex: 1;
+  padding: 24px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  border-left: 1px solid rgba(0, 0, 0, 0.137);
 }
 
 /* ------- FOR ADMIN PAGES LAYOUT ------- */
+
+
+/* ------- DASHBOARD START ------- */
+.dashboard-card {
+  background: var(--bg-card);    
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);       
+}
+
+.dashboard-card .table{
+  border: none!important;
+  margin: 0!important;
+  padding: 0!important;
+}
+
+/* Muted text */
+.text-muted {
+  color: var(--text-muted) !important; /* dynamic muted text */
+}
+
+/* Icon box */
+.icon-box {
+  font-size: 22px;
+  color: var(--text-main);             /* dynamic icon color */
+}
+
+/* DONUT PLACEHOLDER */
+.donut-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 12px solid var(--primary);   /* dynamic border color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--text-main);            /* dynamic text color */
+  background: var(--bg-card);          /* optional: match card background */
+}
+
+/* STATUS DOTS */
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Status colors (can stay fixed or make dynamic with CSS variables if you want) */
+.completed { background: #4ade80; }
+.shipped { background: #22c55e; }
+.pending { background: #facc15; }
+.return { background: #ef4444; }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* ADMIN HEADER */
+.admin-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* ORDER STATUS RING */
+.order-ring {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 12px solid #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* STATUS DOTS */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.completed { background: #22c55e; }
+.shipped   { background: #3b82f6; }
+.pending   { background: #facc15; }
+.return    { background: #ef4444; }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* ------- DASHBOARD END ------- */
+
+
+/* ------- PRODUCT ADD START ------- */
+.image-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.image-preview-item {
+  position: relative;
+  width: 120px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.image-preview-item.thumbnail {
+  border: 2px solid #0d6efd;
+}
+
+.image-preview-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.thumbnail-label {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: #0d6efd;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+/* ------- PRODUCT ADD END ------- */
+
+
+/* ------- INVENTORY START ------- */
+/* .inventory-page {
+  background: #f8f9fc;
+  padding: 20px;
+} */
+
+.inventory-search-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.inventory-search-top input {
+  border: none;
+  outline: none;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.156);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.stat-card .icon {
+  font-size: 22px;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.bg-primary-soft { background: #eef2ff; color: #4f46e5; }
+.bg-warning-soft { background: #fff7ed; color: #f97316; }
+.bg-success-soft { background: #ecfdf5; color: #22c55e; }
+
+.stat-up {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  color: #22c55e;
+  font-size: 12px;
+}
+
+.stat-down {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  color: #ef4444;
+  font-size: 12px;
+}
+
+.inventory-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inventory-search {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.inventory-search input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.inventory-table {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.product-info small {
+  display: block;
+  color: #6b7280;
+}
+
+.stock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progress {
+  height: 6px;
+  border-radius: 10px;
+}
+
+.progress-bar {
+  background: #4f46e5;
+}
+
+.badge.in-stock {
+  background: #ecfdf5;
+  color: #22c55e;
+}
+
+.badge.low-stock {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* ================== Drawer ================== */
+.edit-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  max-width: 90%;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transform: translateX(100%);
+  animation: slideIn 0.3s forwards;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  to { transform: translateX(0); }
+}
+
+.drawer-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.action-buttons button {
+  margin-right: 5px;
+}
+
+.inventory-table img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.badge.in-stock {
+  background-color: #28a745;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.badge.low-stock {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* ------- INVENTORY END ------- */
+
+
+/* ------- USER-LIST ------- */
+.user-page {
+  color: #333; /* main text */
+}
+
+.user-page .search-box {
+  background: #f5f5f5; /* light input background */
+  border: 1px solid #ccc;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.user-page .search-box input {
+  color: #333; /* input text */
+}
+
+.user-page .search-box input::placeholder {
+  color: #888; /* placeholder text */
+}
+
+.user-page .table-card {
+  background: #ffffff; /* card background */
+  border: 1px solid #ccc !important;
+  overflow: hidden;
+}
+
+.user-page table.custom-table {
+  border: none;
+  width: 100%;
+  border-collapse: collapse !important;
+}
+
+.user-page table.custom-table thead tr {
+  background: #f0f0f0; /* light header */
+  color: #555; /* header text */
+  border-bottom: 1px solid #ddd;
+}
+
+.user-page table.custom-table tbody tr {
+  border-bottom: 1px solid #eee;
+  color: #333; /* row text */
+}
+
+.user-page table.custom-table tr,
+.user-page table.custom-table td,
+.user-page table.custom-table th {
+  margin: 0 !important;
+  padding: 12px 10px !important;
+  height: auto !important;
+}
+
+.user-page .user-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.user-page .status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.user-page .status-badge.active {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.user-page .status-badge.blocked {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff4d4d;
+}
+
+.user-page .status-badge.inactive {
+  background: rgba(243, 156, 18, 0.2);
+  color: #f39c12;
+}
+
+.user-page .action-btn {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.user-page .action-btn:hover {
+  transform: scale(1.1);
+}
+
+/* PAGINATION BUTTONS */
+.user-page .pagination {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.user-page .pagination .page-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 5px 10px;
+  margin: 0 3px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-page .pagination .page-btn.active {
+  background: #0d6efd;
+  color: #fff;
+  border-color: #0d6efd;
+}
+
+/* ------- USER-LIST ------- */
 
 
 

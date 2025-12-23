@@ -1,9 +1,14 @@
+import Sidebar from "../../Component/Sidebar"
+
 const Orders = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+    return (
+        <div className="admin">
+            <Sidebar />
+            <div className="admin-content">
+
+            </div>
+        </div>
+    )
 }
 
 export default Orders

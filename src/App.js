@@ -25,26 +25,36 @@ import AgeGate from './Pages/User/AgeGate';
 import Faq from './Pages/User/Faq';
 import Error404 from './Pages/User/Error404';
 import Shop from './Pages/User/Shop';
+import UserSettings from './Pages/User/UserSettings';
 
 // Admin
 import AdminDashboard from './Pages/Admin/AdminDashboard';
 import User from './Pages/Admin/User';
-import AdminProtected from './Protected/AdminProtected';
-import UserSettings from './Pages/User/UserSettings';
 import Coupen from './Pages/Admin/Coupen';
 import CoupenEdit from './Pages/Admin/CoupenEdit';
 import Inventory from './Pages/Admin/Inventory';
 import Orders from './Pages/Admin/Orders';
 import Payment from './Pages/Admin/Payment';
 import ProductAdd from './Pages/Admin/ProductAdd';
-import ProductManage from './Pages/Admin/ProductManage';
 import ReturnRefund from './Pages/Admin/ReturnRefund';
 
+// Protector
+import AdminProtected from './Protected/AdminProtected';
+
 function App() {
-  const [allowed, setAllowed] = useState(false);
+
   const [cartCount, setCartCount] = useState(0);
 
-  const handleConfirm = () => setAllowed(true);
+  const [allowed, setAllowed] = useState(() => {
+    // Read from localStorage on first render
+    return localStorage.getItem("ageAllowed") === "true";
+  });
+
+  const handleConfirm = () => {
+    localStorage.setItem("ageAllowed", "true"); // save once
+    setAllowed(true);
+  };
+
   const handleDeny = () => window.location.href = "https://www.google.com";
 
   if (!allowed) {
@@ -84,7 +94,6 @@ function App() {
       <Route element={<AdminLayout />}>
         <Route path='/Admin-dashboard' element={<AdminProtected><AdminDashboard /></AdminProtected>} />
         <Route path='/Admin-dashboard/product-add' element={<AdminProtected><ProductAdd /></AdminProtected>} />
-        <Route path='/Admin-dashboard/product-manage' element={<AdminProtected><ProductManage /></AdminProtected>} />
         <Route path='/Admin-dashboard/inventory' element={<AdminProtected><Inventory /></AdminProtected>} />
         <Route path='/Admin-dashboard/orders' element={<AdminProtected><Orders /></AdminProtected>} />
         <Route path='/Admin-dashboard/users' element={<AdminProtected><User /></AdminProtected>} />

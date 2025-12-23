@@ -1,5 +1,3 @@
-import React from "react";
-
 const AgeGate = ({ onConfirm, onDeny }) => {
   return (
     <div style={styles.overlay}>

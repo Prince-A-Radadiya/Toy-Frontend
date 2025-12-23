@@ -110,7 +110,7 @@ export const CartProvider = ({ children }) => {
 //   localStorage.removeItem("role");
 //   localStorage.removeItem("cart"); // remove saved cart from localStorage
   setUser(null); // clear user state
-  setCart([]);   // clear cart state
+  // setCart([]);   // clear cart state
 };
 
 
