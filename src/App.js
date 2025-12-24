@@ -26,6 +26,7 @@ import Faq from './Pages/User/Faq';
 import Error404 from './Pages/User/Error404';
 import Shop from './Pages/User/Shop';
 import UserSettings from './Pages/User/UserSettings';
+import ProductDetail from './Pages/User/ProductDetail';
 
 // Admin
 import AdminDashboard from './Pages/Admin/AdminDashboard';
@@ -40,7 +41,6 @@ import ReturnRefund from './Pages/Admin/ReturnRefund';
 
 // Protector
 // import AdminProtected from './Protected/AdminProtected';
-import ProductDetail from './Pages/User/ProductDetail';
 // import UserProtected from './Protected/UserProtected';
 
 function App() {
