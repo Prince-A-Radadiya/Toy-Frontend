@@ -11,24 +11,25 @@ const emptyCart = {
 
 export const CartProvider = ({ children }) => {
   // User state from localStorage
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user"))
-  );
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   // Reactive cart key based on user
   const cartKey = useMemo(() => (user ? `cart_user_${user.id}` : null), [user]);
 
   const [cart, setCart] = useState(emptyCart);
-useEffect(() => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  if (storedUser) {
-    // Ensure profile has full URL
-    if (storedUser.profile && !storedUser.profile.startsWith("http")) {
-      storedUser.profile = `http://localhost:9000${storedUser.profile}`;
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      // Ensure profile has full URL
+      if (storedUser.profile && !storedUser.profile.startsWith("http")) {
+        storedUser.profile = `http://localhost:9000${storedUser.profile}`;
+      }
+      setUser(storedUser);
     }
-    setUser(storedUser);
-  }
-}, []);
+  }, []);
 
   // Sync user across tabs
   useEffect(() => {
@@ -115,13 +116,14 @@ useEffect(() => {
 
   // Logout function (optional)
   const logout = () => {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
-//   localStorage.removeItem("role");
-//   localStorage.removeItem("cart"); // remove saved cart from localStorage
-  setUser(null); // clear user state
-  // setCart([]);   // clear cart state
-};
+    localStorage.removeItem("user");
+    localStorage.removeItem("userToken");
+    setUser(null); // clear user state
+
+    //   localStorage.removeItem("role");
+    //   localStorage.removeItem("cart"); // remove saved cart from localStorage
+    // setCart([]);   // clear cart state
+  };
 
 
   return (

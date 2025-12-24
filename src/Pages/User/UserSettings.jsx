@@ -21,7 +21,9 @@ const UserSettings = () => {
       setEmail(user.email || "");
       setPreview(
         user.profile
-          ? `http://localhost:9000${user.profile}`
+          ? user.profile.startsWith("http")
+            ? user.profile
+            : `http://localhost:9000${user.profile}`
           : "/img/user.webp"
       );
     }
@@ -30,9 +32,8 @@ const UserSettings = () => {
   // UPDATE USER
   const handleUpdate = async (e) => {
     e.preventDefault();
-
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("userToken");
 
       const formData = new FormData();
       formData.append("fullname", fullname);
@@ -40,23 +41,26 @@ const UserSettings = () => {
       if (password) formData.append("password", password);
       if (profile) formData.append("profile", profile);
 
-      const res = await axios.put(
-        "http://localhost:9000/update",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const res = await axios.put("http://localhost:9000/update", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (res.data.success) {
-        setUser(res.data.user);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        // Ensure profile has full URL
+        const updatedUser = {
+          ...res.data.user,
+          profile: res.data.user.profile.startsWith("http")
+            ? res.data.user.profile
+            : `http://localhost:9000${res.data.user.profile}`,
+        };
+
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
         setMessage("Profile updated successfully!");
       }
-
     } catch (err) {
       setMessage(err.response?.data?.message || "Update failed");
     }
@@ -67,14 +71,13 @@ const UserSettings = () => {
     if (!window.confirm("Are you sure?")) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("userToken");
       await axios.delete("http://localhost:9000/delete", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       logout();
       navigate("/");
-
     } catch (err) {
       setMessage("Delete failed");
     }

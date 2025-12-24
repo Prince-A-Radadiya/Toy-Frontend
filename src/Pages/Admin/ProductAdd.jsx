@@ -22,10 +22,11 @@ const ProductAdd = () => {
         stock: "",
         brand: "",
         category: "",
-        vendor: "",
+        vendor: "Official Store",
         tags: "",
         gender: "",
         usageType: "",
+        suitable: "",              // ✅ FIXED
         status: true,
         availability: "Online Store",
         publishDate: "",
@@ -42,19 +43,18 @@ const ProductAdd = () => {
 
     const handleImages = (e) => {
         const files = Array.from(e.target.files);
-        setImages((prev) => [...prev, ...files]);
+        setImages(prev => [...prev, ...files]);
     };
 
-    // Generate previews
+    /* IMAGE PREVIEW */
     useEffect(() => {
-        const previews = images.map((img) => URL.createObjectURL(img));
+        const previews = images.map(img => URL.createObjectURL(img));
         setImagePreviews(previews);
 
-        // Revoke object URLs to avoid memory leaks
-        return () => previews.forEach((url) => URL.revokeObjectURL(url));
+        return () => previews.forEach(url => URL.revokeObjectURL(url));
     }, [images]);
 
-    // HOW TO USE
+    /* HOW TO USE */
     const handleHowToChange = (index, value) => {
         const steps = [...product.howToUse];
         steps[index] = value;
@@ -76,35 +76,41 @@ const ProductAdd = () => {
         try {
             const formData = new FormData();
 
-            // Append product fields
-            Object.entries(product).forEach(([key, value]) => {
-                if (key === "howToUse") {
-                    formData.append("howToUse", JSON.stringify(value));
-                } else if (key === "tags") {
-                    formData.append(
-                        "tags",
-                        JSON.stringify(value.split(",").map((t) => t.trim()))
-                    );
-                } else {
-                    formData.append(key, value);
-                }
-            });
+            formData.append("title", product.title);
+            formData.append("description", product.description);
+            formData.append("sku", product.sku);
+            formData.append("price", Number(product.price));
+            formData.append("oldPrice", Number(product.oldPrice));
+            formData.append("stock", Number(product.stock));
+            formData.append("brand", product.brand);
+            formData.append("category", product.category);
+            formData.append("vendor", product.vendor);
+            formData.append("gender", product.gender);
+            formData.append("usageType", product.usageType);
+            formData.append("suitable", product.suitable);
+            formData.append("status", product.status);
+            formData.append("availability", product.availability);
+            formData.append("publishDate", product.publishDate);
+            formData.append("freeLube", product.freeLube);
 
-            // Append images
-            images.forEach((img) => formData.append("images", img));
+            formData.append("howToUse", JSON.stringify(product.howToUse));
+            formData.append(
+                "tags",
+                JSON.stringify(product.tags.split(",").map(t => t.trim()))
+            );
 
-            // Token example
-            const token = localStorage.getItem("token");
-            const res = await axios.post("http://localhost:9000/products", formData, {
+            images.forEach(img => formData.append("images", img));
+
+            const token = localStorage.getItem("adminToken");
+
+            await axios.post("http://localhost:9000/products", formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data",
                     Authorization: token ? `Bearer ${token}` : "",
                 },
             });
 
             alert("✅ Product saved successfully");
 
-            // Reset form
             setProduct({
                 title: "",
                 description: "",
@@ -114,10 +120,11 @@ const ProductAdd = () => {
                 stock: "",
                 brand: "",
                 category: "",
-                vendor: "",
+                vendor: "Official Store",
                 tags: "",
                 gender: "",
                 usageType: "",
+                suitable: "",
                 status: true,
                 availability: "Online Store",
                 publishDate: "",
@@ -126,14 +133,12 @@ const ProductAdd = () => {
             });
 
             setImages([]);
+            setImagePreviews([]);
             fileRef.current.value = "";
+
         } catch (error) {
             console.error(error);
-            if (error.response?.data?.message === "No token provided") {
-                alert("❌ No token provided. Please login first.");
-            } else {
-                alert(error.response?.data?.message || "❌ Failed to save product");
-            }
+            alert(error.response?.data?.message || "❌ Failed to save product");
         }
     };
 
@@ -337,6 +342,15 @@ const ProductAdd = () => {
                                             name="usageType"
                                             placeholder="Internal"
                                             value={product.usageType}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <label className="form-label">Suitable For</label>
+                                        <input
+                                            className="form-control"
+                                            name="suitable"
+                                            value={product.suitable}
                                             onChange={handleChange}
                                         />
                                     </div>

@@ -11,37 +11,49 @@ const Account = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Login
   const login = async (e) => {
     e.preventDefault();
+
     try {
       const res = await axios.post("http://localhost:9000/login", { email, password });
 
       if (res.data.token) {
         alert(res.data.message);
 
-        // Save token and role
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("role", res.data.role);
+        // Check if user is admin or regular user
+        if (res.data.role === "admin") {
+          // 🔐 ADMIN LOGIN
+          localStorage.setItem("adminToken", res.data.token);
+          localStorage.setItem("adminUser", JSON.stringify(res.data.user));
+          navigate("/Admin-dashboard");
 
-        // Save user for CartContext
-        const loggedInUser = {
-          id: res.data.user.id || res.data.user._id, // support backend user.id or _id
-          name: res.data.user.fullname || res.data.user.email,
-        };
-        localStorage.setItem("user", JSON.stringify(loggedInUser));
-        setUser(loggedInUser); // <-- CartContext updates immediately
+        } else {
+          // 🔐 USER LOGIN
+          localStorage.setItem("userToken", res.data.token);
 
-        // Redirect
-        if (res.data.role === "admin") navigate("/admin-dashboard");
-        else navigate("/");
+          const loggedInUser = {
+            id: res.data.user.id || res.data.user._id,
+            fullname: res.data.user.fullname,
+            email: res.data.user.email,
+            profile: res.data.user.profile.startsWith("http")
+              ? res.data.user.profile
+              : `http://localhost:9000${res.data.user.profile}`
+          };
+
+          // Save in CartContext and localStorage
+          localStorage.setItem("user", JSON.stringify(loggedInUser));
+          setUser(loggedInUser);
+
+          navigate("/");
+        }
       }
     } catch (err) {
       alert(err.response?.data?.message || "Server error");
     }
   };
 
-  // Register
+
+
   const register = async (e) => {
     e.preventDefault();
     try {
@@ -54,18 +66,19 @@ const Account = () => {
       if (res.data.token) {
         alert(res.data.message);
 
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("role", res.data.role);
+        // 🚫 Register should NEVER log in admin
+        localStorage.setItem("userToken", res.data.token);
 
         const newUser = {
           id: res.data.user.id || res.data.user._id,
-          name: res.data.user.fullname,
+          fullname: res.data.user.fullname,
+          email: res.data.user.email,
+          profile: res.data.user.profile,
         };
-        localStorage.setItem("user", JSON.stringify(newUser));
-        setUser(newUser); // <-- CartContext updates immediately
 
-        if (res.data.role === "admin") navigate("/admin-dashboard");
-        else navigate("/");
+        localStorage.setItem("user", JSON.stringify(newUser));
+        setUser(newUser);
+        navigate("/");
       }
     } catch (err) {
       alert(err.response?.data?.message || "Server error");

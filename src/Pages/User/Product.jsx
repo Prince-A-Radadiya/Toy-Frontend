@@ -1,66 +1,53 @@
 import React, { useState } from "react";
 import { FaHeart, FaStar, FaFilter } from "react-icons/fa";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useCart } from "../../Context/CartContext";
-
-/* ------------------ PRODUCTS ------------------ */
-const BRANDS = ["MsChief", "Durex", "Manforce"];
-
-const PRODUCTS = Array.from({ length: 148 }, (_, i) => ({
-  id: i + 1,
-  brand: BRANDS[i % BRANDS.length],
-  title: `Product ${i + 1}`,
-  gender: i % 2 === 0 ? "Women" : "Men",
-  price: 2330 + i * 5,
-  oldPrice: 4668 + i * 5,
-  discount: `${(i % 50) + 1}% Off`,
-  rating: 5,
-  image: require("../../Img/t1.png"),
-  freeLube: i % 2 === 0,
-
-  // ✅ ADD THESE
-  isNew: i % 4 === 0,
-  isBestSeller: i % 6 === 0,
-
-  condomType: "Thin",
-  usageType: "Internal",
-  suitableFor:
-    i % 3 === 0
-      ? ["Beginner", "Solo"]
-      : i % 3 === 1
-        ? ["Couples"]
-        : ["Advanced"],
-}));
-
 
 /* ------------------ PRODUCT CARD ------------------ */
 const ProductCard = ({ product, onAddToCart }) => (
   <div className="product-card">
-    <div className="product-image">
-      <span className="discount-badge">{product.discount}</span>
-      <img src={product.image} alt={product.title} />
-      {product.freeLube && <span className="free-badge">Free Lube!</span>}
-    </div>
+    {/* Only image and title clickable */}
+    <Link to={`/product/${product.id}`}>
+      <div className="product-image">
+        {product.discount && <span className="discount-badge text-uppercase">{product.discount}</span>}
+        <img
+          src={product.images?.[0] || product.image}
+          alt={product.title}
+          className="img-fluid"
+        />
+        {product.freeLube && <span className="free-badge">Free Lube!</span>}
+      </div>
+      <div className="product-info pb-0">
+        <small className="brand">{product.brand}</small>
+        <h6>{product.title}</h6>
+      </div>
+    </Link>
 
-    <div className="product-info">
-      <small className="brand">{product.brand}</small>
-      <h6>{product.title}</h6>
-
+    {/* Card bottom actions */}
+    <div className="product-info pt-0">
       <div className="rating">
-        <FaStar /> {product.rating}.0
+        <FaStar /> {product.rating || 0}.0
       </div>
 
       <div className="price">
         ₹{product.price}
-        <span>₹{product.oldPrice}</span>
+        {product.oldPrice && <span className="ms-2 old-price">₹{product.oldPrice}</span>}
       </div>
 
-      <div className="card-actions">
+      <div className="card-actions mt-2">
         <button className="wishlist">
           <FaHeart />
         </button>
-        <button className="add-cart" onClick={onAddToCart}>Add to cart</button>
+        <button
+          className="add-cart"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent navigating to product
+            onAddToCart();
+          }}
+        >
+          Add to cart
+        </button>
       </div>
     </div>
   </div>
@@ -100,10 +87,8 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
       {/* PRODUCT FOR */}
       <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("gender")}>
-          Product For
-          <span>{open.gender ? "−" : "+"}</span>
+          Product For <span>{open.gender ? "−" : "+"}</span>
         </div>
-
         {open.gender && (
           <div className="filter-options">
             {["Men", "Women"].map((g) => (
@@ -123,10 +108,8 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
       {/* BRAND */}
       <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("brand")}>
-          Brand
-          <span>{open.brand ? "−" : "+"}</span>
+          Brand <span>{open.brand ? "−" : "+"}</span>
         </div>
-
         {open.brand && (
           <div className="filter-options">
             {["MsChief", "Durex", "Manforce"].map((b) => (
@@ -143,13 +126,11 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
         )}
       </div>
 
-      {/* PRICE RANGE */}
+      {/* PRICE */}
       <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("price")}>
-          Price
-          <span>{open.price ? "−" : "+"}</span>
+          Price <span>{open.price ? "−" : "+"}</span>
         </div>
-
         {open.price && (
           <div className="filter-options">
             {["Under 1000", "1000-2599", "2600-5000"].map((p) => (
@@ -169,10 +150,8 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
       {/* CONDOM TYPE */}
       <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("condomType")}>
-          Condom Type
-          <span>{open.condomType ? "−" : "+"}</span>
+          Condom Type <span>{open.condomType ? "−" : "+"}</span>
         </div>
-
         {open.condomType && (
           <div className="filter-options">
             {["Thin", "Fit"].map((c) => (
@@ -192,61 +171,48 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
       {/* USAGE TYPE */}
       <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("usageType")}>
-          Usage Type
-          <span>{open.usageType ? "−" : "+"}</span>
+          Usage Type <span>{open.usageType ? "−" : "+"}</span>
         </div>
-
         {open.usageType && (
           <div className="filter-options">
-            {["Internal", "External", "Remote Control", "Dual Massager"].map((u) => (
-              <label key={u}>
-                <input
-                  type="checkbox"
-                  checked={filters.usageType.includes(u)}
-                  onChange={() => handleCheck("usageType", u)}
-                />
-                {u}
-              </label>
-            ))}
+            {["Internal", "External", "Remote Control", "Dual Massager"].map(
+              (u) => (
+                <label key={u}>
+                  <input
+                    type="checkbox"
+                    checked={filters.usageType.includes(u)}
+                    onChange={() => handleCheck("usageType", u)}
+                  />
+                  {u}
+                </label>
+              )
+            )}
           </div>
         )}
       </div>
 
       {/* SUITABLE FOR */}
       <div className="filter-dropdown">
-        <div
-          className="filter-title"
-          onClick={() => toggle("suitableFor")}
-        >
-          Suitable For
-          <span>{open.suitableFor ? "−" : "+"}</span>
+        <div className="filter-title" onClick={() => toggle("suitableFor")}>
+          Suitable For <span>{open.suitableFor ? "−" : "+"}</span>
         </div>
-
         {open.suitableFor && (
           <div className="filter-options">
-            {[
-              "Beginner",
-              "Advanced",
-              "Couples",
-              "Solo",
-              "Sensitive Skin",
-            ].map((item) => (
-              <label key={item}>
-                <input
-                  type="checkbox"
-                  checked={filters.suitableFor.includes(item)}
-                  onChange={() =>
-                    handleCheck("suitableFor", item)
-                  }
-                />
-                {item}
-              </label>
-            ))}
+            {["Beginner", "Advanced", "Couples", "Solo", "Sensitive Skin"].map(
+              (s) => (
+                <label key={s}>
+                  <input
+                    type="checkbox"
+                    checked={filters.suitableFor.includes(s)}
+                    onChange={() => handleCheck("suitableFor", s)}
+                  />
+                  {s}
+                </label>
+              )
+            )}
           </div>
         )}
       </div>
-
-
 
       {isMobile && (
         <button className="apply-filter-btn" onClick={onApply}>
@@ -257,27 +223,54 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
   );
 };
 
-
 /* ------------------ MAIN COMPONENT ------------------ */
-const Product = ({ setCartCount }) => {
+const Product = () => {
   const { addToCart } = useCart();
   const { brandSlug, collectionSlug } = useParams();
   const location = useLocation();
 
-  const getRouteFilteredProducts = () => {
-    // Default → All products (Product page)
-    if (location.pathname === "/products") {
-      return PRODUCTS;
-    }
+  /* 🔁 BACKEND PRODUCTS */
+  const [PRODUCTS, setPRODUCTS] = useState([]);
 
-    // Brand page
+  useEffect(() => {
+    fetch("http://localhost:9000/get-product")
+      .then((res) => res.json())
+      .then((data) => {
+        const mapped = data.products.map((p, i) => ({
+          id: p._id,  // <--- FIX: added id
+          brand: p.brand,
+          title: p.title,
+          gender: p.gender,
+          price: p.price,
+          oldPrice: p.oldPrice || p.price * 2,
+          discount: p.oldPrice
+            ? `${Math.abs(Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100))}% OFF`
+            : "",
+          rating: 4,
+          image: p.images?.length
+            ? `http://localhost:9000${p.images[0]}`
+            : require("../../Img/t1.png"),
+          freeLube: p.freeLube,
+          isNew: i % 4 === 0,
+          isBestSeller: i % 6 === 0,
+          condomType: p.condomType || "Thin",
+          usageType: p.usageType || "Internal",
+          suitableFor: p.suitableFor || [],
+        }));
+        setPRODUCTS(mapped);
+      });
+  }, []);
+
+  /* ---------- ROUTE FILTER ---------- */
+  const getRouteFilteredProducts = () => {
+    if (location.pathname === "/products") return PRODUCTS;
+
     if (location.pathname.startsWith("/brand") && brandSlug) {
       return PRODUCTS.filter(
         (p) => p.brand.toLowerCase() === brandSlug.toLowerCase()
       );
     }
 
-    // Collection page
     if (location.pathname.startsWith("/collection") && collectionSlug) {
       switch (collectionSlug) {
         case "new-arrivals":
@@ -292,25 +285,19 @@ const Product = ({ setCartCount }) => {
           return PRODUCTS;
       }
     }
-
     return PRODUCTS;
   };
+
   useEffect(() => {
     setPage(1);
   }, [brandSlug, collectionSlug, location.pathname]);
 
   const routeFilteredProducts = getRouteFilteredProducts();
 
-
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState("a-z");
+  const [sortBy, setSortBy] = useState("az");
   const [showFilter, setShowFilter] = useState(false);
-  // const [cartCount, setCartCount] = useState(0);
-
-  // const handleAddToCart = () => {
-  //   setCartCount((prev) => prev + 1);
-  // };
 
   const [filters, setFilters] = useState({
     gender: [],
@@ -322,40 +309,31 @@ const Product = ({ setCartCount }) => {
   });
 
   const [tempFilters, setTempFilters] = useState(filters);
-
   const itemsPerPage = 12;
 
-  /* -------- FILTER -------- */
-  const uiFilteredProducts = routeFilteredProducts.filter((p) => {
+  /* ---------- FILTER ---------- */
+  const filteredProducts = routeFilteredProducts.filter((p) => {
     const genderMatch =
-      filters.gender.length === 0 ||
-      filters.gender.includes(p.gender);
-
+      filters.gender.length === 0 || filters.gender.includes(p.gender);
     const brandMatch =
-      filters.brand.length === 0 ||
-      filters.brand.includes(p.brand);
-
+      filters.brand.length === 0 || filters.brand.includes(p.brand);
     const priceMatch =
       filters.price.length === 0 ||
-      filters.price.some((range) => {
-        if (range === "Under 1000") return p.price < 1000;
-        if (range === "1000-2599") return p.price >= 1000 && p.price <= 2599;
-        if (range === "2600-5000") return p.price >= 2600 && p.price <= 5000;
+      filters.price.some((r) => {
+        if (r === "Under 1000") return p.price < 1000;
+        if (r === "1000-2599") return p.price >= 1000 && p.price <= 2599;
+        if (r === "2600-5000") return p.price >= 2600 && p.price <= 5000;
         return true;
       });
-
     const condomMatch =
       filters.condomType.length === 0 ||
       filters.condomType.includes(p.condomType);
-
     const usageMatch =
       filters.usageType.length === 0 ||
       filters.usageType.includes(p.usageType);
-
     const suitableMatch =
       filters.suitableFor.length === 0 ||
-      filters.suitableFor.some((s) => p.suitableFor?.includes(s));
-
+      filters.suitableFor.some((s) => p.suitableFor.includes(s));
     const searchMatch =
       p.title.toLowerCase().includes(search.toLowerCase()) ||
       p.brand.toLowerCase().includes(search.toLowerCase());
@@ -370,36 +348,19 @@ const Product = ({ setCartCount }) => {
       searchMatch
     );
   });
-  const filteredProducts = uiFilteredProducts;
 
-
-
-  /* -------- PAGINATION -------- */
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
   const visibleProducts = filteredProducts.slice(
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
 
-  /* -------- SORT -------- */
   const sortedProducts = [...visibleProducts].sort((a, b) => {
-    switch (sortBy) {
-      case "priceLowHigh":
-        return a.price - b.price;
-      case "priceHighLow":
-        return b.price - a.price;
-      case "az":
-        return a.title.localeCompare(b.title);
-      case "za":
-        return b.title.localeCompare(a.title);
-      case "newOld":
-        return b.id - a.id;
-      case "oldNew":
-        return a.id - b.id;
-      default:
-        return 0;
-    }
+    if (sortBy === "priceLowHigh") return a.price - b.price;
+    if (sortBy === "priceHighLow") return b.price - a.price;
+    if (sortBy === "az") return a.title.localeCompare(b.title);
+    if (sortBy === "za") return b.title.localeCompare(a.title);
+    return 0;
   });
 
   const applyMobileFilter = () => {
@@ -485,7 +446,11 @@ const Product = ({ setCartCount }) => {
 
               <div className="product-grid">
                 {sortedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} onAddToCart={() => addToCart(product)} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onAddToCart={() => addToCart(product)}
+                  />
                 ))}
               </div>
 

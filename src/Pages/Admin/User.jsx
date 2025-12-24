@@ -13,17 +13,27 @@ const User = () => {
 
     // Fetch users
     useEffect(() => {
+        const token = localStorage.getItem("adminToken");
+
         axios
-            .get("http://localhost:9000/users")
-            .then((res) => setUsersData(res.data))
+            .get("http://localhost:9000/users", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                console.log("USERS:", res.data); // 🔥 DEBUG
+                setUsersData(res.data);
+            })
             .catch((err) => console.log(err));
     }, []);
+
 
     // Delete user
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("adminToken");
             await axios.delete(`http://localhost:9000/users/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });

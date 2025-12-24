@@ -11,7 +11,6 @@
   --spacing-lg: 24px;
   --spacing-md: 16px;
   --spacing-sm: 8px;
-
 }
 
 :root {
@@ -245,6 +244,34 @@ header {
     opacity: 1;
     transform: translate(0, -50%);
   }
+}
+
+/* ===== MOBILE NAVBAR ANIMATION ===== */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    display: block !important;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: 
+      max-height 0.45s ease,
+      opacity 0.35s ease,
+      transform 0.35s ease;
+  }
+
+  .navbar-collapse.show {
+    max-height: 100vh; /* large enough for menu */
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.navbar-toggler svg {
+  transition: transform 0.3s ease;
+}
+
+.navbar-toggler.open svg {
+  transform: rotate(180deg);
 }
 
 
@@ -1123,20 +1150,11 @@ header {
   }
 }
 
-/* ================================
-   ABOUT PAGE – PARENT
-================================ */
-.about {}
-
-/* ================================
-CURATED SECTION
-================================ */
 .about .care {
   padding: 60px 20px;
   background: #faf7f5;
 }
 
-/* CARD CONTAINER */
 .about .curated-card {
   background: #ffffff;
   border-radius: 22px;
@@ -1146,9 +1164,6 @@ CURATED SECTION
   align-items: stretch;
 }
 
-/* ================================
-   LEFT IMAGE
-================================ */
 .about .curated-image {
   width: 50%;
   height: 460px;
@@ -1161,9 +1176,6 @@ CURATED SECTION
   object-fit: cover;
 }
 
-/* ================================
-   RIGHT CONTENT
-================================ */
 .about .curated-content {
   width: 50%;
   padding: 40px;
@@ -1617,7 +1629,13 @@ CURATED SECTION
 .product-card {
   cursor: pointer;
 }
-
+.product-card a{
+  text-decoration: none;
+}
+.product-grid a{
+  text-decoration: none;
+  color: #000000;
+}
 .product-icon {
   width: 52px;
   height: 52px;
@@ -2035,6 +2053,327 @@ input#switch-close:checked~.register .inner {
 }
 
 /* ----- ACCOUNT END ----- */
+
+
+/* ----- PRODUCT DETAILS START ----- */
+.product-detail {
+  background: var(--col-bg);
+  color: var(--col-text);
+}
+
+.main-image {
+  background: var(--col-bg2);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.main-image img {
+  border-radius: 12px;
+  width: 100%;
+}
+
+.thumbs img {
+  border-radius: 10px;
+  border: 2px solid transparent;
+  transition: 0.2s ease;
+}
+
+.thumbs img:hover {
+  border-color: var(--color-secondary);
+}
+
+.thumbs .border-primary {
+  border-color: var(--color-secondary) !important;
+}
+
+.product-detail h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.rating svg {
+  font-size: 14px;
+}
+
+.price .current {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.price del {
+  color: var(--col-text2);
+}
+
+.price span.text-danger {
+  color: var(--color-secondary) !important;
+  font-weight: 600;
+}
+
+.qty button {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.btn-warning {
+  background: var(--color-secondary);
+  border: none;
+  color: var(--color-font-2);
+  padding: 14px;
+  border-radius: 12px;
+}
+
+.btn-warning:hover {
+  background: #e14f4b;
+}
+
+.btn-outline-dark {
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.trust div {
+  background: var(--col-bg2);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.accordion-item {
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: none;
+}
+
+.accordion-button {
+  background: var(--col-bg2);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.accordion-button:not(.collapsed) {
+  background: var(--color-secondary);
+  color: var(--color-font-2);
+}
+
+.related-section {
+  margin-top: 40px;
+}
+
+.related-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.related-card {
+  background: var(--col-bg2);
+  border-radius: 16px;
+  padding: 16px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.related-card:hover {
+  transform: translateY(-5px);
+}
+
+.related-card img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.related-card h6 {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.related-card span {
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .product-detail h1 {
+    font-size: 1.6rem;
+  }
+
+  .price .current {
+    font-size: 22px;
+  }
+}
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;800&display=swap');
+
+:root {
+    --velvet-red: #c6102e;
+    --velvet-gold: #FFC72C;
+    --velvet-black: #181112;
+    --soft-bg: #fdfbfb;
+}
+
+.pdp-container {
+    background-color: var(--soft-bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--velvet-black);
+}
+
+/* Gallery Styling */
+.main-display {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.main-display img {
+    width: 100%;
+    height: 700px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.thumbnail-grid {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.thumb-box {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.6;
+}
+
+.thumb-box.active {
+    border-color: var(--velvet-red);
+    opacity: 1;
+}
+
+.thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Content Styling */
+.pdp-breadcrumb {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.pdp-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+}
+
+.pdp-price-area {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.price-current {
+    font-size: 2.2rem;
+    font-weight: 800;
+}
+
+.save-tag {
+    background: var(--velvet-red);
+    color: white;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-weight: 800;
+}
+
+/* Buttons & Qty */
+.pdp-cta-section {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.qty-luxury {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 5px 20px;
+}
+
+.qty-luxury button {
+    background: none; border: none; padding: 10px; cursor: pointer;
+}
+
+.btn-buy-luxury {
+    flex: 1;
+    background: var(--velvet-black);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-buy-luxury:hover {
+    background: var(--velvet-red);
+}
+
+/* Specs & Gift */
+.pdp-gift-banner {
+    background: rgba(198, 16, 46, 0.05);
+    border-left: 4px solid var(--velvet-red);
+    padding: 15px;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.pdp-spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 25px;
+    margin-top: 25px;
+}
+
+.spec-item span { font-size: 11px; color: #888; text-transform: uppercase; display: block; }
+.spec-item strong { font-size: 14px; font-weight: 600; }
+
+/* Custom Accordion */
+details {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
+
+summary {
+    list-style: none;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+/* ----- PRODUCT DETAILS END ----- */
 
 
 /* ----- ADD TO CART START ----- */
@@ -2494,19 +2833,19 @@ input#switch-close:checked~.register .inner {
   padding: 16px;
 }
 
-.product-info {
+.inventory-table .product-info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.product-info img {
+.inventory-table .product-info img {
   width: 40px;
   height: 40px;
   border-radius: 8px;
 }
 
-.product-info small {
+.inventory-table .product-info small {
   display: block;
   color: #6b7280;
 }

@@ -3,7 +3,6 @@ import { FaSearch, FaCog } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import Sidebar from "../../Component/Sidebar";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const CoupenEdit = () => {
   const [coupons, setCoupons] = useState([]);
@@ -16,7 +15,6 @@ const CoupenEdit = () => {
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
 
   const fetchCoupons = async () => {
     const res = await axios.get(
@@ -35,7 +33,7 @@ const CoupenEdit = () => {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");;
 
       await axios.put(
         `http://localhost:9000/coupen-update/${selectedCoupon._id}`,
@@ -178,61 +176,165 @@ const CoupenEdit = () => {
       </div>
 
       {/* EDIT DRAWER */}
-      {openDrawer && selectedCoupon && (
-        <div className="coupon-drawer">
-          <div className="drawer-header">
-            <h5 className="mb-0">Edit Coupon</h5>
-            <button onClick={() => setOpenDrawer(false)}>✕</button>
-          </div>
+{openDrawer && selectedCoupon && (
+  <div className="coupon-drawer">
+    <div className="drawer-header">
+      <h5 className="mb-0">Edit Coupon</h5>
+      <button onClick={() => setOpenDrawer(false)}>✕</button>
+    </div>
 
-          <div className="drawer-body">
-            <label>Coupon Code</label>
-            <input value={selectedCoupon.code} disabled />
+    <div className="drawer-body">
 
-            <label>Description</label>
-            <input
-              value={selectedCoupon.description || ""}
-              onChange={(e) =>
-                setSelectedCoupon({ ...selectedCoupon, description: e.target.value })
-              }
-            />
+      {/* COUPON CODE */}
+      <label>Coupon Code</label>
+      <input value={selectedCoupon.code} disabled />
 
-            <label>Discount Value</label>
-            <input
-              type="number"
-              value={selectedCoupon.discountValue}
-              onChange={(e) =>
-                setSelectedCoupon({
-                  ...selectedCoupon,
-                  discountValue: e.target.value,
-                })
-              }
-            />
+      {/* DESCRIPTION */}
+      <label>Description</label>
+      <input
+        value={selectedCoupon.description || ""}
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            description: e.target.value,
+          })
+        }
+      />
 
-            <label>Status</label>
-            <select
-              value={selectedCoupon.active}
-              onChange={(e) =>
-                setSelectedCoupon({
-                  ...selectedCoupon,
-                  active: e.target.value === "true",
-                })
-              }
-            >
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
-            </select>
+      {/* DISCOUNT TYPE */}
+      <label>Discount Type</label>
+      <select
+        value={selectedCoupon.discountType}
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            discountType: e.target.value,
+          })
+        }
+      >
+        <option value="percentage">Percentage (%)</option>
+        <option value="fixed">Fixed Amount (₹)</option>
+      </select>
 
-            <button
-              className="btn btn-primary mt-3 w-100"
-              onClick={updateCoupon}
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </div>
-      )}
+      {/* DISCOUNT VALUE */}
+      <label>Discount Value</label>
+      <input
+        type="number"
+        value={selectedCoupon.discountValue}
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            discountValue: Number(e.target.value),
+          })
+        }
+      />
+
+      {/* APPLIES TO */}
+      <label>Applies To</label>
+      <select
+        value={selectedCoupon.appliesTo}
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            appliesTo: e.target.value,
+          })
+        }
+      >
+        <option value="entire">Entire Store</option>
+        <option value="product">Specific Product</option>
+        <option value="category">Specific Category</option>
+      </select>
+
+      {/* START DATE */}
+      <label>Start Date</label>
+      <input
+        type="date"
+        value={
+          selectedCoupon.startDate
+            ? selectedCoupon.startDate.slice(0, 10)
+            : ""
+        }
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            startDate: e.target.value,
+          })
+        }
+      />
+
+      {/* EXPIRY DATE */}
+      <label>Expiry Date</label>
+      <input
+        type="date"
+        value={
+          selectedCoupon.expiryDate
+            ? selectedCoupon.expiryDate.slice(0, 10)
+            : ""
+        }
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            expiryDate: e.target.value,
+          })
+        }
+      />
+
+      {/* LIMIT PER COUPON */}
+      <label>Usage Limit (Total)</label>
+      <input
+        type="number"
+        value={selectedCoupon.limitPerCoupon || ""}
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            limitPerCoupon: e.target.value
+              ? Number(e.target.value)
+              : null,
+          })
+        }
+      />
+
+      {/* LIMIT PER USER */}
+      <label>Usage Limit Per User</label>
+      <input
+        type="number"
+        value={selectedCoupon.limitPerUser || ""}
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            limitPerUser: e.target.value
+              ? Number(e.target.value)
+              : null,
+          })
+        }
+      />
+
+      {/* STATUS */}
+      <label>Status</label>
+      <select
+        value={selectedCoupon.active}
+        onChange={(e) =>
+          setSelectedCoupon({
+            ...selectedCoupon,
+            active: e.target.value === "true",
+          })
+        }
+      >
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+
+      <button
+        className="btn btn-primary mt-4 w-100"
+        onClick={updateCoupon}
+        disabled={loading}
+      >
+        {loading ? "Saving..." : "Save Changes"}
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

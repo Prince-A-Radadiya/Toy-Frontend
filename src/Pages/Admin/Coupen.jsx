@@ -30,7 +30,7 @@ const Coupen = () => {
 
   const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");;
 
       await axios.post(
         "http://localhost:9000/coupen-create",

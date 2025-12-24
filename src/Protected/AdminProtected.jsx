@@ -1,10 +1,9 @@
 import { Navigate } from "react-router-dom";
 
 const AdminProtected = ({ children }) => {
-  const token = localStorage.getItem("token"); 
-  const role = localStorage.getItem("role");
+  const adminToken = localStorage.getItem("adminToken");
 
-  if (!token || role !== "admin") {
+  if (!adminToken) {
     return <Navigate to="/Account" replace />;
   }
 

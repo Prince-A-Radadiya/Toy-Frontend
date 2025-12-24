@@ -36,13 +36,13 @@ const Sidebar = () => {
   const toggleCollapsed = () => setCollapsed(!collapsed);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminUser");
     window.location.href = "/";
   };
 
   return (
-     <div
+    <div
       style={{
         maxHeight: "100vh",
         width: collapsed ? 80 : 250,
@@ -57,7 +57,7 @@ const Sidebar = () => {
       </div>
 
       <Menu
-        theme="light" 
+        theme="light"
         mode="inline"
         inlineCollapsed={collapsed}
         selectedKeys={[location.pathname]}

@@ -40,6 +40,8 @@ import ReturnRefund from './Pages/Admin/ReturnRefund';
 
 // Protector
 // import AdminProtected from './Protected/AdminProtected';
+import ProductDetail from './Pages/User/ProductDetail';
+// import UserProtected from './Protected/UserProtected';
 
 function App() {
 
@@ -68,6 +70,8 @@ function App() {
       <Route element={<UserLayout />}>
         <Route path='/' element={<Home setCartCount={setCartCount} />} />
         <Route path='/product' element={<Product setCartCount={setCartCount} />} />
+        {/* <Route path='/product-details' element={<ProductDetail />} /> */}
+        <Route path='/product/:id' element={<ProductDetail />} />
 
         <Route path="/brand" element={<Brand />} />
         <Route path="/brand/:brandSlug" element={<Product setCartCount={setCartCount} />} />

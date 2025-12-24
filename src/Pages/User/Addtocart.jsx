@@ -45,7 +45,7 @@ const Addtocart = () => {
 
               <div className="price">
                 <strong>₹{item.price.toFixed(2)}</strong>
-                <p>Total: ₹{(item.price * item.qty).toFixed(2)}</p>
+                <p className="mb-0">Total: ₹{(item.price * item.qty).toFixed(2)}</p>
               </div>
             </div>
           ))}

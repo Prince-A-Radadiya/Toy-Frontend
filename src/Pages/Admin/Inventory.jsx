@@ -18,7 +18,7 @@ const Inventory = () => {
     /* ================= FETCH PRODUCTS ================= */
     const fetchProducts = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("adminToken");;
             const res = await axios.get("http://localhost:9000/get-product", {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -57,7 +57,7 @@ const Inventory = () => {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("adminToken");;
             await axios.delete(`http://localhost:9000/products/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -72,7 +72,7 @@ const Inventory = () => {
     // EDIT / SAVE
     const handleSave = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("adminToken");;
             await axios.put(`http://localhost:9000/products/${selectedProduct._id}`, selectedProduct, {
                 headers: { Authorization: `Bearer ${token}` },
             });

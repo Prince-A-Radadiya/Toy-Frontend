@@ -66,7 +66,7 @@ const Header = ({ cartCount }) => {
 
           {/* Mobile Toggle */}
           <button
-            className="navbar-toggler"
+            className={`navbar-toggler ${menuOpen ? "open" : ""}`}
             onClick={() => {
               setMenuOpen(prev => !prev);
               setBrandOpen(false);
@@ -232,7 +232,7 @@ const Header = ({ cartCount }) => {
                     setColOpen(false);
                   }}
                 >
-                  <NavLink to='/shop' onClick={closeMobileMenu} className='c-nav-link d-flex align-items-center'>
+                  <NavLink to='/faq' onClick={closeMobileMenu} className='c-nav-link d-flex align-items-center'>
                     Shopping & FAQs <IoIosArrowDown className="d-lg-flex d-none ms-1" />
                   </NavLink>
                   {isMobile && (
@@ -310,7 +310,9 @@ const Header = ({ cartCount }) => {
                   <img
                     src={
                       user.profile
-                        ? `http://localhost:9000${user.profile}`
+                        ? user.profile.startsWith("http")
+                          ? user.profile
+                          : `http://localhost:9000${user.profile}`
                         : "/img/user.webp"
                     }
                     alt="profile"
