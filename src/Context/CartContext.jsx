@@ -1,134 +1,164 @@
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
-const emptyCart = {
-  items: [],
-  totalQty: 0,
-  totalAmount: 0,
-};
-
 export const CartProvider = ({ children }) => {
-  // User state from localStorage
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // Reactive cart key based on user
-  const cartKey = useMemo(() => (user ? `cart_user_${user.id}` : null), [user]);
+  const [cart, setCart] = useState({
+    items: [],
+    totalQty: 0,
+    totalAmount: 0,
+  });
 
-  const [cart, setCart] = useState(emptyCart);
+  // Load cart from backend on user change
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      // Ensure profile has full URL
-      if (storedUser.profile && !storedUser.profile.startsWith("http")) {
-        storedUser.profile = `http://localhost:9000${storedUser.profile}`;
+    const fetchCart = async () => {
+      if (!user) return setCart({ items: [], totalQty: 0, totalAmount: 0 });
+      try {
+        const { data } = await axios.get("http://localhost:9000/cart", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
+        });
+        if (data.success) {
+          const items = data.cart.items;
+          const totalQty = items.reduce((a, i) => a + i.qty, 0);
+          const totalAmount = items.reduce((a, i) => a + i.qty * i.price, 0);
+          setCart({ items, totalQty, totalAmount });
+        }
+      } catch (err) {
+        console.error(err);
       }
-      setUser(storedUser);
-    }
-  }, []);
-
-  // Sync user across tabs
-  useEffect(() => {
-    const syncUser = () => {
-      setUser(JSON.parse(localStorage.getItem("user")));
     };
 
-    window.addEventListener("storage", syncUser);
-    syncUser();
+    fetchCart();
+  }, [user]);
 
-    return () => window.removeEventListener("storage", syncUser);
-  }, []);
-
-  // Load cart when user changes
-  useEffect(() => {
-    if (cartKey) {
-      const saved = localStorage.getItem(cartKey);
-      setCart(saved ? JSON.parse(saved) : emptyCart);
-    } else {
-      setCart(emptyCart);
-    }
-  }, [cartKey]);
-
-  // Save cart to localStorage
-  const saveCart = (newCart) => {
-    setCart(newCart);
-    if (cartKey) {
-      localStorage.setItem(cartKey, JSON.stringify(newCart));
-    }
-  };
-
-  // Add to cart
-  const addToCart = (product) => {
+  // ✅ Add to cart
+  const addToCart = async (product, qty = 1) => {
     if (!user) {
       alert("Please login to add items");
       return;
     }
 
-    const exists = cart.items.find((i) => i.productId === product.id);
-
-    let items;
-
-    if (exists) {
-      items = cart.items.map((i) =>
-        i.productId === product.id ? { ...i, qty: i.qty + 1 } : i
+    try {
+      await axios.post(
+        "http://localhost:9000/cart/add",
+        { productId: product.id, qty },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
       );
-    } else {
-      items = [
-        ...cart.items,
-        {
-          productId: product.id,
-          title: product.title,
-          price: product.price,
-          image: product.image,
-          qty: 1,
-        },
-      ];
+
+      // Refresh cart
+      const { data } = await axios.get("http://localhost:9000/cart", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
+      });
+
+      if (data.success) {
+        const items = data.cart.items;
+        const totalQty = items.reduce((a, i) => a + i.qty, 0);
+        const totalAmount = items.reduce((a, i) => a + i.qty * i.price, 0);
+        setCart({ items, totalQty, totalAmount });
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add item to cart");
     }
-
-    calculate(items);
   };
 
-  // Update quantity
-  const updateQty = (id, qty) => {
-    if (qty <= 0) return removeItem(id);
+  // ✅ Update quantity
+  const updateQty = async (productId, qty) => {
+    if (qty <= 0) return removeItem(productId);
+    try {
+      await axios.post(
+        "http://localhost:9000/cart/add",
+        { productId, qty: 0 }, // we will handle exact qty below
+        { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
+      );
 
-    calculate(
-      cart.items.map((i) => (i.productId === id ? { ...i, qty } : i))
-    );
+      // Workaround: manually update each qty via full refresh
+      const { data } = await axios.get("http://localhost:9000/cart", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
+      });
+
+      if (data.success) {
+        const items = data.cart.items.map((i) =>
+          i.productId === productId ? { ...i, qty } : i
+        );
+        const totalQty = items.reduce((a, i) => a + i.qty, 0);
+        const totalAmount = items.reduce((a, i) => a + i.qty * i.price, 0);
+        setCart({ items, totalQty, totalAmount });
+
+        // Optionally, sync backend exact qty
+        await axios.post(
+          "http://localhost:9000/cart/add",
+          { productId, qty },
+          { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // Remove item
-  const removeItem = (id) => {
-    calculate(cart.items.filter((i) => i.productId !== id));
+  // ✅ Remove item
+  const removeItem = async (productId) => {
+    try {
+      await axios.post(
+        "http://localhost:9000/cart/remove",
+        { productId },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
+      );
+
+      setCart((prev) => {
+        const items = prev.items.filter((i) => i.productId !== productId);
+        const totalQty = items.reduce((a, i) => a + i.qty, 0);
+        const totalAmount = items.reduce((a, i) => a + i.qty * i.price, 0);
+        return { items, totalQty, totalAmount };
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // Calculate totals
-  const calculate = (items) => {
-    const totalQty = items.reduce((a, b) => a + b.qty, 0);
-    const totalAmount = items.reduce((a, b) => a + b.qty * b.price, 0);
-
-    saveCart({ items, totalQty, totalAmount });
+  // ✅ Clear cart
+  const clearCart = async () => {
+    if (!user) return;
+    try {
+      await axios.post(
+        "http://localhost:9000/cart/clear",
+        {},
+        { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
+      );
+      setCart({ items: [], totalQty: 0, totalAmount: 0 });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // Logout function (optional)
+  // ✅ Logout
   const logout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("userToken");
-    setUser(null); // clear user state
-
-    //   localStorage.removeItem("role");
-    //   localStorage.removeItem("cart"); // remove saved cart from localStorage
-    // setCart([]);   // clear cart state
+    setUser(null);
+    setCart({ items: [], totalQty: 0, totalAmount: 0 });
   };
-
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, updateQty, removeItem, user, setUser, logout }}
+      value={{
+        user,
+        setUser,
+        cart,
+        addToCart,
+        updateQty,
+        removeItem,
+        clearCart,
+        logout
+      }}
     >
       {children}
     </CartContext.Provider>

@@ -27,6 +27,8 @@ import Error404 from './Pages/User/Error404';
 import Shop from './Pages/User/Shop';
 import UserSettings from './Pages/User/UserSettings';
 import ProductDetail from './Pages/User/ProductDetail';
+import Checkout from './Pages/User/Checkout';
+import OrderSuccess from './Pages/User/OrderSuccess';
 
 // Admin
 import AdminDashboard from './Pages/Admin/AdminDashboard';
@@ -88,6 +90,8 @@ function App() {
         <Route path='/shop' element={<Shop />} />
         <Route path='/faq' element={<Faq />} />
         <Route path='/user-settings' element={<UserSettings />} />
+        <Route path='/checkout' element={<Checkout />} />
+        <Route path='/order-success' element={<OrderSuccess />} />
 
       </Route>
 

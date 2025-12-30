@@ -60,7 +60,7 @@ const CoupenEdit = () => {
     <div className="admin">
       <Sidebar />
       <div className="admin-content">
-        <div className="coupen-page">
+        <div className="coupen-page fade-in">
 
           {/* PAGE HEADER */}
           <div className="d-flex justify-content-between align-items-center mb-4">

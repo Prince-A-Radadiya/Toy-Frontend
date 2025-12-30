@@ -19,7 +19,7 @@ const Inventory = () => {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem("adminToken");;
-            const res = await axios.get("http://localhost:9000/get-product", {
+            const res = await axios.get("http://localhost:9000/get-p-data", {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setProducts(res.data.products || []);
@@ -111,7 +111,7 @@ const Inventory = () => {
     return (
         <div className="admin">
             <Sidebar />
-            <div className="admin-content">
+            <div className="admin-content fade-in">
 
                 {/* PAGE HEADER */}
                 <div className="d-flex justify-content-between align-items-center mb-4">

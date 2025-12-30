@@ -139,7 +139,7 @@ const Home = ({ setCartCount }) => {
                     <div className="container">
                         <div className="d-flex justify-content-between align-items-center mb-4">
                             <div>
-                                <h3 className="section-title">Trending Now</h3>
+                                <h3 className="section-title text-black">Trending Now</h3>
                                 <p className="section-subtitle">
                                     The most coveted items this week.
                                 </p>

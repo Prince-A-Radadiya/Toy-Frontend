@@ -53,7 +53,7 @@ const Coupen = () => {
   return (
     <div className="admin">
       <Sidebar />
-      <div className="admin-content">
+      <div className="admin-content fade-in">
         <div className="coupen-container">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <div>

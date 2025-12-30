@@ -146,7 +146,7 @@ const ProductAdd = () => {
         <div className="admin d-flex">
             <Sidebar />
 
-            <div className="admin-content p-4">
+            <div className="admin-content p-4 fade-in">
                 {/* HEADER */}
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold mb-0">Add New Product</h2>
@@ -278,7 +278,7 @@ const ProductAdd = () => {
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label className="form-label">Compare at price</label>
+                                        <label className="form-label">Old price</label>
                                         <input
                                             className="form-control"
                                             name="oldPrice"

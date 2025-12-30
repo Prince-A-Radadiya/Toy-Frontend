@@ -74,7 +74,7 @@ const AdminDashboard = () => {
     <div className="admin d-flex">
       <Sidebar />
 
-      <div className="admin-content p-4">
+      <div className="admin-content p-4 fade-in">
 
         {/* HEADER */}
         <div className="d-flex justify-content-between align-items-center mb-4">
