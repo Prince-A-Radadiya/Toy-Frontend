@@ -55,7 +55,7 @@ import AdminProtected from './Protected/AdminProtected';
 function App() {
   useEffect(() => {
     AOS.init({
-      duration: 700,
+      duration: 600,
       easing: "ease-in-out",
       once: false,     // 🔥 IMPORTANT
       mirror: true,    // 🔥 animate again when scrolling up
