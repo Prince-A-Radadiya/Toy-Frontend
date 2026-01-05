@@ -67,7 +67,7 @@ const Wishlist = () => {
         <div className="row">
           {wishlist.map((item) => (
             <div key={item.id} className="col-lg-3 col-md-4 col-sm-6 mb-4">
-              <div className="wishlist-card card h-100 shadow-sm border-0">
+              <div className="wishlist-card card h-100 shadow-sm border-0" data-aos="fade-up">
                 <Link to={`/product/${item.id}`} className="text-decoration-none">
                   <div className="wishlist-img-container">
                     <img

@@ -138,8 +138,30 @@ const Coupen = () => {
                   <option value="product">Specific Product</option>
                   <option value="category">Specific Category</option>
                 </select>
+                <label className="mt-3">Minimum Cart Value</label>
+                <input
+                  className="form-control"
+                  name="minCartValue"
+                  onChange={handleChange}
+                />
+
+                <div className="form-check mt-3">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    name="firstOrderOnly"
+                    onChange={handleChange}
+                  />
+                  <label className="form-check-label mt-0">
+                    First Order Only
+                  </label>
+                </div>
+
               </div>
+
             </div>
+
+
 
             {/* RIGHT */}
             <div className="col-lg-4">

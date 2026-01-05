@@ -29,11 +29,11 @@ const Faq = () => {
         },
         {
           q: "What is the minimum age to shop here?",
-          a: "You have have to be 18 and older to shop at Love Depot."
+          a: "You have have to be 18 and older to shop at Toys."
         },
         {
           q: "How can I stay up to date with new launches and sales?",
-          a: "Do you want to keep up with the latest products and be informed of discounts and sales? Just go to the Love Depot homepage and scroll to the bottom of the page to see the button that says 'Sign up to our newsletters'. Simply type your email ID and you can even avail 10% off your first order by signing up."
+          a: "Do you want to keep up with the latest products and be informed of discounts and sales? Just go to the Toys homepage and scroll to the bottom of the page to see the button that says 'Sign up to our newsletters'. Simply type your email ID and you can even avail 10% off your first order by signing up."
         },
         {
           q: "How can I be updated on the latest products?",
@@ -49,11 +49,11 @@ const Faq = () => {
         },
         {
           q: "How do I search for a particular product?",
-          a: "Love Depot has a simple search engine that has been customized to provide better search results. If you are familiar with or specific about a product, enter it into the search bar and the results will be displayed. Also, if you are only vaguely familiar with a product, simply enter the category and you will be outlined with a list of products which are 100% genuine from well-known Indian and International Brands from which you can easily find your preferred product."
+          a: "Toys has a simple search engine that has been customized to provide better search results. If you are familiar with or specific about a product, enter it into the search bar and the results will be displayed. Also, if you are only vaguely familiar with a product, simply enter the category and you will be outlined with a list of products which are 100% genuine from well-known Indian and International Brands from which you can easily find your preferred product."
         },
         {
           q: "How do I reset my password in case I fail to log in to my account?",
-          a: `If you failed to log in to your account, don't worry. Love Depot has a simple account recovery process that will allow you to re-login quickly.
+          a: `If you failed to log in to your account, don't worry. Toys has a simple account recovery process that will allow you to re-login quickly.
 
 1. Select the option “Forgot Password”.
 2. Enter your registered email address or phone number.
@@ -76,11 +76,11 @@ Once completed, you will be redirected to the login page.`
         },
         {
           q: "Will my order details be visible on the package?",
-          a: "At Love Depot, we ensure you that your order will arrive in a discreet manner. We value your privacy and understand that you may want to keep your purchases private. Hence, we strictly scrutinize our logistics and and shipping to ensure discretion. Your order is packaged very securely and is covered before it leaves the warehouse. There is no description or indication of the product inside and you cant feel the product either as it is boxed. Hence, you can feel at ease while shopping at Love Depot."
+          a: "At Toys, we ensure you that your order will arrive in a discreet manner. We value your privacy and understand that you may want to keep your purchases private. Hence, we strictly scrutinize our logistics and and shipping to ensure discretion. Your order is packaged very securely and is covered before it leaves the warehouse. There is no description or indication of the product inside and you cant feel the product either as it is boxed. Hence, you can feel at ease while shopping at Toys."
         },
         {
           q: "Is GST included in your orders?",
-          a: "Yes, while shopping at Love Depot, GST is included in the price of the product. That means you do not have to pay anything on top of what you see for the products."
+          a: "Yes, while shopping at Toys, GST is included in the price of the product. That means you do not have to pay anything on top of what you see for the products."
         },
         {
           q: "How does the charge appear on my bank statement?",
@@ -193,7 +193,7 @@ Once completed, you will be redirected to the login page.`
             <h2 className="faq__heading">{topic.title}</h2>
             <p className="faq__desc">{topic.description}</p>
 
-            <div className="accordion faq__accordion" id="faqAccordion">
+            <div className="accordion faq__accordion" id="faqAccordion" data-aos="fade-up">
               {topic.faqs.map((item, index) => (
                 <div className="accordion-item faq__item" key={index}>
                   <h2 className="accordion-header">

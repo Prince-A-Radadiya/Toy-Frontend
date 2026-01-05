@@ -31,7 +31,6 @@ import Addtocart from './Pages/User/Addtocart';
 import AgeGate from './Pages/User/AgeGate';
 import Faq from './Pages/User/Faq';
 import Error404 from './Pages/User/Error404';
-import Shop from './Pages/User/Shop';
 import UserSettings from './Pages/User/UserSettings';
 import Checkout from './Pages/User/Checkout';
 import OrderSuccess from './Pages/User/OrderSuccess';
@@ -55,20 +54,23 @@ import AdminProtected from './Protected/AdminProtected';
 function App() {
   useEffect(() => {
     AOS.init({
-      duration: 600,
+      duration: 600,      
       easing: "ease-in-out",
-      once: false,     // 🔥 IMPORTANT
-      mirror: true,    // 🔥 animate again when scrolling up
-      offset: 100,
+      once: true,
+      // once: false,        
+      // mirror: true,
+      offset: 120,        
     });
-
   }, []);
   const [cartCount, setCartCount] = useState(0);
 
-  const [allowed, setAllowed] = useState(() => {
-    // Read from localStorage on first render
-    return localStorage.getItem("ageAllowed") === "true";
-  });
+  const [allowed, setAllowed] = useState(false);
+
+useEffect(() => {
+  const stored = localStorage.getItem("ageAllowed");
+  setAllowed(stored === "true");
+}, []);
+
 
   const handleConfirm = () => {
     localStorage.setItem("ageAllowed", "true"); // save once
@@ -102,7 +104,6 @@ function App() {
         <Route path='/return-&-refund' element={<ReturnnRefund />} />
         <Route path='/add-to-cart' element={<Addtocart />} />
         <Route path='/wishlist' element={<Wishlist />} />
-        <Route path='/shop' element={<Shop />} />
         <Route path='/faq' element={<Faq />} />
         <Route path='/user-settings' element={<UserSettings />} />
         <Route path='/checkout' element={<Checkout />} />

@@ -121,7 +121,7 @@ const Header = ({ cartCount }) => {
         <div className="container">
           {/* Logo */}
           <Link className="navbar-brand" to="/">
-            <img src={logo} alt="Logo" height="40" />
+            <img className="logo" src={logo} alt="Logo" height="40" />
           </Link>
 
           {/* Mobile Toggle */}

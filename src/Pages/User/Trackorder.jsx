@@ -66,7 +66,7 @@ const Track = () => {
 
             {/* CURRENT STATUS */}
             <div className="col-lg-6">
-              <div className="card shadow-sm track-card h-100">
+              <div className="card shadow-sm track-card h-100" data-aos="fade-up">
                 <div className="card-body">
                   <h6 className="text-uppercase text-muted">
                     Current Status
@@ -100,7 +100,7 @@ const Track = () => {
 
             {/* PRODUCT BOX */}
             <div className="col-lg-6">
-              <div className="card shadow-sm track-card product-card h-100">
+              <div className="card shadow-sm track-card product-card h-100" data-aos="fade-up">
                 <div className="card-body d-flex align-items-center">
                   <div className="product-icon me-3">📦</div>
                   <div>
@@ -116,7 +116,7 @@ const Track = () => {
 
             {/* ACTIVITY LOG */}
             <div className="col-12">
-              <div className="card shadow-sm track-card">
+              <div className="card shadow-sm track-card" data-aos="fade-up">
                 <div className="card-body">
                   <h6 className="text-uppercase text-muted mb-3">
                     Activity Log

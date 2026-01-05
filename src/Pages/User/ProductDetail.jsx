@@ -20,6 +20,61 @@ const ProductDetail = () => {
   const [activeImg, setActiveImg] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const [userRating, setUserRating] = useState(0);
+  const [ratingLoading, setRatingLoading] = useState(false);
+  const [canRate, setCanRate] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    if (!token || !product?._id) return;
+
+    fetch(`http://localhost:9000/can-rate/${product._id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => setCanRate(data.canRate))
+      .catch(() => setCanRate(false));
+  }, [product]);
+
+
+  const submitRating = async (value) => {
+    try {
+      setUserRating(value);
+      setRatingLoading(true);
+
+      const token = localStorage.getItem("userToken");
+      if (!token) return alert("Login required to rate");
+
+      const res = await fetch(
+        `http://localhost:9000/product/${product._id}/rate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ value }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+        setProduct((prev) => ({
+          ...prev,
+          averageRating: data.averageRating,
+          ratingCount: data.ratingCount,
+        }));
+      }
+    } catch {
+      alert("Rating failed");
+    } finally {
+      setRatingLoading(false);
+    }
+  };
+
+
+
   useEffect(() => {
     if (!id) return;
 
@@ -69,7 +124,7 @@ const ProductDetail = () => {
       <div className="container">
         <div className="row g-5">
           {/* LEFT - IMAGES */}
-          <div className="col-lg-6">
+          <div className="col-lg-6" data-aos="fade-up">
             <div className="main-image mb-3">
               <img
                 src={getImageUrl(product.images?.[activeImg])}
@@ -98,17 +153,36 @@ const ProductDetail = () => {
           </div>
 
           {/* RIGHT - PRODUCT INFO */}
-          <div className="col-lg-6">
+          <div className="col-lg-6" data-aos="fade-up">
             <h1 className="mb-2">{product.title}</h1>
 
             <div className="rating mb-2 d-flex align-items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <FaStar key={i} color="#f5c518" />
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  style={{ cursor: canRate ? "pointer" : "default" }}
+                  color={star <= Math.round(product.averageRating)
+                    ? "#f5c518"
+                    : "#e4e5e9"}
+                  onClick={() => {
+                    if (!canRate) return;
+                    submitRating(star);
+                  }}
+                />
               ))}
+
               <span className="ms-2 text-muted">
-                {product.reviewCount || 0} Reviews
+                {product.averageRating?.toFixed(1)} / 5
+                {" "}({product.ratingCount} ratings)
               </span>
             </div>
+
+            {!canRate && (
+              <small className="text-muted">
+                ⭐ You can rate this product after purchasing it
+              </small>
+            )}
+
 
             <div className="price mb-3">
               <span className="fs-4 fw-bold">₹{product.price}</span>

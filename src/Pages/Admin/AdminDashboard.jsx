@@ -147,6 +147,25 @@ const AdminDashboard = () => {
 
   if (loading) return <div className="admin d-flex"><Sidebar /><div className="admin-content p-4">Loading dashboard...</div></div>;
 
+  const doughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "right",   // 🔥 MOVE TO RIGHT
+        align: "center",
+        labels: {
+          boxWidth: 14,
+          boxHeight: 14,
+          padding: 16,
+          // usePointStyle: true, // circle dots
+          // pointStyle: "rectangle",
+        },
+      },
+    },
+  };
+
   return (
     <div className="admin d-flex">
       <Sidebar />
@@ -175,7 +194,7 @@ const AdminDashboard = () => {
           <div className="col-lg-8">
             <div className="card dashboard-card h-100">
               <div className="card-header bg-transparent border-0">
-                <h5 className="mb-1">Sales Overview</h5>
+                <h5 className="mb-2">Sales Overview</h5>
                 <div className="d-flex gap-2">
                   <input type="date" className="form-control form-control-sm" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
                   <input type="date" className="form-control form-control-sm" value={toDate} onChange={(e) => setToDate(e.target.value)} />
@@ -190,15 +209,21 @@ const AdminDashboard = () => {
           {/* ORDER STATUS */}
           <div className="col-lg-4">
             <div className="card dashboard-card h-100">
-              <div className="card-header bg-transparent border-0"><h5>Order Status</h5></div>
-              <div className="card-body text-center">
-                <div style={{ position: "relative", width: 220, height: 220 }}>
-                  <Doughnut key={orderStatus.map(s => s.count).join("-")} data={ringData} />
+              <div className="card-header bg-transparent border-0">
+                <h5 className="mb-0">Order Status</h5>
+              </div>
+              <div className="card-body text-center pt-0">
+                <div style={{ position: "relative", width: 220, height: 180 }}>
+                  <Doughnut
+                    key={orderStatus.map(s => s.count).join("-")}
+                    data={ringData}
+                    options={doughnutOptions}
+                  />
                   <div
                     style={{
                       position: "absolute",
-                      top: "60%",
-                      left: "50%",
+                      top: "50%",
+                      left: "28%",
                       transform: "translate(-50%, -50%)",
                       fontSize: 24,
                       fontWeight: 700,
@@ -208,7 +233,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <ul className="list-unstyled text-start small mt-3">
+                <ul className="list-unstyled text-start small mt-2 mb-0">
                   {orderStatus.map((s) => (
                     <li key={s._id} className="d-flex align-items-center gap-2">
                       <span

@@ -21,7 +21,6 @@ const Checkout = () => {
   const [discountAmount, setDiscountAmount] = useState(0);
 
   const tax = 0;
-
   // Fetch available coupons
   useEffect(() => {
     fetch("http://localhost:9000/coupen-list")
@@ -35,24 +34,36 @@ const Checkout = () => {
   const totalBeforeCoupon = subtotal + tax;
   const total = totalBeforeCoupon - discountAmount;
 
-  const applyCoupon = (coupon) => {
-    if (cart.items.length === 0) return alert("Cart is empty");
+const applyCoupon = async (coupon) => {
+  try {
+    const token = localStorage.getItem("userToken");
 
-    const isFirstOrder = !user?.orders || user.orders.length === 0;
-    if (coupon.code === "WELCOME20" && !isFirstOrder) {
-      return alert("This coupon is valid only for first order");
+    const res = await fetch("http://localhost:9000/apply-coupon", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        couponCode: coupon.code,
+        cartTotal: totalBeforeCoupon,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert(data.message);
+      return;
     }
 
-    if (totalBeforeCoupon < 2500) return alert("Cart total must be at least ₹2500");
-
-    setAppliedCoupon(coupon);
-    const discount = coupon.discountType === "percentage"
-      ? (totalBeforeCoupon * coupon.discountValue) / 100
-      : coupon.discountValue;
-
-    setDiscountAmount(discount);
+    setAppliedCoupon(data.coupon);
+    setDiscountAmount(data.discount);
     setDrawerOpen(false);
-  };
+  } catch (err) {
+    alert("Coupon apply failed");
+  }
+};
 
   const removeAppliedCoupon = () => {
     setAppliedCoupon(null);
@@ -112,7 +123,7 @@ const placeOrder = async () => {
       key: rpData.key,
       amount: rpData.order.amount,
       currency: "INR",
-      name: "Love Depot",
+      name: "Toys",
       description: "Order Payment",
       order_id: rpData.order.id,
       handler: (response) =>
@@ -187,7 +198,7 @@ const createOrderAndFinish = async (method) => {
 
 
   return (
-    <div className="checkout-page">
+    <div className="checkout-page checkout">
       <div className="container">
         <div className="row gy-4">
 

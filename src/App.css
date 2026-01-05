@@ -54,6 +54,7 @@ header {
   border-radius: 50%;
 }
 
+header .logo
 
 .animated-navbar {
   transition: all 0.35s ease-in-out;
@@ -291,12 +292,9 @@ header .btn{
   border-top: 1px solid #eee;
 }
 
-.footer-logo {
-  font-weight: 700;
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.footer-logo img{
+  height: 80px;
+  width: auto;
 }
 
 .logo-icon {
@@ -405,8 +403,6 @@ header .btn{
 }
 
 .home .category .box {
-  /* height: 250px;
-  width: 250px; */
   padding: 75px 0px;
   background-color: var(--col-bg);
   display: flex;
@@ -1783,6 +1779,32 @@ header .btn{
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
 }
 
+.orders-page .return-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 360px;
+  height: 100%;
+  background: #fff;
+  padding: 20px;
+  z-index: 1001;
+  box-shadow: -5px 0 20px rgba(0,0,0,.15);
+  animation: slideIn .3s ease;
+}
+
+.orders-page .drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .mobile-header {
@@ -1812,6 +1834,18 @@ header .btn{
     padding: 20px 0;
   }
 }
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 /* ----- USER SETTING END ----- */
 
@@ -2723,7 +2757,7 @@ input#switch-close:checked~.register .inner {
   background: #faf7f6;
 }
 
-.box {
+.checkout .box {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
@@ -2731,7 +2765,7 @@ input#switch-close:checked~.register .inner {
   position: relative;
 }
 
-.step {
+.checkout .step {
   position: absolute;
   top: -12px;
   left: -12px;
@@ -2746,7 +2780,7 @@ input#switch-close:checked~.register .inner {
 
 }
 
-.input {
+.checkout .input {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
@@ -2754,19 +2788,19 @@ input#switch-close:checked~.register .inner {
   margin-bottom: 12px;
 }
 
-.grid-2 {
+.checkout .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.grid-3 {
+.checkout .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
-.payment-tabs button {
+.checkout .payment-tabs button {
   border: none;
   padding: 12px;
   background: #eee;
@@ -2776,12 +2810,12 @@ input#switch-close:checked~.register .inner {
   cursor: pointer;
 }
 
-.payment-tabs .active {
+.checkout .payment-tabs .active {
   background: #fff;
   border: 2px solid var(--col-card-bg);
 }
 
-.pay-btn {
+.checkout .pay-btn {
   width: 100%;
   background: var(--col-card-bg);
   color: #fff;
@@ -2791,36 +2825,36 @@ input#switch-close:checked~.register .inner {
   font-size: 18px;
 }
 
-.summary {
+.checkout .summary {
   background: #fff;
   padding: 24px;
   border-radius: 12px;
 }
 
-.summary-item {
+.checkout .summary-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
 }
 
-.summary-item img {
+.checkout .summary-item img {
   width: 50px;
   border-radius: 6px;
 }
 
-.price-row {
+.checkout .price-row {
   display: flex;
   justify-content: space-between;
   margin: 8px 0;
 }
 
-.total {
+.checkout .total {
   font-weight: bold;
   font-size: 18px;
 }
 
-.trust {
+.checkout .trust {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
@@ -2829,7 +2863,7 @@ input#switch-close:checked~.register .inner {
 
 
 /* Apply Coupon Button */
-.apply-btn {
+.checkout .apply-btn {
   background-color: var(--col-card-bg);
   border: none;
   outline: none;
@@ -2840,7 +2874,7 @@ input#switch-close:checked~.register .inner {
 }
 
 /* Coupon Drawer */
-.coupon-drawer {
+.checkout .coupon-drawer {
   position: fixed;
   top: 0;
   right: -100%;
@@ -2857,16 +2891,16 @@ input#switch-close:checked~.register .inner {
   overflow-y: auto;
 }
 
-.coupon-drawer.open {
+.checkout .coupon-drawer.open {
   right: 0;
 }
 
-.coupon-drawer .drawer-title {
+.checkout .coupon-drawer .drawer-title {
   font-weight: 600;
   margin-bottom: 15px;
 }
 
-.coupon-drawer .close-btn {
+.checkout .coupon-drawer .close-btn {
   background: transparent;
   border: none;
   font-size: 1.5rem;
@@ -2874,11 +2908,11 @@ input#switch-close:checked~.register .inner {
   cursor: pointer;
   z-index: 10001;
 }
-.checkout-page .drawer-content{
+.checkout .checkout-page .drawer-content{
   padding: 0;
 }
 /* Overlay */
-.drawer-overlay {
+.checkout .drawer-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -2890,7 +2924,7 @@ input#switch-close:checked~.register .inner {
 }
 
 /* Coupon Card */
-.coupon-card {
+.checkout .coupon-card {
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 10px;
@@ -2900,11 +2934,11 @@ input#switch-close:checked~.register .inner {
   align-items: center;
 }
 
-.coupon-card h6 {
+.checkout .coupon-card h6 {
   margin: 0;
 }
 
-.coupon-card button {
+.checkout .coupon-card button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -2914,12 +2948,12 @@ input#switch-close:checked~.register .inner {
   transition: 0.25s;
 }
 
-.coupon-card button:hover {
+.checkout .coupon-card button:hover {
   background-color: #0056b3;
 }
 
 /* Applied Coupon */
-.applied-coupon {
+.checkout .applied-coupon {
   background: #d4edda;
   padding: 8px 12px;
   border-radius: 5px;
@@ -2929,7 +2963,7 @@ input#switch-close:checked~.register .inner {
 }
 
 /* Remove coupon button */
-.remove-coupon-btn {
+.checkout .remove-coupon-btn {
   background: #dc3545;
   color: white;
   border: none;
@@ -2939,49 +2973,49 @@ input#switch-close:checked~.register .inner {
   cursor: pointer;
 }
 
-.remove-coupon-btn:hover {
+.checkout .remove-coupon-btn:hover {
   background: #a71d2a;
 }
 
 /* Drawer content inside */
-.cart-page .drawer-content {
+.checkout .cart-page .drawer-content {
   padding: 0;
   margin-top: 20px;
 }
 
 /* ------------------ Responsive for Mobile ------------------  */
 @media (max-width: 576px) {
-  .coupon-drawer {
+  .checkout .coupon-drawer {
     width: 100%;
     right: -100%;
     padding: 15px;
   }
 
-  .coupon-drawer.open {
+  .checkout .coupon-drawer.open {
     right: 0;
   }
 
-  .coupon-card {
+  .checkout .coupon-card {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .coupon-card button {
+  .checkout .coupon-card button {
     margin-top: 8px;
     width: 100%;
     text-align: center;
   }
 
-  .drawer-header {
+  .checkout .drawer-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .drawer-header .close-btn {
+  .checkout .drawer-header .close-btn {
     align-self: flex-end;
     margin-top: -40px;
   }
-  .step{
+  .checkout .step{
     top: -5px;
     left: -5px;
     height: 20px;
@@ -3574,12 +3608,12 @@ input#switch-close:checked~.register .inner {
   min-height: 100vh;
 }
 
-.filter-bar {
+.coupon-page .filter-bar {
   display: flex;
   justify-content: space-between;
 }
 
-.create-coupon-btn {
+.coupon-page .create-coupon-btn {
   height: 42px;
   padding: 0 18px;
   font-size: 14px;
@@ -3591,7 +3625,7 @@ input#switch-close:checked~.register .inner {
   white-space: nowrap;
 }
 
-.search-box {
+.coupon-page .search-box {
   display: flex;
   align-items: center;
   background: white;
@@ -3600,26 +3634,26 @@ input#switch-close:checked~.register .inner {
   gap: 10px;
 }
 
-.search-box input {
+.coupon-page .search-box input {
   border: none;
   outline: none;
 }
 
-.card {
+.coupon-page .card {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.status.active {
+.coupon-page .status.active {
   color: green;
   font-weight: 600;
 }
 
-.status.inactive {
+.coupon-page .status.inactive {
   color: gray;
 }
 
-.pagination-bar {
+.coupon-page .pagination-bar {
   display: flex;
   justify-content: end;
   align-items: center;
@@ -3627,7 +3661,7 @@ input#switch-close:checked~.register .inner {
   padding: 15px;
 }
 
-.pagination-bar button {
+.coupon-page .pagination-bar button {
   padding: 0 10px;
 }
 
@@ -3659,29 +3693,29 @@ input#switch-close:checked~.register .inner {
 }
 
 
-.drawer-header {
+.coupon-page .drawer-header {
   padding: 16px;
   border-bottom: 1px solid #eee;
   display: flex;
   justify-content: space-between;
 }
 
-.drawer-header button {
+.coupon-page .drawer-header button {
   outline: none;
   background: transparent;
   border: none;
 }
 
-.drawer-body {
+.coupon-page .drawer-body {
   padding: 16px;
 }
 
-.drawer-body label {
+.coupon-page .drawer-body label {
   font-size: 13px;
   margin-top: 12px;
 }
 
-.drawer-body input,
+.coupon-page .drawer-body input,
 .drawer-body select {
   width: 100%;
   padding: 8px;
@@ -4028,8 +4062,12 @@ input#switch-close:checked~.register .inner {
   animation: fadeIn 0.35s ease;
 }
 
-.returns-page .table-card .btn{
-  border: 1px solid #007bff!important;
+.returns-page .table-card .green{
+  border: 1px solid #22c55e!important;
+}
+.returns-page .table-card .red{
+  border: 1px solid #ef4444!important;
+
 }
 
 @keyframes fadeIn {

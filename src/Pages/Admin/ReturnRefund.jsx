@@ -1,74 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../../Component/Sidebar";
 import { FaCog } from "react-icons/fa";
+import axios from "axios";
 
 const ReturnsRefunds = () => {
-    const data = [
-        {
-            returnId: "RET-8832",
-            orderId: "ORD-1029",
-            product: "Nike Air Zoom (Sz 10)",
-            customer: "John Doe",
-            email: "john@example.com",
-            date: "Oct 24, 2023",
-            amount: 120,
-            status: "Pending",
-            action: "Review",
-        },
-        {
-            returnId: "RET-8831",
-            orderId: "ORD-0922",
-            product: "Mech Keyboard K2",
-            customer: "Sarah Smith",
-            email: "sarah@mail.com",
-            date: "Oct 23, 2023",
-            amount: 89,
-            status: "Approved",
-            action: "Process Refund",
-        },
-        {
-            returnId: "RET-8829",
-            orderId: "ORD-0911",
-            product: "Classic Watch",
-            customer: "Michael Brown",
-            email: "mike.b@web.net",
-            date: "Oct 21, 2023",
-            amount: 240,
-            status: "Rejected",
-            action: "Details",
-        },
-    ];
-
+    const [data, setData] = useState([]);
     const [filter, setFilter] = useState("All");
 
+    useEffect(() => {
+        axios
+            .get("http://localhost:9000/admin/returns", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                },
+            })
+            .then((res) => setData(res.data.orders || []))
+            .catch((err) => console.error(err));
+    }, []);
+
     const filteredData =
-        filter === "All" ? data : data.filter((d) => d.status === filter);
+        filter === "All"
+            ? data
+            : data.filter(
+                (d) =>
+                    d.returnRequest?.status?.toLowerCase() === filter.toLowerCase()
+            );
+
+    const updateReturn = async (orderId, status) => {
+        try {
+            await axios.put(
+                `http://localhost:9000/admin/returns/${orderId}`,
+                { status },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                    },
+                }
+            );
+
+            // update UI instantly
+            setData((prev) =>
+                prev.map((o) =>
+                    o._id === orderId
+                        ? {
+                            ...o,
+                            returnRequest: { ...o.returnRequest, status },
+                        }
+                        : o
+                )
+            );
+        } catch (err) {
+            alert("Failed to update return");
+        }
+    };
+
 
     return (
         <div className="admin">
             <Sidebar />
 
             <div className="admin-content returns-page">
-
                 {/* HEADER */}
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold mb-0">Returns & Refunds</h2>
                     <div className="d-flex align-items-center gap-3">
                         <FaCog className="fs-5 cursor-pointer text-muted" />
-
                         <img
-                            src={require('../../Img/admin.webp')}
+                            src={require("../../Img/admin.webp")}
                             alt="Admin"
                             className="admin-avatar"
                         />
                     </div>
                 </div>
 
-                {/* STATS */}
+                {/* STATS (unchanged) */}
                 <div className="row g-3 mb-4">
-                    <StatCard title="Pending Requests" value="12" tag="+2 new" color="orange" />
-                    <StatCard title="Total Refunded (Mo)" value="$4,230.50" tag="+12.5%" color="green" />
-                    <StatCard title="Avg. Processing Time" value="24 hrs" tag="-2 hrs" color="purple" />
+                    <StatCard title="Pending Requests" value="—" tag="Live" color="orange" />
+                    <StatCard title="Total Refunded (Mo)" value="—" tag="—" color="green" />
+                    <StatCard title="Avg. Processing Time" value="—" tag="—" color="purple" />
                 </div>
 
                 {/* FILTER BAR */}
@@ -78,24 +87,13 @@ const ReturnsRefunds = () => {
                             {["All", "Pending", "Approved", "Rejected"].map((s) => (
                                 <button
                                     key={s}
-                                    className={`btn filter-btn ${filter === s ? "active" : ""}`}
+                                    className={`btn filter-btn ${filter === s ? "active" : ""
+                                        }`}
                                     onClick={() => setFilter(s)}
                                 >
                                     {s}
                                 </button>
                             ))}
-                        </div>
-
-                        <div className="d-flex gap-2">
-                            <select className="form-select form-select-sm">
-                                <option>Newest First</option>
-                                <option>Oldest First</option>
-                            </select>
-                            <input
-                                type="text"
-                                className="form-control form-control-sm"
-                                placeholder="Filter by ID..."
-                            />
                         </div>
                     </div>
                 </div>
@@ -117,10 +115,18 @@ const ReturnsRefunds = () => {
                             </thead>
 
                             <tbody>
+                                {filteredData.length === 0 && (
+                                    <tr>
+                                        <td colSpan="7" className="text-center text-muted py-4">
+                                            No records found
+                                        </td>
+                                    </tr>
+                                )}
+
                                 {filteredData.map((item) => (
-                                    <tr key={item.returnId} className="fade-in">
+                                    <tr key={item._id} className="fade-in">
                                         <td>
-                                            <strong>#{item.returnId}</strong>
+                                            <strong>{item.orderId}</strong>
                                         </td>
 
                                         <td>
@@ -128,40 +134,66 @@ const ReturnsRefunds = () => {
                                                 #{item.orderId}
                                             </strong>
                                             <br />
-                                            <small className="text-muted">{item.product}</small>
+                                            <small className="text-muted">
+                                                {item.items?.[0]?.title || "—"}
+                                            </small>
                                         </td>
 
                                         <td>
-                                            <strong>{item.customer}</strong>
+                                            <strong>{item.userId?.fullname}</strong>
                                             <br />
-                                            <small className="text-muted">{item.email}</small>
+                                            <small className="text-muted">
+                                                {item.userId?.email}
+                                            </small>
                                         </td>
 
-                                        <td>{item.date}</td>
+                                        <td>
+                                            {new Date(
+                                                item.returnRequest.requestedAt
+                                            ).toLocaleDateString()}
+                                        </td>
 
-                                        <td className="fw-bold">${item.amount.toFixed(2)}</td>
+                                        <td className="fw-bold">
+                                            ₹{Number(item.total || 0).toFixed(2)}
+                                        </td>
 
                                         <td>
-                                            <span className={`status ${item.status.toLowerCase()}`}>
-                                                {item.status}
+                                            <span
+                                                className={`status ${item.returnRequest.status}`}
+                                            >
+                                                {item.returnRequest.status}
                                             </span>
                                         </td>
 
                                         <td>
-                                            <button className="btn btn-sm btn-outline-primary">
-                                                {item.action}
-                                            </button>
+                                            {item.returnRequest.status === "pending" && (
+                                                <>
+                                                    <button
+                                                        className="btn green btn-sm btn-outline-success me-2"
+                                                        onClick={() => updateReturn(item._id, "approved")}
+                                                    >
+                                                        Approve
+                                                    </button>
+
+                                                    <button
+                                                        className="btn red btn-sm btn-outline-danger"
+                                                        onClick={() => updateReturn(item._id, "rejected")}
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                </>
+                                            )}
+
+                                            {item.returnRequest.status !== "pending" && (
+                                                <span className="text-muted">
+                                                    {item.returnRequest.status.toUpperCase()}
+                                                </span>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-
-                        {filteredData.length === 0 && (
-                            <div className="text-center py-4 text-muted">
-                                No records found
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
@@ -174,7 +206,7 @@ const StatCard = ({ title, value, tag, color }) => (
         <div className={`stat-card ${color}`}>
             <div className="d-flex justify-content-between">
                 <p>{title}</p>
-                <span className="tag">{tag}</span>
+                {/* <span className="tag">{tag}</span> */}
             </div>
             <h5>{value}</h5>
         </div>

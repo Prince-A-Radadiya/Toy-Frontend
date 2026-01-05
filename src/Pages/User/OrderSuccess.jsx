@@ -43,7 +43,7 @@ const OrderSuccess = () => {
             />
 
             <AnimatedText
-              text="Thank you for shopping with Love Depot."
+              text="Thank you for shopping with Toys."
               className="success-subtitle"
               delay={600}
             />

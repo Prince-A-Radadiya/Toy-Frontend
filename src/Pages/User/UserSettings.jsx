@@ -222,11 +222,65 @@ const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Return drawer states
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [reason, setReason] = useState("");
+  const [comment, setComment] = useState("");
+
+  // ⭐ Rating states
+const [ratingDrawerOrderId, setRatingDrawerOrderId] = useState(null);
+const [ratingValue, setRatingValue] = useState(0);
+const [ratingLoading, setRatingLoading] = useState(false);
+
+const renderStars = (value, onSelect) => {
+  return (
+    <div style={{ display: "flex", gap: "6px" }}>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span
+          key={star}
+          onClick={() => onSelect(star)}
+          style={{
+            cursor: "pointer",
+            fontSize: "22px",
+            color: star <= value ? "#facc15" : "#d1d5db",
+          }}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+  );
+};
+
+const submitRating = async (productId) => {
+  if (!ratingValue) return alert("Please select rating");
+
+  try {
+    setRatingLoading(true);
+    const token = localStorage.getItem("userToken");
+
+    await axios.post(
+      `http://localhost:9000/product/${productId}/rate`,
+      { value: ratingValue },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    setRatingDrawerOrderId(null);
+    setRatingValue(0);
+    alert("Thanks for rating ⭐");
+  } catch {
+    alert("Rating failed");
+  } finally {
+    setRatingLoading(false);
+  }
+};
+
   useEffect(() => {
     fetchOrders();
   }, []);
 
-  // Fetch all orders
+  /* ================= FETCH ORDERS ================= */
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("userToken");
@@ -234,30 +288,29 @@ const MyOrders = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const ordersData = res.data.orders || [];
       const now = new Date();
 
-      // Filter: keep cancelled orders for 48 hours
-      const filteredOrders = ordersData.filter((order) => {
-        if (order.orderStatus?.toLowerCase() === "cancelled") {
-          const cancelledAt = new Date(order.updatedAt);
-          const diffInHours = (now - cancelledAt) / (1000 * 60 * 60);
-          return diffInHours <= 48; // show only if less than 2 days
+      // Keep cancelled orders only for 48 hrs
+      const filtered = (res.data.orders || []).filter((order) => {
+        if (order.orderStatus === "cancelled") {
+          const diff =
+            (now - new Date(order.updatedAt)) / (1000 * 60 * 60);
+          return diff <= 48;
         }
-        return true; // show all other orders
+        return true;
       });
 
-      setOrders(filteredOrders);
+      setOrders(filtered);
     } catch (err) {
-      console.error("Failed to fetch orders", err);
+      console.error("Fetch orders failed", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Cancel order
+  /* ================= CANCEL ORDER ================= */
   const cancelOrder = async (orderId) => {
-    if (!window.confirm("Are you sure you want to cancel this order?")) return;
+    if (!window.confirm("Cancel this order?")) return;
 
     try {
       const token = localStorage.getItem("userToken");
@@ -265,65 +318,88 @@ const MyOrders = () => {
       const res = await axios.put(
         `http://localhost:9000/cancel-order/${orderId}`,
         {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (res.data.success) {
-        // Update local order status immediately
         setOrders((prev) =>
           prev.map((o) =>
             o._id === orderId
-              ? { ...o, orderStatus: "cancelled", updatedAt: new Date().toISOString() }
+              ? {
+                ...o,
+                orderStatus: "cancelled",
+                updatedAt: new Date().toISOString(),
+              }
               : o
           )
         );
       }
     } catch (err) {
       alert("Unable to cancel order");
-      console.error(err);
     }
   };
 
-  // Download invoice
-const downloadInvoice = async (orderId) => {
-  try {
-    const token = localStorage.getItem("userToken");
+  /* ================= DOWNLOAD INVOICE ================= */
+  const downloadInvoice = async (orderId) => {
+    try {
+      const token = localStorage.getItem("userToken");
 
-    const { data } = await axios.get(
-      `http://localhost:9000/invoice/${orderId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: "blob",
-      }
-    );
+      const res = await axios.get(
+        `http://localhost:9000/invoice/${orderId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        }
+      );
 
-    const url = window.URL.createObjectURL(
-      new Blob([data], { type: "application/pdf" })
-    );
+      const url = window.URL.createObjectURL(
+        new Blob([res.data], { type: "application/pdf" })
+      );
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `Invoice-${orderId}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Invoice-${orderId}.pdf`;
+      link.click();
+    } catch {
+      alert("Invoice download failed");
+    }
+  };
 
-  } catch (err) {
-    console.error(err);
-    alert("Failed to download invoice");
+  /* ================= SUBMIT RETURN ================= */
+//  const submitReturn = async () => {
+//   if (!reason) return alert("Please select a reason");
+
+//   try {
+//     const token = localStorage.getItem("userToken");
+
+//     await axios.post(
+//       `http://localhost:9000/order/${selectedOrder._id}/return`,
+//       { reason, comment },
+//       { headers: { Authorization: `Bearer ${token}` } }
+//     );
+
+//     setDrawerOpen(false);
+//     setReason("");
+//     setComment("");
+//     fetchOrders();
+//   } catch (err) {
+//     alert("Return request failed");
+//   }
+// };
+
+
+  if (loading) {
+    return <div className="text-center py-5">Loading orders...</div>;
   }
-};
-
-  if (loading) return <div className="text-center py-5">Loading orders...</div>;
 
   return (
     <div className="orders-page">
       <h3 className="mb-4">My Orders</h3>
 
       {orders.length === 0 ? (
-        <div className="alert alert-info">You have not placed any orders yet.</div>
+        <div className="alert alert-info">
+          You have not placed any orders yet.
+        </div>
       ) : (
         orders.map((order) => (
           <div className="card mb-3 shadow-sm" key={order._id}>
@@ -344,19 +420,16 @@ const downloadInvoice = async (orderId) => {
                   <p className="mb-0">
                     <strong>Status:</strong>{" "}
                     <span
-                      className={`badge ${
-                        order.orderStatus === "delivered"
+                      className={`badge ${order.orderStatus === "delivered"
                           ? "bg-success"
                           : order.orderStatus === "cancelled"
-                          ? "bg-danger"
-                          : order.orderStatus === "pending"
-                          ? "bg-secondary"
-                          : order.orderStatus === "confirmed"
-                          ? "bg-primary"
-                          : "text-bg-dark"
-                      }`}
+                            ? "bg-danger"
+                            : order.orderStatus === "confirmed"
+                              ? "bg-primary"
+                              : "bg-secondary"
+                        }`}
                     >
-                      {order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)}
+                      {order.orderStatus.toUpperCase()}
                     </span>
                   </p>
                 </div>
@@ -368,8 +441,8 @@ const downloadInvoice = async (orderId) => {
                   <button
                     className="btn btn-outline-danger btn-sm me-2"
                     disabled={
-                      order.orderStatus?.toLowerCase() === "cancelled" ||
-                      order.orderStatus?.toLowerCase() === "delivered"
+                      order.orderStatus === "cancelled" ||
+                      order.orderStatus === "delivered"
                     }
                     onClick={() => cancelOrder(order._id)}
                   >
@@ -377,17 +450,115 @@ const downloadInvoice = async (orderId) => {
                   </button>
 
                   <button
-                    className="btn btn-outline-secondary btn-sm"
+                    className="btn btn-outline-secondary btn-sm me-2"
                     onClick={() => downloadInvoice(order.orderId)}
                   >
                     Invoice
                   </button>
+
+                  {order.orderStatus === "delivered" && (
+  <>
+    <button
+      className="btn btn-outline-primary btn-sm"
+      onClick={() =>
+        setRatingDrawerOrderId(
+          ratingDrawerOrderId === order._id ? null : order._id
+        )
+      }
+    >
+      ⭐ Rate Order
+    </button>
+
+    {/* ⭐ RATING DRAWER */}
+    {ratingDrawerOrderId === order._id && (
+      <div
+        className="mt-3 p-3 border rounded bg-light"
+        style={{ animation: "fadeSlide 0.25s ease" }}
+      >
+        <p className="mb-2 fw-semibold">Rate your experience</p>
+
+        {renderStars(ratingValue, setRatingValue)}
+
+        <button
+          className="btn btn-primary btn-sm mt-3"
+          disabled={ratingLoading}
+          onClick={() => submitRating(order.items[0].productId)}
+        >
+          {ratingLoading ? "Submitting..." : "Submit Rating"}
+        </button>
+      </div>
+    )}
+  </>
+)}
+
+
+                  {/* RETURN BUTTON */}
+                  {/* {order.orderStatus === "delivered" &&
+                    !order.returnRequest?.requested && (
+                      <button
+                        className="btn btn-outline-warning btn-sm"
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          setDrawerOpen(true);
+                        }}
+                      >
+                        Return
+                      </button>
+                    )} */}
+
+                  {/* {order.returnRequest?.requested && (
+                    <span className="badge bg-warning text-dark ms-2">
+                      Return {order.returnRequest.status}
+                    </span>
+                  )} */}
                 </div>
               </div>
             </div>
           </div>
         ))
       )}
+
+      {/* ================= RETURN DRAWER ================= */}
+      {/* {drawerOpen && (
+        <>
+          <div
+            className="drawer-overlay"
+            onClick={() => setDrawerOpen(false)}
+          />
+
+          <div className="return-drawer">
+            <h5 className="mb-3">Return Order</h5>
+
+            <select
+              className="form-select mb-2"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            >
+              <option value="">Select Reason</option>
+              <option>Damaged Product</option>
+              <option>Wrong Item</option>
+              <option>Quality Issue</option>
+              <option>Other</option>
+            </select>
+
+            <textarea
+              className="form-control mb-3"
+              rows="3"
+              placeholder="Additional comments (optional)"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+
+            <button
+              className="btn btn-danger w-100"
+              onClick={submitReturn}
+            >
+              Submit Return
+            </button>
+          </div>
+        </>
+      )} */}
     </div>
   );
 };
+

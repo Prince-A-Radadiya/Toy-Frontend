@@ -22,7 +22,7 @@ const User = () => {
                 },
             })
             .then((res) => {
-                console.log("USERS:", res.data); // 🔥 DEBUG
+                // console.log("USERS:", res.data); // 🔥 DEBUG
                 setUsersData(res.data);
             })
             .catch((err) => console.log(err));
@@ -39,7 +39,7 @@ const User = () => {
             });
             setUsersData((prev) => prev.filter((u) => u.id !== id));
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             alert("Failed to delete user");
         }
     };

@@ -70,9 +70,25 @@ const ProductCard = ({ product, onAddToCart }) => {
       </Link>
 
       <div className="product-info pt-0">
-        <div className="rating">
-          <FaStar /> {product.rating || 0}.0
-        </div>
+        <div className="rating d-flex align-items-center gap-1">
+  {[1, 2, 3, 4, 5].map((star) => (
+    <FaStar
+      key={star}
+      size={14}
+      color={
+        star <= Math.round(product.averageRating || 0)
+          ? "#f5c518"
+          : "#e4e5e9"
+      }
+    />
+  ))}
+
+  <span className="ms-1 text-muted" style={{ fontSize: "13px" }}>
+    {product.averageRating?.toFixed(1) || "0.0"}
+    {product.ratingCount > 0 && ` (${product.ratingCount})`}
+  </span>
+</div>
+
 
         <div className="price">
           ₹{product.price}
@@ -320,7 +336,9 @@ const Product = () => {
 
           suitableFor: p.suitable ? [p.suitable.toLowerCase()] : [],
 
-          rating: 4,
+          averageRating: p.averageRating || 0,
+ratingCount: p.ratingCount || 0,
+
 
           discount: p.oldPrice
             ? `${Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)}% Off`
@@ -332,7 +350,7 @@ const Product = () => {
 
           freeLube: p.freeLube,
 
-          stock: p.stock, // ✅ ADD THIS LINE ONLY
+          stock: p.stock, 
 
           isNew: i % 4 === 0,
           isBestSeller: i % 6 === 0,

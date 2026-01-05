@@ -13,7 +13,7 @@ const Deliver = () => {
       <section className="packaging">
         <div className="container">
           <div className="row align-items-center justify-content-center">
-            <div className="col-lg-6 col-md-8 col-12 mb-4 mb-lg-0">
+            <div className="col-lg-6 col-md-8 col-12 mb-4 mb-lg-0" data-aos="fade-up">
               <div className="box d-flex flex-column flex-lg-row align-items-center">
                 <div className="left mb-3 mb-lg-0">
                   <img
@@ -36,7 +36,7 @@ const Deliver = () => {
                 </div>
               </div>
             </div>
-            <div className="col-12 text-center mt-4">
+            <div className="col-12 text-center mt-4" data-aos="fade-up">
               <img
                 src={require('../../Img/label.png')}
                 alt="Label"
