@@ -4,10 +4,23 @@ import axios from "axios";
 import { FaCog } from "react-icons/fa";
 
 const Orders = () => {
+
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "https://toy-backend-fsek.onrender.com";
+
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState("all"); // all / pending / confirmed
     const ordersPerPage = 5;
+
+    const resolveImage = (path) => {
+        if (!path) return "/img/default-product.png";
+
+        // If already full URL (cloudinary, old data, etc.)
+        if (path.startsWith("http")) return path;
+
+        // Relative path → add backend URL
+        return `${BACKEND_URL}${path}`;
+    };
 
     // ================= FETCH ORDERS =================
     const fetchOrders = async () => {
@@ -218,14 +231,13 @@ const Orders = () => {
                                             {item.productId ? (
                                                 <>
                                                     <img
-                                                        src={
-                                                            item.productId.images?.[0]
-                                                                ? `https://toy-backend-fsek.onrender.com${item.productId.images[0]}`
-                                                                : item.image || "/img/default-product.png"
-                                                        }
-                                                        alt={item.productId.title || item.title || "Product"}
+                                                        src={resolveImage(
+                                                            item.productId?.images?.[0] || item.image
+                                                        )}
+                                                        alt={item.productId?.title || item.title || "Product"}
                                                         style={{ width: "50px", height: "50px", objectFit: "cover" }}
                                                     />
+
                                                     {/* <div>{item.productId.title || item.title}</div> */}
                                                     <div>Qty: {item.qty}</div>
                                                 </>
