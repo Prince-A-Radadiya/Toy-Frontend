@@ -69,6 +69,9 @@ const MegaMenu = ({
 };
 
 const Header = ({ cartCount }) => {
+
+  const BASE_URL = "https://toy-backend-fsek.onrender.com";
+
   const [brands, setBrands] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [brandOpen, setBrandOpen] = useState(false);
@@ -261,14 +264,28 @@ const Header = ({ cartCount }) => {
 
               <Link onClick={closeMobileMenu} to="/wishlist"><FiHeart size={20} /></Link>
 
-              <button className="btn p-0 d-flex align-items-center" onClick={() => { handleAccountClick(); closeMobileMenu(); }}>
+              <button
+                className="btn p-0 d-flex align-items-center"
+                onClick={() => {
+                  handleAccountClick();
+                  closeMobileMenu();
+                }}
+              >
                 {user ? (
                   <img
-                    src={user.profile ? (user.profile.startsWith("http") ? user.profile : `https://toy-backend-fsek.onrender.com${user.profile}`) : "/img/user.webp"}
+                    src={
+                      user.profile
+                        ? user.profile.startsWith("http")
+                          ? user.profile.replace("http://localhost:9000", BASE_URL)
+                          : `${BASE_URL}${user.profile}`
+                        : "/img/user.webp"
+                    }
                     alt="profile"
                     className="rounded-circle header-profile-img"
                   />
-                ) : <FaRegCircleUser size={20} />}
+                ) : (
+                  <FaRegCircleUser size={20} />
+                )}
               </button>
 
               <Link onClick={closeMobileMenu} to="/add-to-cart" className="position-relative">

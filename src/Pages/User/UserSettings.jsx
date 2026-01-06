@@ -29,7 +29,10 @@ const UserSettings = () => {
       setPreview(
         user.profile
           ? user.profile.startsWith("http")
-            ? user.profile
+            ? user.profile.replace(
+              "http://localhost:9000",
+              "https://toy-backend-fsek.onrender.com"
+            )
             : `https://toy-backend-fsek.onrender.com${user.profile}`
           : "/img/user.webp"
       );
