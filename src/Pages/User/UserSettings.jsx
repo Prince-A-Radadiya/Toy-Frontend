@@ -229,52 +229,52 @@ const MyOrders = () => {
   const [comment, setComment] = useState("");
 
   // ⭐ Rating states
-const [ratingDrawerOrderId, setRatingDrawerOrderId] = useState(null);
-const [ratingValue, setRatingValue] = useState(0);
-const [ratingLoading, setRatingLoading] = useState(false);
+  const [ratingDrawerOrderId, setRatingDrawerOrderId] = useState(null);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [ratingLoading, setRatingLoading] = useState(false);
 
-const renderStars = (value, onSelect) => {
-  return (
-    <div style={{ display: "flex", gap: "6px" }}>
-      {[1, 2, 3, 4, 5].map((star) => (
-        <span
-          key={star}
-          onClick={() => onSelect(star)}
-          style={{
-            cursor: "pointer",
-            fontSize: "22px",
-            color: star <= value ? "#facc15" : "#d1d5db",
-          }}
-        >
-          ★
-        </span>
-      ))}
-    </div>
-  );
-};
-
-const submitRating = async (productId) => {
-  if (!ratingValue) return alert("Please select rating");
-
-  try {
-    setRatingLoading(true);
-    const token = localStorage.getItem("userToken");
-
-    await axios.post(
-      `https://toy-backend-fsek.onrender.com/product/${productId}/rate`,
-      { value: ratingValue },
-      { headers: { Authorization: `Bearer ${token}` } }
+  const renderStars = (value, onSelect) => {
+    return (
+      <div style={{ display: "flex", gap: "6px" }}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            onClick={() => onSelect(star)}
+            style={{
+              cursor: "pointer",
+              fontSize: "22px",
+              color: star <= value ? "#facc15" : "#d1d5db",
+            }}
+          >
+            ★
+          </span>
+        ))}
+      </div>
     );
+  };
 
-    setRatingDrawerOrderId(null);
-    setRatingValue(0);
-    alert("Thanks for rating ⭐");
-  } catch {
-    alert("Rating failed");
-  } finally {
-    setRatingLoading(false);
-  }
-};
+  const submitRating = async (productId) => {
+    if (!ratingValue) return alert("Please select rating");
+
+    try {
+      setRatingLoading(true);
+      const token = localStorage.getItem("userToken");
+
+      await axios.post(
+        `https://toy-backend-fsek.onrender.com/product/${productId}/rate`,
+        { value: ratingValue },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setRatingDrawerOrderId(null);
+      setRatingValue(0);
+      alert("Thanks for rating ⭐");
+    } catch {
+      alert("Rating failed");
+    } finally {
+      setRatingLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -366,26 +366,26 @@ const submitRating = async (productId) => {
   };
 
   /* ================= SUBMIT RETURN ================= */
-//  const submitReturn = async () => {
-//   if (!reason) return alert("Please select a reason");
+  //  const submitReturn = async () => {
+  //   if (!reason) return alert("Please select a reason");
 
-//   try {
-//     const token = localStorage.getItem("userToken");
+  //   try {
+  //     const token = localStorage.getItem("userToken");
 
-//     await axios.post(
-//       `https://toy-backend-fsek.onrender.com/order/${selectedOrder._id}/return`,
-//       { reason, comment },
-//       { headers: { Authorization: `Bearer ${token}` } }
-//     );
+  //     await axios.post(
+  //       `https://toy-backend-fsek.onrender.com/order/${selectedOrder._id}/return`,
+  //       { reason, comment },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
 
-//     setDrawerOpen(false);
-//     setReason("");
-//     setComment("");
-//     fetchOrders();
-//   } catch (err) {
-//     alert("Return request failed");
-//   }
-// };
+  //     setDrawerOpen(false);
+  //     setReason("");
+  //     setComment("");
+  //     fetchOrders();
+  //   } catch (err) {
+  //     alert("Return request failed");
+  //   }
+  // };
 
 
   if (loading) {
@@ -421,12 +421,12 @@ const submitRating = async (productId) => {
                     <strong>Status:</strong>{" "}
                     <span
                       className={`badge ${order.orderStatus === "delivered"
-                          ? "bg-success"
-                          : order.orderStatus === "cancelled"
-                            ? "bg-danger"
-                            : order.orderStatus === "confirmed"
-                              ? "bg-primary"
-                              : "bg-secondary"
+                        ? "bg-success"
+                        : order.orderStatus === "cancelled"
+                          ? "bg-danger"
+                          : order.orderStatus === "confirmed"
+                            ? "bg-primary"
+                            : "bg-secondary"
                         }`}
                     >
                       {order.orderStatus.toUpperCase()}
@@ -457,39 +457,39 @@ const submitRating = async (productId) => {
                   </button>
 
                   {order.orderStatus === "delivered" && (
-  <>
-    <button
-      className="btn btn-outline-primary btn-sm"
-      onClick={() =>
-        setRatingDrawerOrderId(
-          ratingDrawerOrderId === order._id ? null : order._id
-        )
-      }
-    >
-      ⭐ Rate Order
-    </button>
+                    <>
+                      <button
+                        className="btn btn-outline-primary btn-sm"
+                        onClick={() =>
+                          setRatingDrawerOrderId(
+                            ratingDrawerOrderId === order._id ? null : order._id
+                          )
+                        }
+                      >
+                        ⭐ Rate Order
+                      </button>
 
-    {/* ⭐ RATING DRAWER */}
-    {ratingDrawerOrderId === order._id && (
-      <div
-        className="mt-3 p-3 border rounded bg-light"
-        style={{ animation: "fadeSlide 0.25s ease" }}
-      >
-        <p className="mb-2 fw-semibold">Rate your experience</p>
+                      {/* ⭐ RATING DRAWER */}
+                      {ratingDrawerOrderId === order._id && (
+                        <div
+                          className="mt-3 p-3 border rounded bg-light"
+                          style={{ animation: "fadeSlide 0.25s ease" }}
+                        >
+                          <p className="mb-2 fw-semibold">Rate your experience</p>
 
-        {renderStars(ratingValue, setRatingValue)}
+                          {renderStars(ratingValue, setRatingValue)}
 
-        <button
-          className="btn btn-primary btn-sm mt-3"
-          disabled={ratingLoading}
-          onClick={() => submitRating(order.items[0].productId)}
-        >
-          {ratingLoading ? "Submitting..." : "Submit Rating"}
-        </button>
-      </div>
-    )}
-  </>
-)}
+                          <button
+                            className="btn btn-primary btn-sm mt-3"
+                            disabled={ratingLoading}
+                            onClick={() => submitRating(order.items[0].productId)}
+                          >
+                            {ratingLoading ? "Submitting..." : "Submit Rating"}
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
 
 
                   {/* RETURN BUTTON */}
