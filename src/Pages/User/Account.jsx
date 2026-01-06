@@ -15,7 +15,7 @@ const Account = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("https://toy-backend-fsek.onrender.com", { email, password });
+      const res = await axios.post("https://toy-backend-fsek.onrender.com/login", { email, password });
 
       if (res.data.token) {
         alert(res.data.message);
@@ -49,8 +49,6 @@ const Account = () => {
       }
     } catch (err) {
       alert(err.response?.data?.message || "Server error");
-      console.log(err);
-      
     }
   };
 
@@ -59,7 +57,7 @@ const Account = () => {
   const register = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://toy-backend-fsek.onrender.com", {
+      const res = await axios.post("https://toy-backend-fsek.onrender.com/register", {
         fullname: name,
         email,
         password,
