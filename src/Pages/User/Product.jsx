@@ -11,7 +11,7 @@ const ProductCard = ({ product, onAddToCart }) => {
   useEffect(() => {
     const checkWishlist = async () => {
       try {
-        const res = await axios.get("http://localhost:9000/wishlist", {
+        const res = await axios.get("https://toy-backend-fsek.onrender.com/wishlist", {
           headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
         });
         const wishlistIds = res.data.wishlist.map((item) => item.id); // backend sends id from productId
@@ -32,13 +32,13 @@ const ProductCard = ({ product, onAddToCart }) => {
       }
 
       if (inWishlist) {
-        await axios.delete(`http://localhost:9000/wishlist/${pid}`, {
+        await axios.delete(`https://toy-backend-fsek.onrender.com/wishlist/${pid}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
         });
         setInWishlist(false);
       } else {
         await axios.post(
-          "http://localhost:9000/wishlist-add",
+          "https://toy-backend-fsek.onrender.com/wishlist-add",
           { productId: pid },
           { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
         );
@@ -319,7 +319,7 @@ const Product = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    fetch("http://localhost:9000/get-product")
+    fetch("https://toy-backend-fsek.onrender.com/get-product")
       .then((res) => res.json())
       .then((data) => {
         const mapped = data.products.map((p, i) => ({
@@ -345,7 +345,7 @@ ratingCount: p.ratingCount || 0,
             : "",
 
           image: p.images?.length
-            ? `http://localhost:9000${p.images[0]}`
+            ? `https://toy-backend-fsek.onrender.com${p.images[0]}`
             : require("../../Img/t1.png"),
 
           freeLube: p.freeLube,

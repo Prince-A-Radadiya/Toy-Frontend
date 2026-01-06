@@ -12,7 +12,7 @@ const Orders = () => {
     // ================= FETCH ORDERS =================
     const fetchOrders = async () => {
         try {
-            const { data } = await axios.get("http://localhost:9000/get-orders", {
+            const { data } = await axios.get("https://toy-backend-fsek.onrender.com/get-orders", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                 },
@@ -31,7 +31,7 @@ const Orders = () => {
     const acceptOrder = async (id) => {
         try {
             await axios.put(
-                `http://localhost:9000/order/${id}`,
+                `https://toy-backend-fsek.onrender.com/order/${id}`,
                 { orderStatus: "confirmed" },
                 {
                     headers: {
@@ -56,7 +56,7 @@ const Orders = () => {
     const downloadLabel = async (orderId) => {
         try {
             const { data } = await axios.get(
-                `http://localhost:9000/order/${orderId}/label`,
+                `https://toy-backend-fsek.onrender.com/order/${orderId}/label`,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` },
                     responseType: "blob",
@@ -125,7 +125,7 @@ const Orders = () => {
     const updateOrderStatus = async (orderId, status) => {
         try {
             await axios.put(
-                `http://localhost:9000/order/${orderId}`,
+                `https://toy-backend-fsek.onrender.com/order/${orderId}`,
                 { orderStatus: status },
                 {
                     headers: {
@@ -220,7 +220,7 @@ const Orders = () => {
                                                     <img
                                                         src={
                                                             item.productId.images?.[0]
-                                                                ? `http://localhost:9000${item.productId.images[0]}`
+                                                                ? `https://toy-backend-fsek.onrender.com${item.productId.images[0]}`
                                                                 : item.image || "/img/default-product.png"
                                                         }
                                                         alt={item.productId.title || item.title || "Product"}

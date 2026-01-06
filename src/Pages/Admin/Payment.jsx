@@ -12,7 +12,7 @@ const Payment = () => {
             try {
                 const token = localStorage.getItem("adminToken");
                 const res = await axios.get(
-                    "http://localhost:9000/payments",
+                    "https://toy-backend-fsek.onrender.com/payments",
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 

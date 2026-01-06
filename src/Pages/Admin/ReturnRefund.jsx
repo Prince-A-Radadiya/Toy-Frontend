@@ -9,7 +9,7 @@ const ReturnsRefunds = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:9000/admin/returns", {
+            .get("https://toy-backend-fsek.onrender.com/admin/returns", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
                 },
@@ -29,7 +29,7 @@ const ReturnsRefunds = () => {
     const updateReturn = async (orderId, status) => {
         try {
             await axios.put(
-                `http://localhost:9000/admin/returns/${orderId}`,
+                `https://toy-backend-fsek.onrender.com/admin/returns/${orderId}`,
                 { status },
                 {
                     headers: {

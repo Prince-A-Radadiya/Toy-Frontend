@@ -19,7 +19,7 @@ const Addtocart = () => {
     if (!user) return;
     try {
       const token = localStorage.getItem("userToken");
-      const res = await fetch("http://localhost:9000/cart", {
+      const res = await fetch("https://toy-backend-fsek.onrender.com/cart", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -40,7 +40,7 @@ const Addtocart = () => {
 
     try {
       const token = localStorage.getItem("userToken");
-      const res = await fetch("http://localhost:9000/cart/update", {
+      const res = await fetch("https://toy-backend-fsek.onrender.com/cart/update", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ productId, qty: newQty }),
@@ -59,7 +59,7 @@ const Addtocart = () => {
     if (!user) return alert("Please login first");
     try {
       const token = localStorage.getItem("userToken");
-      const res = await fetch("http://localhost:9000/cart/remove", {
+      const res = await fetch("https://toy-backend-fsek.onrender.com/cart/remove", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ productId }),
@@ -76,7 +76,7 @@ const Addtocart = () => {
 
   // Fetch coupons
   useEffect(() => {
-    fetch("http://localhost:9000/coupen-list")
+    fetch("https://toy-backend-fsek.onrender.com/coupen-list")
       .then(res => res.json())
       .then(data => {
         if (data.success) setCoupons(data.coupens.filter(c => c.active));
@@ -127,7 +127,7 @@ const Addtocart = () => {
 
             {cart.items.map(item => (
               <div className="cart-item" key={item.productId}>
-                <img src={item.image?.startsWith("http") ? item.image : `http://localhost:9000${item.image}`} alt={item.title} />
+                <img src={item.image?.startsWith("http") ? item.image : `https://toy-backend-fsek.onrender.com${item.image}`} alt={item.title} />
                 <div className="cart-info">
                   <h6>{item.title}</h6>
                   <div className="cart-actions">

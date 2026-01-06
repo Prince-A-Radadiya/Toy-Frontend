@@ -87,7 +87,7 @@ const AdminDashboard = () => {
       try {
         const token = localStorage.getItem("adminToken");
         const res = await axios.get(
-          `http://localhost:9000/dashboard?from=${fromDate}&to=${toDate}`,
+          `https://toy-backend-fsek.onrender.com/dashboard?from=${fromDate}&to=${toDate}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

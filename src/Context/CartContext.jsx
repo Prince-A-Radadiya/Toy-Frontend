@@ -21,7 +21,7 @@ export const CartProvider = ({ children }) => {
     const fetchCart = async () => {
       if (!user) return setCart({ items: [], totalQty: 0, totalAmount: 0 });
       try {
-        const { data } = await axios.get("http://localhost:9000/cart", {
+        const { data } = await axios.get("https://toy-backend-fsek.onrender.com/cart", {
           headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
         });
         if (data.success) {
@@ -47,13 +47,13 @@ export const CartProvider = ({ children }) => {
 
     try {
       await axios.post(
-        "http://localhost:9000/cart/add",
+        "https://toy-backend-fsek.onrender.com/cart/add",
         { productId: product.id, qty },
         { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
       );
 
       // Refresh cart
-      const { data } = await axios.get("http://localhost:9000/cart", {
+      const { data } = await axios.get("https://toy-backend-fsek.onrender.com/cart", {
         headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
       });
 
@@ -74,13 +74,13 @@ export const CartProvider = ({ children }) => {
     if (qty <= 0) return removeItem(productId);
     try {
       await axios.post(
-        "http://localhost:9000/cart/add",
+        "https://toy-backend-fsek.onrender.com/cart/add",
         { productId, qty: 0 }, // we will handle exact qty below
         { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
       );
 
       // Workaround: manually update each qty via full refresh
-      const { data } = await axios.get("http://localhost:9000/cart", {
+      const { data } = await axios.get("https://toy-backend-fsek.onrender.com/cart", {
         headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
       });
 
@@ -94,7 +94,7 @@ export const CartProvider = ({ children }) => {
 
         // Optionally, sync backend exact qty
         await axios.post(
-          "http://localhost:9000/cart/add",
+          "https://toy-backend-fsek.onrender.com/cart/add",
           { productId, qty },
           { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
         );
@@ -108,7 +108,7 @@ export const CartProvider = ({ children }) => {
   const removeItem = async (productId) => {
     try {
       await axios.post(
-        "http://localhost:9000/cart/remove",
+        "https://toy-backend-fsek.onrender.com/cart/remove",
         { productId },
         { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
       );
@@ -129,7 +129,7 @@ export const CartProvider = ({ children }) => {
     if (!user) return;
     try {
       await axios.post(
-        "http://localhost:9000/cart/clear",
+        "https://toy-backend-fsek.onrender.com/cart/clear",
         {},
         { headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` } }
       );

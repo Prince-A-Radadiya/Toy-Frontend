@@ -85,7 +85,7 @@ const Header = ({ cartCount }) => {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const res = await axios.get("http://localhost:9000/brands"); // adjust API
+        const res = await axios.get("https://toy-backend-fsek.onrender.com/brands"); // adjust API
         setBrands(res.data); // assuming [{ _id, name, slug }]
       } catch (err) {
         console.error("Failed to fetch brands:", err);
@@ -264,7 +264,7 @@ const Header = ({ cartCount }) => {
               <button className="btn p-0 d-flex align-items-center" onClick={() => { handleAccountClick(); closeMobileMenu(); }}>
                 {user ? (
                   <img
-                    src={user.profile ? (user.profile.startsWith("http") ? user.profile : `http://localhost:9000${user.profile}`) : "/img/user.webp"}
+                    src={user.profile ? (user.profile.startsWith("http") ? user.profile : `https://toy-backend-fsek.onrender.com${user.profile}`) : "/img/user.webp"}
                     alt="profile"
                     className="rounded-circle header-profile-img"
                   />

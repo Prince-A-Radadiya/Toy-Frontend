@@ -15,7 +15,7 @@ const Account = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:9000/login", { email, password });
+      const res = await axios.post("https://toy-backend-fsek.onrender.com", { email, password });
 
       if (res.data.token) {
         alert(res.data.message);
@@ -37,7 +37,7 @@ const Account = () => {
             email: res.data.user.email,
             profile: res.data.user.profile.startsWith("http")
               ? res.data.user.profile
-              : `http://localhost:9000${res.data.user.profile}`
+              : `https://toy-backend-fsek.onrender.com${res.data.user.profile}`
           };
 
           // Save in CartContext and localStorage
@@ -49,6 +49,8 @@ const Account = () => {
       }
     } catch (err) {
       alert(err.response?.data?.message || "Server error");
+      console.log(err);
+      
     }
   };
 
@@ -57,7 +59,7 @@ const Account = () => {
   const register = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:9000/register", {
+      const res = await axios.post("https://toy-backend-fsek.onrender.com", {
         fullname: name,
         email,
         password,

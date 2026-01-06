@@ -33,7 +33,7 @@ const Coupen = () => {
       const token = localStorage.getItem("adminToken");;
 
       await axios.post(
-        "http://localhost:9000/coupen-create",
+        "https://toy-backend-fsek.onrender.com/coupen-create",
         coupen,
         {
           headers: {

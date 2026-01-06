@@ -30,7 +30,7 @@ const UserSettings = () => {
         user.profile
           ? user.profile.startsWith("http")
             ? user.profile
-            : `http://localhost:9000${user.profile}`
+            : `https://toy-backend-fsek.onrender.com${user.profile}`
           : "/img/user.webp"
       );
     }
@@ -48,7 +48,7 @@ const UserSettings = () => {
       if (password) formData.append("password", password);
       if (profile) formData.append("profile", profile);
 
-      const res = await axios.put("http://localhost:9000/update", formData, {
+      const res = await axios.put("https://toy-backend-fsek.onrender.com/update", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -59,7 +59,7 @@ const UserSettings = () => {
           ...res.data.user,
           profile: res.data.user.profile.startsWith("http")
             ? res.data.user.profile
-            : `http://localhost:9000${res.data.user.profile}`,
+            : `https://toy-backend-fsek.onrender.com${res.data.user.profile}`,
         };
 
         setUser(updatedUser);
@@ -76,7 +76,7 @@ const UserSettings = () => {
     if (!window.confirm("Are you sure?")) return;
     try {
       const token = localStorage.getItem("userToken");
-      await axios.delete("http://localhost:9000/delete", {
+      await axios.delete("https://toy-backend-fsek.onrender.com/delete", {
         headers: { Authorization: `Bearer ${token}` },
       });
       logout();
@@ -261,7 +261,7 @@ const submitRating = async (productId) => {
     const token = localStorage.getItem("userToken");
 
     await axios.post(
-      `http://localhost:9000/product/${productId}/rate`,
+      `https://toy-backend-fsek.onrender.com/product/${productId}/rate`,
       { value: ratingValue },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -284,7 +284,7 @@ const submitRating = async (productId) => {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("userToken");
-      const res = await axios.get("http://localhost:9000/my-orders", {
+      const res = await axios.get("https://toy-backend-fsek.onrender.com/my-orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -316,7 +316,7 @@ const submitRating = async (productId) => {
       const token = localStorage.getItem("userToken");
 
       const res = await axios.put(
-        `http://localhost:9000/cancel-order/${orderId}`,
+        `https://toy-backend-fsek.onrender.com/cancel-order/${orderId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -345,7 +345,7 @@ const submitRating = async (productId) => {
       const token = localStorage.getItem("userToken");
 
       const res = await axios.get(
-        `http://localhost:9000/invoice/${orderId}`,
+        `https://toy-backend-fsek.onrender.com/invoice/${orderId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: "blob",
@@ -373,7 +373,7 @@ const submitRating = async (productId) => {
 //     const token = localStorage.getItem("userToken");
 
 //     await axios.post(
-//       `http://localhost:9000/order/${selectedOrder._id}/return`,
+//       `https://toy-backend-fsek.onrender.com/order/${selectedOrder._id}/return`,
 //       { reason, comment },
 //       { headers: { Authorization: `Bearer ${token}` } }
 //     );

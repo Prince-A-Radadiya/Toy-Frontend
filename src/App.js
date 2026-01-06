@@ -54,23 +54,26 @@ import AdminProtected from './Protected/AdminProtected';
 function App() {
   useEffect(() => {
     AOS.init({
-      duration: 600,      
+      duration: 600,
       easing: "ease-in-out",
       once: true,
       // once: false,        
       // mirror: true,
-      offset: 120,        
+      offset: 120,
     });
   }, []);
   const [cartCount, setCartCount] = useState(0);
 
   const [allowed, setAllowed] = useState(false);
-
-useEffect(() => {
-  const stored = localStorage.getItem("ageAllowed");
-  setAllowed(stored === "true");
-}, []);
-
+  
+  useEffect(()=>{
+    const adminToken = localStorage.getItem('adminToken')
+    const userToken = localStorage.getItem('userToken')
+    if(!adminToken || !userToken){
+      const stored = localStorage.getItem("ageAllowed");
+      setAllowed(stored === "true");
+    }
+  },[])
 
   const handleConfirm = () => {
     localStorage.setItem("ageAllowed", "true"); // save once

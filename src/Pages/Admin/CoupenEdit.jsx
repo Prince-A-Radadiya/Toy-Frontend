@@ -18,7 +18,7 @@ const CoupenEdit = () => {
 
   const fetchCoupons = async () => {
     const res = await axios.get(
-      `http://localhost:9000/coupen-list?page=${page}&search=${search}&status=${status}`
+      `https://toy-backend-fsek.onrender.com/coupen-list?page=${page}&search=${search}&status=${status}`
     );
     setCoupons(res.data.coupens);
     setPages(res.data.pages);
@@ -36,7 +36,7 @@ const CoupenEdit = () => {
       const token = localStorage.getItem("adminToken");;
 
       await axios.put(
-        `http://localhost:9000/coupen-update/${selectedCoupon._id}`,
+        `https://toy-backend-fsek.onrender.com/coupen-update/${selectedCoupon._id}`,
         selectedCoupon,
         {
           headers: {

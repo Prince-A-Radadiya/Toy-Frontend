@@ -16,7 +16,7 @@ const User = () => {
         const token = localStorage.getItem("adminToken");
 
         axios
-            .get("http://localhost:9000/users", {
+            .get("https://toy-backend-fsek.onrender.com/users", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -34,7 +34,7 @@ const User = () => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;
         try {
             const token = localStorage.getItem("adminToken");
-            await axios.delete(`http://localhost:9000/users/${id}`, {
+            await axios.delete(`https://toy-backend-fsek.onrender.com/users/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUsersData((prev) => prev.filter((u) => u.id !== id));
@@ -109,7 +109,7 @@ const User = () => {
                                     <tr key={u.id}>
                                         <td>
                                             <div className="d-flex align-items-center">
-                                                <img src={`http://localhost:9000${u.img}`} alt="" className="user-img me-2" />
+                                                <img src={`https://toy-backend-fsek.onrender.com${u.img}`} alt="" className="user-img me-2" />
                                                 <div>
                                                     <p className="mb-0 fw-semibold">{u.name}</p>
                                                     <small className="text-secondary">{u.email}</small>

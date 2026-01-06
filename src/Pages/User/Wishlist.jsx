@@ -11,7 +11,7 @@ const Wishlist = () => {
 
   const fetchWishlist = async () => {
     try {
-      const res = await axios.get("http://localhost:9000/wishlist", {
+      const res = await axios.get("https://toy-backend-fsek.onrender.com/wishlist", {
         headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
       });
       setWishlist(res.data.wishlist || []);
@@ -37,7 +37,7 @@ const Wishlist = () => {
       });
 
       // Remove from wishlist after adding to cart
-      await axios.delete(`http://localhost:9000/wishlist/${product.id}`, {
+      await axios.delete(`https://toy-backend-fsek.onrender.com/wishlist/${product.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
       });
 
@@ -49,7 +49,7 @@ const Wishlist = () => {
 
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`http://localhost:9000/wishlist/${id}`, {
+      await axios.delete(`https://toy-backend-fsek.onrender.com/wishlist/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
       });
       setWishlist((prev) => prev.filter((item) => item.id !== id));

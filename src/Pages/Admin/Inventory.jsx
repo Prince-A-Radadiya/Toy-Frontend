@@ -19,7 +19,7 @@ const Inventory = () => {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem("adminToken");;
-            const res = await axios.get("http://localhost:9000/get-p-data", {
+            const res = await axios.get("https://toy-backend-fsek.onrender.com/get-p-data", {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setProducts(res.data.products || []);
@@ -58,7 +58,7 @@ const Inventory = () => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
         try {
             const token = localStorage.getItem("adminToken");;
-            await axios.delete(`http://localhost:9000/products/${id}`, {
+            await axios.delete(`https://toy-backend-fsek.onrender.com/products/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert("Product deleted successfully");
@@ -73,7 +73,7 @@ const Inventory = () => {
     const handleSave = async () => {
         try {
             const token = localStorage.getItem("adminToken");;
-            await axios.put(`http://localhost:9000/products/${selectedProduct._id}`, selectedProduct, {
+            await axios.put(`https://toy-backend-fsek.onrender.com/products/${selectedProduct._id}`, selectedProduct, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             alert("Product updated successfully");
@@ -220,7 +220,7 @@ const Inventory = () => {
                                     <td>
                                         <div className="product-info">
                                             <img
-                                                src={product.images?.[0] ? `http://localhost:9000${product.images[0]}` : "https://via.placeholder.com/40"}
+                                                src={product.images?.[0] ? `https://toy-backend-fsek.onrender.com${product.images[0]}` : "https://via.placeholder.com/40"}
                                                 alt=""
                                             />
                                             <div>

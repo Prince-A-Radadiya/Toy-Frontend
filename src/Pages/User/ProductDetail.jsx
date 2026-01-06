@@ -28,7 +28,7 @@ const ProductDetail = () => {
     const token = localStorage.getItem("userToken");
     if (!token || !product?._id) return;
 
-    fetch(`http://localhost:9000/can-rate/${product._id}`, {
+    fetch(`https://toy-backend-fsek.onrender.com/can-rate/${product._id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -46,7 +46,7 @@ const ProductDetail = () => {
       if (!token) return alert("Login required to rate");
 
       const res = await fetch(
-        `http://localhost:9000/product/${product._id}/rate`,
+        `https://toy-backend-fsek.onrender.com/product/${product._id}/rate`,
         {
           method: "POST",
           headers: {
@@ -80,7 +80,7 @@ const ProductDetail = () => {
 
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:9000/product/${id}`);
+        const res = await fetch(`https://toy-backend-fsek.onrender.com/product/${id}`);
         const data = await res.json();
         if (data.success) setProduct(data.product);
         else setProduct(null);
@@ -100,7 +100,7 @@ const ProductDetail = () => {
 
   // Image URL helper
   const getImageUrl = (img) =>
-    img ? `http://localhost:9000${img}` : product.image;
+    img ? `https://toy-backend-fsek.onrender.com${img}` : product.image;
 
   const handleAddToCart = () => {
     addToCart(

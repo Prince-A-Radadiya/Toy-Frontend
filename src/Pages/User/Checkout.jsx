@@ -23,7 +23,7 @@ const Checkout = () => {
   const tax = 0;
   // Fetch available coupons
   useEffect(() => {
-    fetch("http://localhost:9000/coupen-list")
+    fetch("https://toy-backend-fsek.onrender.com/coupen-list")
       .then(res => res.json())
       .then(data => {
         if (data.success) setCoupons(data.coupens.filter(c => c.active));
@@ -38,7 +38,7 @@ const applyCoupon = async (coupon) => {
   try {
     const token = localStorage.getItem("userToken");
 
-    const res = await fetch("http://localhost:9000/apply-coupon", {
+    const res = await fetch("https://toy-backend-fsek.onrender.com/apply-coupon", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const placeOrder = async () => {
   // ONLINE PAYMENT FLOW
   try {
     // 🔹 STEP 1: Create DB order first
-    const orderRes = await fetch("http://localhost:9000/create-order", {
+    const orderRes = await fetch("https://toy-backend-fsek.onrender.com/create-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,7 +106,7 @@ const placeOrder = async () => {
     const dbOrderId = orderData.orderId; // ORD-xxxxx
 
     // 🔹 STEP 2: Create Razorpay order
-    const rpRes = await fetch("http://localhost:9000/razorpay/create-order", {
+    const rpRes = await fetch("https://toy-backend-fsek.onrender.com/razorpay/create-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -145,7 +145,7 @@ const placeOrder = async () => {
 const verifyPayment = async (response, orderId) => {
   const token = localStorage.getItem("userToken");
 
-  const verifyRes = await fetch("http://localhost:9000/razorpay/verify", {
+  const verifyRes = await fetch("https://toy-backend-fsek.onrender.com/razorpay/verify", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -163,13 +163,13 @@ const verifyPayment = async (response, orderId) => {
   if (!data.success) return alert("Payment verification failed");
 
   navigate("/order-success");
-  window.open(`http://localhost:9000/invoice/${orderId}`, "_blank");
+  window.open(`https://toy-backend-fsek.onrender.com/invoice/${orderId}`, "_blank");
 };
 
 const createOrderAndFinish = async (method) => {
   const token = localStorage.getItem("userToken");
 
-  const res = await fetch("http://localhost:9000/create-order", {
+  const res = await fetch("https://toy-backend-fsek.onrender.com/create-order", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -190,7 +190,7 @@ const createOrderAndFinish = async (method) => {
   const data = await res.json();
   if (data.success) {
     navigate("/order-success");
-    window.open(`http://localhost:9000/invoice/${data.orderId}`, "_blank");
+    window.open(`https://toy-backend-fsek.onrender.com/invoice/${data.orderId}`, "_blank");
   } else {
     alert(data.message);
   }
@@ -285,7 +285,7 @@ const createOrderAndFinish = async (method) => {
               <h4>Order Summary</h4>
               {cart.items.map((item) => (
                 <div key={item.productId} className="summary-item">
-                  <img src={item.image?.startsWith("http") ? item.image : `http://localhost:9000${item.image}`} alt={item.title} />
+                  <img src={item.image?.startsWith("http") ? item.image : `https://toy-backend-fsek.onrender.com${item.image}`} alt={item.title} />
                   <div>
                     <p>{item.title}</p>
                     <span>x{item.qty}</span>

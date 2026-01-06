@@ -103,7 +103,7 @@ const ProductAdd = () => {
 
             const token = localStorage.getItem("adminToken");
 
-            await axios.post("http://localhost:9000/products", formData, {
+            await axios.post("https://toy-backend-fsek.onrender.com/products", formData, {
                 headers: {
                     Authorization: token ? `Bearer ${token}` : "",
                 },
