@@ -5,6 +5,8 @@ import axios from "axios";
 import { FaTrash, FaShoppingCart } from "react-icons/fa";
 
 const Wishlist = () => {
+  const BASE_URL = "https://toy-backend-fsek.onrender.com";
+
   const { addToCart } = useCart();
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,10 +73,19 @@ const Wishlist = () => {
                 <Link to={`/product/${item.id}`} className="text-decoration-none">
                   <div className="wishlist-img-container">
                     <img
-                      src={item.image || "/placeholder.png"}
-                      alt={item.title}
-                      className="card-img-top wishlist-img"
-                    />
+  src={
+    item.image
+      ? item.image.startsWith("http")
+        ? item.image.replace(
+            "http://localhost:9000",
+            BASE_URL
+          )
+        : `${BASE_URL}${item.image}`
+      : "/placeholder.png"
+  }
+  alt={item.title}
+  className="card-img-top wishlist-img"
+/>
                   </div>
                 </Link>
                 <div className="card-body d-flex flex-column">
