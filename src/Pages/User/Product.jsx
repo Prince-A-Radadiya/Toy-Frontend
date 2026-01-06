@@ -71,23 +71,23 @@ const ProductCard = ({ product, onAddToCart }) => {
 
       <div className="product-info pt-0">
         <div className="rating d-flex align-items-center gap-1">
-  {[1, 2, 3, 4, 5].map((star) => (
-    <FaStar
-      key={star}
-      size={14}
-      color={
-        star <= Math.round(product.averageRating || 0)
-          ? "#f5c518"
-          : "#e4e5e9"
-      }
-    />
-  ))}
+          {[1, 2, 3, 4, 5].map((star) => (
+            <FaStar
+              key={star}
+              size={14}
+              color={
+                star <= Math.round(product.averageRating || 0)
+                  ? "#f5c518"
+                  : "#e4e5e9"
+              }
+            />
+          ))}
 
-  <span className="ms-1 text-muted" style={{ fontSize: "13px" }}>
-    {product.averageRating?.toFixed(1) || "0.0"}
-    {product.ratingCount > 0 && ` (${product.ratingCount})`}
-  </span>
-</div>
+          <span className="ms-1 text-muted" style={{ fontSize: "13px" }}>
+            {product.averageRating?.toFixed(1) || "0.0"}
+            {product.ratingCount > 0 && ` (${product.ratingCount})`}
+          </span>
+        </div>
 
 
         <div className="price">
@@ -129,7 +129,8 @@ const ProductCard = ({ product, onAddToCart }) => {
 };
 
 /* ------------------ FILTER CONTENT ------------------ */
-const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
+const FilterContent = ({ filters, setFilters, filterOptions, isMobile, onApply }) => {
+
   const [open, setOpen] = useState({
     gender: true,
     brand: false,
@@ -153,9 +154,9 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
     });
   };
 
-  useEffect(() => {
-    setOpen((prev) => ({ ...prev }));
-  }, [filters]);
+  // useEffect(() => {
+  //   setOpen((prev) => ({ ...prev }));
+  // }, [filters]);
 
   return (
     <>
@@ -168,7 +169,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
         </div>
         {open.gender && (
           <div className="filter-options">
-            {["male", "female"].map((g) => (
+            {filterOptions.gender.map((g) => (
               <label key={g}>
                 <input
                   type="checkbox"
@@ -189,7 +190,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
         </div>
         {open.brand && (
           <div className="filter-options">
-            {["mschief", "durex", "manforce"].map((b) => (
+            {filterOptions.brand.map((b) => (
               <label key={b}>
                 <input
                   type="checkbox"
@@ -204,7 +205,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
       </div>
 
       {/* PRICE */}
-      <div className="filter-dropdown">
+      {/* <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("price")}>
           Price <span>{open.price ? "−" : "+"}</span>
         </div>
@@ -222,7 +223,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* CONDOM TYPE */}
       <div className="filter-dropdown">
@@ -231,7 +232,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
         </div>
         {open.condomType && (
           <div className="filter-options">
-            {["thin", "fit"].map((c) => (
+            {filterOptions.condomType.map((c) => (
               <label key={c}>
                 <input
                   type="checkbox"
@@ -252,7 +253,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
         </div>
         {open.usageType && (
           <div className="filter-options">
-            {["internal", "external", "remote control", "dual massager"].map((u) => (
+            {filterOptions.usageType.map((u) => (
               <label key={u}>
                 <input
                   type="checkbox"
@@ -273,7 +274,7 @@ const FilterContent = ({ filters, setFilters, isMobile, onApply }) => {
         </div>
         {open.suitableFor && (
           <div className="filter-options">
-            {["beginner", "advanced", "couple", "solo", "sensitive"].map((s) => (
+            {filterOptions.suitableFor.map((s) => (
               <label key={s}>
                 <input
                   type="checkbox"
@@ -311,6 +312,15 @@ const Product = () => {
     usageType: [],
     suitableFor: [],
   });
+
+  const filterOptions = {
+    gender: [...new Set(PRODUCTS.map(p => p.gender).filter(Boolean))],
+    brand: [...new Set(PRODUCTS.map(p => p.brand).filter(Boolean))],
+    condomType: [...new Set(PRODUCTS.map(p => p.condomType).filter(Boolean))],
+    usageType: [...new Set(PRODUCTS.map(p => p.usageType).filter(Boolean))],
+    suitableFor: [...new Set(PRODUCTS.flatMap(p => p.suitableFor || []))],
+  };
+
   const [tempFilters, setTempFilters] = useState(filters);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -337,7 +347,7 @@ const Product = () => {
           suitableFor: p.suitable ? [p.suitable.toLowerCase()] : [],
 
           averageRating: p.averageRating || 0,
-ratingCount: p.ratingCount || 0,
+          ratingCount: p.ratingCount || 0,
 
 
           discount: p.oldPrice
@@ -350,7 +360,7 @@ ratingCount: p.ratingCount || 0,
 
           freeLube: p.freeLube,
 
-          stock: p.stock, 
+          stock: p.stock,
 
           isNew: i % 4 === 0,
           isBestSeller: i % 6 === 0,
@@ -452,7 +462,11 @@ ratingCount: p.ratingCount || 0,
             {/* DESKTOP FILTER */}
             <div className="col-lg-3 d-none d-lg-block">
               <div className="filter-sidebar">
-                <FilterContent filters={filters} setFilters={setFilters} />
+                <FilterContent
+                  filters={filters}
+                  setFilters={setFilters}
+                  filterOptions={filterOptions}
+                />
               </div>
             </div>
 
@@ -530,7 +544,8 @@ ratingCount: p.ratingCount || 0,
               <FilterContent
                 filters={tempFilters}
                 setFilters={setTempFilters}
-                isMobile={true}
+                filterOptions={filterOptions}
+                isMobile
                 onApply={applyMobileFilter}
               />
             )}
