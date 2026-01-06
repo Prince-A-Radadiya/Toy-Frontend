@@ -5,22 +5,10 @@ import { FaCog } from "react-icons/fa";
 
 const Orders = () => {
 
-    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "https://toy-backend-fsek.onrender.com";
-
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState("all"); // all / pending / confirmed
     const ordersPerPage = 5;
-
-    const resolveImage = (path) => {
-        if (!path) return "/img/default-product.png";
-
-        // If already full URL (cloudinary, old data, etc.)
-        if (path.startsWith("http")) return path;
-
-        // Relative path → add backend URL
-        return `${BACKEND_URL}${path}`;
-    };
 
     // ================= FETCH ORDERS =================
     const fetchOrders = async () => {
@@ -231,9 +219,19 @@ const Orders = () => {
                                             {item.productId ? (
                                                 <>
                                                     <img
-                                                        src={resolveImage(
-                                                            item.productId?.images?.[0] || item.image
-                                                        )}
+                                                        src={
+                                                            item.productId?.images?.[0]
+                                                                ? item.productId.images[0].replace(
+                                                                    "http://localhost:9000",
+                                                                    "https://toy-backend-fsek.onrender.com"
+                                                                )
+                                                                : item.image
+                                                                    ? item.image.replace(
+                                                                        "http://localhost:9000",
+                                                                        "https://toy-backend-fsek.onrender.com"
+                                                                    )
+                                                                    : "https://toy-backend-fsek.onrender.com/img/default-product.png"
+                                                        }
                                                         alt={item.productId?.title || item.title || "Product"}
                                                         style={{ width: "50px", height: "50px", objectFit: "cover" }}
                                                     />
