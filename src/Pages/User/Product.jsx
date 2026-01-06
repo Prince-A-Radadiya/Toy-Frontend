@@ -15,7 +15,8 @@ const ProductCard = ({ product, onAddToCart }) => {
           headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
         });
         const wishlistIds = res.data.wishlist.map((item) => item.id); // backend sends id from productId
-        setInWishlist(wishlistIds.includes(product._id));
+        // setInWishlist(wishlistIds.includes(product._id));
+        setInWishlist(wishlistIds.includes(product.id));
       } catch (err) {
         console.error("Wishlist fetch error:", err);
       }
@@ -25,7 +26,8 @@ const ProductCard = ({ product, onAddToCart }) => {
 
   const toggleWishlist = async () => {
     try {
-      const pid = product._id || product.id;
+      // const pid = product._id || product.id;
+      const pid = product.id;
       if (!pid) {
         console.error("Cannot toggle wishlist: productId missing", product);
         return;
