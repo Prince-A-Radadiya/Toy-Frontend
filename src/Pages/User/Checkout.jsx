@@ -34,55 +34,142 @@ const Checkout = () => {
   const totalBeforeCoupon = subtotal + tax;
   const total = totalBeforeCoupon - discountAmount;
 
-const applyCoupon = async (coupon) => {
-  try {
-    const token = localStorage.getItem("userToken");
+  const applyCoupon = async (coupon) => {
+    try {
+      const token = localStorage.getItem("userToken");
 
-    const res = await fetch("https://toy-backend-fsek.onrender.com/apply-coupon", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        couponCode: coupon.code,
-        cartTotal: totalBeforeCoupon,
-      }),
-    });
+      const res = await fetch("https://toy-backend-fsek.onrender.com/apply-coupon", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          couponCode: coupon.code,
+          cartTotal: totalBeforeCoupon,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!data.success) {
-      alert(data.message);
-      return;
+      if (!data.success) {
+        alert(data.message);
+        return;
+      }
+
+      setAppliedCoupon(data.coupon);
+      setDiscountAmount(data.discount);
+      setDrawerOpen(false);
+    } catch (err) {
+      alert("Coupon apply failed");
     }
-
-    setAppliedCoupon(data.coupon);
-    setDiscountAmount(data.discount);
-    setDrawerOpen(false);
-  } catch (err) {
-    alert("Coupon apply failed");
-  }
-};
+  };
 
   const removeAppliedCoupon = () => {
     setAppliedCoupon(null);
     setDiscountAmount(0);
   };
 
-const placeOrder = async () => {
-  const token = localStorage.getItem("userToken");
-  if (!token) return alert("Login required");
+  const placeOrder = async () => {
+    const token = localStorage.getItem("userToken");
+    if (!token) return alert("Login required");
 
-  // COD FLOW
-  if (payment === "cod") {
-    return createOrderAndFinish("cod");
-  }
+    // COD FLOW
+    if (payment === "cod") {
+      return createOrderAndFinish("cod");
+    }
 
-  // ONLINE PAYMENT FLOW
-  try {
-    // 🔹 STEP 1: Create DB order first
-    const orderRes = await fetch("https://toy-backend-fsek.onrender.com/create-order", {
+    // ONLINE PAYMENT FLOW
+    try {
+      // 🔹 STEP 1: Create DB order first
+      const orderRes = await fetch("https://toy-backend-fsek.onrender.com/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email,
+          shipping: {
+            name: `${shipping.firstName} ${shipping.lastName}`,
+            phone: shipping.phone,
+            address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.zip}`,
+          },
+          paymentMethod: "razorpay",
+          couponCode: appliedCoupon?.code || "",
+        }),
+      });
+
+      const orderData = await orderRes.json();
+      if (!orderData.success) throw new Error(orderData.message);
+
+      const dbOrderId = orderData.orderId; // ORD-xxxxx
+
+      // 🔹 STEP 2: Create Razorpay order
+      const rpRes = await fetch("https://toy-backend-fsek.onrender.com/razorpay/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ amount: total }),
+      });
+
+      const rpData = await rpRes.json();
+      if (!rpData.success) throw new Error("Razorpay order failed");
+
+      // 🔹 STEP 3: Open Razorpay popup
+      const options = {
+        key: rpData.key,
+        amount: rpData.order.amount,
+        currency: "INR",
+        name: "Toys",
+        description: "Order Payment",
+        order_id: rpData.order.id,
+        handler: (response) =>
+          verifyPayment(response, dbOrderId),
+        prefill: {
+          email,
+          contact: shipping.phone,
+        },
+        theme: { color: "#e11d48" },
+      };
+
+      new window.Razorpay(options).open();
+    } catch (err) {
+      console.error(err);
+      alert("Payment failed");
+    }
+  };
+
+  const verifyPayment = async (response, orderId) => {
+    const token = localStorage.getItem("userToken");
+
+    const verifyRes = await fetch("https://toy-backend-fsek.onrender.com/razorpay/verify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_signature: response.razorpay_signature,
+        orderId, // 🔑 VERY IMPORTANT
+      }),
+    });
+
+    const data = await verifyRes.json();
+    if (!data.success) return alert("Payment verification failed");
+
+    navigate("/order-success");
+    window.open(`https://toy-backend-fsek.onrender.com/invoice/${orderId}`, "_blank");
+  };
+
+  const createOrderAndFinish = async (method) => {
+    const token = localStorage.getItem("userToken");
+
+    const res = await fetch("https://toy-backend-fsek.onrender.com/create-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -95,106 +182,19 @@ const placeOrder = async () => {
           phone: shipping.phone,
           address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.zip}`,
         },
-        paymentMethod: "razorpay",
+        paymentMethod: method,
         couponCode: appliedCoupon?.code || "",
       }),
     });
 
-    const orderData = await orderRes.json();
-    if (!orderData.success) throw new Error(orderData.message);
-
-    const dbOrderId = orderData.orderId; // ORD-xxxxx
-
-    // 🔹 STEP 2: Create Razorpay order
-    const rpRes = await fetch("https://toy-backend-fsek.onrender.com/razorpay/create-order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ amount: total }),
-    });
-
-    const rpData = await rpRes.json();
-    if (!rpData.success) throw new Error("Razorpay order failed");
-
-    // 🔹 STEP 3: Open Razorpay popup
-    const options = {
-      key: rpData.key,
-      amount: rpData.order.amount,
-      currency: "INR",
-      name: "Toys",
-      description: "Order Payment",
-      order_id: rpData.order.id,
-      handler: (response) =>
-        verifyPayment(response, dbOrderId),
-      prefill: {
-        email,
-        contact: shipping.phone,
-      },
-      theme: { color: "#e11d48" },
-    };
-
-    new window.Razorpay(options).open();
-  } catch (err) {
-    console.error(err);
-    alert("Payment failed");
-  }
-};
-
-const verifyPayment = async (response, orderId) => {
-  const token = localStorage.getItem("userToken");
-
-  const verifyRes = await fetch("https://toy-backend-fsek.onrender.com/razorpay/verify", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      razorpay_payment_id: response.razorpay_payment_id,
-      razorpay_order_id: response.razorpay_order_id,
-      razorpay_signature: response.razorpay_signature,
-      orderId, // 🔑 VERY IMPORTANT
-    }),
-  });
-
-  const data = await verifyRes.json();
-  if (!data.success) return alert("Payment verification failed");
-
-  navigate("/order-success");
-  window.open(`https://toy-backend-fsek.onrender.com/invoice/${orderId}`, "_blank");
-};
-
-const createOrderAndFinish = async (method) => {
-  const token = localStorage.getItem("userToken");
-
-  const res = await fetch("https://toy-backend-fsek.onrender.com/create-order", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      email,
-      shipping: {
-        name: `${shipping.firstName} ${shipping.lastName}`,
-        phone: shipping.phone,
-        address: `${shipping.address}, ${shipping.city}, ${shipping.state} - ${shipping.zip}`,
-      },
-      paymentMethod: method,
-      couponCode: appliedCoupon?.code || "",
-    }),
-  });
-
-  const data = await res.json();
-  if (data.success) {
-    navigate("/order-success");
-    window.open(`https://toy-backend-fsek.onrender.com/invoice/${data.orderId}`, "_blank");
-  } else {
-    alert(data.message);
-  }
-};
+    const data = await res.json();
+    if (data.success) {
+      navigate("/order-success");
+      window.open(`https://toy-backend-fsek.onrender.com/invoice/${data.orderId}`, "_blank");
+    } else {
+      alert(data.message);
+    }
+  };
 
 
   return (
@@ -241,13 +241,13 @@ const createOrderAndFinish = async (method) => {
             </div>
 
             {/* PAYMENT */}
-            <div className="box">
+            {/* <div className="box">
               <div className="step">3</div>
               <h3>Payment</h3>
               <div className="payment-tabs">
-                {/* <button className={payment === "card" ? "active" : ""} onClick={() => setPayment("card")}>
+                <button className={payment === "card" ? "active" : ""} onClick={() => setPayment("card")}>
                   <FaCreditCard /> Card
-                </button> */}
+                </button>
                 <button className={payment === "upi" ? "active" : ""} onClick={() => setPayment("upi")}>
                   <FaWallet /> Wallet / UPI
                 </button>
@@ -256,7 +256,7 @@ const createOrderAndFinish = async (method) => {
                 </button>
               </div>
 
-              {/* {payment === "card" && (
+              {payment === "card" && (
                 <>
                   <input className="input" placeholder="Card number" />
                   <div className="grid-2">
@@ -265,18 +265,15 @@ const createOrderAndFinish = async (method) => {
                   </div>
                   <input className="input mb-0" placeholder="Cardholder name" />
                 </>
-              )} */}
+              )}
 
               {payment === "upi" && (
                 <>
                   <input className="input mb-0" type="text" placeholder="Enter UPI Id" />
                 </>
               )}
-            </div>
+            </div> */}
 
-            <button className="pay-btn mt-3" onClick={placeOrder}>
-              Pay / Buy Now
-            </button>
           </div>
 
           {/* RIGHT */}
@@ -285,7 +282,19 @@ const createOrderAndFinish = async (method) => {
               <h4>Order Summary</h4>
               {cart.items.map((item) => (
                 <div key={item.productId} className="summary-item">
-                  <img src={item.image?.startsWith("http") ? item.image : `https://toy-backend-fsek.onrender.com${item.image}`} alt={item.title} />
+                  <img
+                    src={
+                      item.image
+                        ? item.image.startsWith("http")
+                          ? item.image.replace(
+                            "http://localhost:9000",
+                            "https://toy-backend-fsek.onrender.com"
+                          )
+                          : `https://toy-backend-fsek.onrender.com${item.image}`
+                        : "/img/placeholder.png"
+                    }
+                    alt={item.title}
+                  />
                   <div>
                     <p>{item.title}</p>
                     <span>x{item.qty}</span>
@@ -309,6 +318,9 @@ const createOrderAndFinish = async (method) => {
                   <button className="remove-coupon-btn" onClick={removeAppliedCoupon}>Remove</button>
                 </p>
               )}
+              <button className="pay-btn mt-3" onClick={placeOrder}>
+                Pay / Buy Now
+              </button>
             </div>
           </div>
 
