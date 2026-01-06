@@ -126,7 +126,7 @@ const Addtocart = () => {
             {cart.items.length === 0 && <p>Your cart is empty</p>}
 
             {cart.items.map(item => (
-              <div className="cart-item bg-primary" key={item.productId}>
+              <div className="cart-item" key={item.productId}>
                 {/* <img src={`https://toy-backend-fsek.onrender.com${item.image}`} alt={item.title} /> */}
                 <img
                   src={
