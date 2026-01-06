@@ -127,7 +127,7 @@ const Addtocart = () => {
 
             {cart.items.map(item => (
               <div className="cart-item" key={item.productId}>
-                <img src={item.image?.startsWith("http") ? item.image : `https://toy-backend-fsek.onrender.com${item.image}`} alt={item.title} />
+                <img src={`https://toy-backend-fsek.onrender.com${item.image}`} alt={item.title} />
                 <div className="cart-info">
                   <h6>{item.title}</h6>
                   <div className="cart-actions">
