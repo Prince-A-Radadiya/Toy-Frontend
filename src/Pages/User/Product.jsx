@@ -575,7 +575,7 @@ const Product = () => {
                     return false;
                   })
                   .map((p) => (
-                    <button key={p} className={page === p ? "active" : ""} onClick={() => setPage(p)}>
+                    <button key={p} className={page === p ? "active m-0" : ""} onClick={() => setPage(p)}>
                       {p}
                     </button>
                   ))}
