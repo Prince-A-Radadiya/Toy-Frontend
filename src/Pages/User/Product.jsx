@@ -167,7 +167,7 @@ const FilterContent = ({ filters, setFilters, filterOptions, isMobile, onApply }
       {/* PRODUCT FOR */}
       <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("gender")}>
-          Product For <span>{open.gender ? "−" : "+"}</span>
+          Gender <span>{open.gender ? "−" : "+"}</span>
         </div>
         {open.gender && (
           <div className="filter-options">
@@ -228,7 +228,7 @@ const FilterContent = ({ filters, setFilters, filterOptions, isMobile, onApply }
       </div> */}
 
       {/* CONDOM TYPE */}
-      <div className="filter-dropdown">
+      {/* <div className="filter-dropdown">
         <div className="filter-title" onClick={() => toggle("condomType")}>
           Condom Type <span>{open.condomType ? "−" : "+"}</span>
         </div>
@@ -246,7 +246,7 @@ const FilterContent = ({ filters, setFilters, filterOptions, isMobile, onApply }
             ))}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* USAGE TYPE */}
       <div className="filter-dropdown">
@@ -290,6 +290,38 @@ const FilterContent = ({ filters, setFilters, filterOptions, isMobile, onApply }
         )}
       </div>
 
+      {/* RATING */}
+      <div className="filter-dropdown">
+        <div className="filter-title" onClick={() => toggle("rating")}>
+          Rating <span>{open.rating ? "−" : "+"}</span>
+        </div>
+
+        {open.rating && (
+          <div className="filter-options rating-single-line">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <FaStar
+                key={star}
+                className={`rating-star-icon ${filters.rating >= star ? "active" : ""
+                  }`}
+                onClick={() =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    rating: prev.rating === star ? null : star,
+                  }))
+                }
+              />
+            ))}
+
+            {filters.rating && (
+              <span className="rating-label">
+                &nbsp;{filters.rating} ★ & above
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+
       {isMobile && (
         <button className="apply-filter-btn" onClick={onApply}>
           Apply Filters
@@ -309,18 +341,19 @@ const Product = () => {
   const [filters, setFilters] = useState({
     gender: [],
     brand: [],
-    price: [],
-    condomType: [],
+    // price: [],
+    // condomType: [],
     usageType: [],
     suitableFor: [],
+    rating: null,
   });
 
   const filterOptions = {
     gender: [...new Set(PRODUCTS.map(p => p.gender).filter(Boolean))],
     brand: [...new Set(PRODUCTS.map(p => p.brand).filter(Boolean))],
-    condomType: [...new Set(PRODUCTS.map(p => p.condomType).filter(Boolean))],
     usageType: [...new Set(PRODUCTS.map(p => p.usageType).filter(Boolean))],
     suitableFor: [...new Set(PRODUCTS.flatMap(p => p.suitableFor || []))],
+    // condomType: [...new Set(PRODUCTS.map(p => p.condomType).filter(Boolean))],
   };
 
   const [tempFilters, setTempFilters] = useState(filters);
@@ -331,7 +364,7 @@ const Product = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    fetch("https://toy-backend-fsek.onrender.com/get-product")
+    fetch("http://localhost:9000/get-product")
       .then((res) => res.json())
       .then((data) => {
         const mapped = data.products.map((p, i) => ({
@@ -344,31 +377,34 @@ const Product = () => {
           brand: p.brand?.toLowerCase() || "",
           gender: p.gender?.toLowerCase() || "",
           usageType: p.usageType?.toLowerCase() || "",
-          condomType: p.condomType?.toLowerCase() || "thin",
 
+          // 🔑 BACKEND FIELD IS "suitable"
           suitableFor: p.suitable ? [p.suitable.toLowerCase()] : [],
 
           averageRating: p.averageRating || 0,
           ratingCount: p.ratingCount || 0,
 
-
           discount: p.oldPrice
             ? `${Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)}% Off`
             : "",
 
-          image: p.images?.[0] || require("../../Img/t1.png"),
-
+          image: p.images?.[0],
           freeLube: p.freeLube,
-
           stock: p.stock,
 
           isNew: i % 4 === 0,
           isBestSeller: i % 6 === 0,
         }));
 
+        console.log("MAPPED PRODUCTS:", mapped); // 👈 confirm once
         setPRODUCTS(mapped);
       });
   }, []);
+
+  useEffect(() => {
+    console.log("FILTER OPTIONS", filterOptions);
+  }, [PRODUCTS]);
+
 
   // Route based filtering
   const getRouteFilteredProducts = () => {
@@ -406,27 +442,38 @@ const Product = () => {
 
   // Apply filters
   const filteredProducts = routeFilteredProducts.filter((p) => {
-    const genderMatch = filters.gender.length === 0 || filters.gender.includes(p.gender);
-    const brandMatch = filters.brand.length === 0 || filters.brand.includes(p.brand);
-    const priceMatch =
-      filters.price.length === 0 ||
-      filters.price.some((r) => {
-        if (r === "Under 1000") return p.price < 1000;
-        if (r === "1000-2599") return p.price >= 1000 && p.price <= 2599;
-        if (r === "2600-5000") return p.price >= 2600 && p.price <= 5000;
-        return true;
-      });
-    const condomMatch = filters.condomType.length === 0 || filters.condomType.includes(p.condomType);
-    const usageMatch = filters.usageType.length === 0 || filters.usageType.includes(p.usageType);
+    const genderMatch =
+      filters.gender.length === 0 || filters.gender.includes(p.gender);
+
+    const brandMatch =
+      filters.brand.length === 0 || filters.brand.includes(p.brand);
+
+    const usageMatch =
+      filters.usageType.length === 0 ||
+      filters.usageType.includes(p.usageType);
+
     const suitableMatch =
       filters.suitableFor.length === 0 ||
-      (Array.isArray(p.suitableFor) && p.suitableFor.some((s) => filters.suitableFor.includes(s)));
+      p.suitableFor.some((s) => filters.suitableFor.includes(s));
+
+    const ratingMatch =
+      filters.rating === null || p.averageRating >= filters.rating;
+
     const searchMatch =
       p.title.toLowerCase().includes(search.toLowerCase()) ||
       p.brand.toLowerCase().includes(search.toLowerCase());
 
-    return genderMatch && brandMatch && priceMatch && condomMatch && usageMatch && suitableMatch && searchMatch;
+    return (
+      genderMatch &&
+      brandMatch &&
+      usageMatch &&
+      suitableMatch &&
+      ratingMatch &&
+      searchMatch
+    );
+
   });
+
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const visibleProducts = filteredProducts.slice((page - 1) * itemsPerPage, page * itemsPerPage);

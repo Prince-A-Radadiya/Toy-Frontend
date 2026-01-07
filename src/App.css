@@ -37,7 +37,7 @@
 .btn:hover {
   border: none !important;
   outline: none !important;
-  
+
 }
 
 /* ----- HEADER START ----- */
@@ -112,7 +112,7 @@ header {
 
 .c-nav-link.active {
   color: var(--col-card-bg);
-  
+
 }
 
 .navbar-toggler {
@@ -234,16 +234,17 @@ header {
   border: none;
 }
 
-header .btn{
-  border: none!important;
+header .btn {
+  border: none !important;
 }
+
 /* ===== ANIMATION ===== */
 @keyframes slideLeft {
   from {
     opacity: 0;
     transform: translate(20px, -50%);
   }
-  
+
   to {
     opacity: 1;
     transform: translate(0, -50%);
@@ -291,7 +292,7 @@ header .btn{
   border-top: 1px solid #eee;
 }
 
-.footer-logo img{
+.footer-logo img {
   height: 80px;
   width: auto;
 }
@@ -910,10 +911,14 @@ header .btn{
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--col-text2);
   background: #fff;
+  color: #000;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product .pagination button.active {
@@ -1032,9 +1037,72 @@ header .btn{
   cursor: pointer;
 }
 
-.mobile-filter{
+.mobile-filter {
   overflow-y: auto;
 }
+
+.rating-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rating-star {
+  cursor: pointer;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.rating-star svg {
+  color: #f5c518;
+  margin-right: 2px;
+}
+
+.rating-star.active {
+  font-weight: bold;
+  color: #000;
+}
+
+.rating-star:hover {
+  opacity: 0.8;
+}
+
+.rating-text {
+  font-size: 12px;
+  color: #555;
+}
+
+/* SINGLE LINE RATING */
+.rating-single-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rating-star-icon {
+  font-size: 18px;
+  color: #d1d5db;
+  /* gray */
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.rating-star-icon:hover {
+  transform: scale(1.1);
+}
+
+.rating-star-icon.active {
+  color: #f5c518;
+  /* yellow */
+}
+
+.rating-label {
+  font-size: 13px;
+  color: #555;
+}
+
 /* ----- PRODUCT END ----- */
 
 /* ----- ABOUT START ----- */
@@ -1746,7 +1814,7 @@ header .btn{
 .account-content {
   flex: 1;
   padding: 30px;
-  background-color: var(--col-bg)!important;
+  background-color: var(--col-bg) !important;
 }
 
 /* ===== ANIMATION ===== */
@@ -1759,6 +1827,7 @@ header .btn{
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1787,20 +1856,25 @@ header .btn{
   background: #fff;
   padding: 20px;
   z-index: 1001;
-  box-shadow: -5px 0 20px rgba(0,0,0,.15);
+  box-shadow: -5px 0 20px rgba(0, 0, 0, .15);
   animation: slideIn .3s ease;
 }
 
 .orders-page .drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.4);
+  background: rgba(0, 0, 0, .4);
   z-index: 1000;
 }
 
 @keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 
@@ -1839,6 +1913,7 @@ header .btn{
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1883,7 +1958,8 @@ header .btn{
   height: 90px;
   overflow: visible;
   stroke-width: 4;
-  stroke: #ef4444; /* RED */
+  stroke: #ef4444;
+  /* RED */
   stroke-miterlimit: 10;
   filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.6));
 }
@@ -1915,7 +1991,8 @@ header .btn{
 .success-title {
   font-size: 28px;
   font-weight: 700;
-  color: #ef4444; /* RED */
+  color: #ef4444;
+  /* RED */
   margin-bottom: 14px;
   text-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
 }
@@ -1980,6 +2057,7 @@ header .btn{
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -2052,7 +2130,7 @@ header .btn{
   align-items: center;
   justify-content: center;
   width: max-content;
-  padding: 4.5px 10px!important;
+  padding: 4.5px 10px !important;
 }
 
 .btn-danger {
@@ -2060,7 +2138,7 @@ header .btn{
   align-items: center;
   justify-content: center;
   width: max-content;
-  padding: 8px 10px!important;
+  padding: 8px 10px !important;
 }
 
 /* ----- WISHLIST END ----- */
@@ -2773,9 +2851,9 @@ input#switch-close:checked~.register .inner {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-      display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
 }
 
@@ -2907,9 +2985,11 @@ input#switch-close:checked~.register .inner {
   cursor: pointer;
   z-index: 10001;
 }
-.checkout .checkout-page .drawer-content{
+
+.checkout .checkout-page .drawer-content {
   padding: 0;
 }
+
 /* Overlay */
 .checkout .drawer-overlay {
   position: fixed;
@@ -3014,13 +3094,15 @@ input#switch-close:checked~.register .inner {
     align-self: flex-end;
     margin-top: -40px;
   }
-  .checkout .step{
+
+  .checkout .step {
     top: -5px;
     left: -5px;
     height: 20px;
     width: 20px;
   }
 }
+
 /* ----- CHECKOUT END ----- */
 
 
@@ -3056,8 +3138,8 @@ input#switch-close:checked~.register .inner {
   color: var(--text-main);
 }
 
-.dashboard-card .cancelled{
-  background-color: red!important;
+.dashboard-card .cancelled {
+  background-color: red !important;
 }
 
 .dashboard-card .table {
@@ -3251,8 +3333,8 @@ input#switch-close:checked~.register .inner {
   outline: none;
 }
 
-.inventory-table .btn{
-  outline: none!important;
+.inventory-table .btn {
+  outline: none !important;
   border: none;
 }
 
@@ -3673,10 +3755,10 @@ input#switch-close:checked~.register .inner {
   background: #fff;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
   z-index: 9999;
-  
+
   transform: translateX(100%);
   animation: slideInDrawer 0.35s ease forwards;
-  
+
   display: flex;
   flex-direction: column;
 }
@@ -3685,7 +3767,7 @@ input#switch-close:checked~.register .inner {
   from {
     transform: translateX(100%);
   }
-  
+
   to {
     transform: translateX(0);
   }
@@ -3848,7 +3930,7 @@ input#switch-close:checked~.register .inner {
   color: white;
 }
 
-.admin-order .btn{
+.admin-order .btn {
   outline: none;
   border: none;
 }
@@ -3887,12 +3969,15 @@ input#switch-close:checked~.register .inner {
 .stat-card.green {
   border-left: 5px solid #28a745;
 }
+
 .stat-card.blue {
   border-left: 5px solid #0d6efd;
 }
+
 .stat-card.orange {
   border-left: 5px solid #fd7e14;
 }
+
 .stat-card.red {
   border-left: 5px solid #dc3545;
 }
@@ -3932,9 +4017,9 @@ input#switch-close:checked~.register .inner {
 
 /* FILTER BUTTONS */
 .filter-btn {
-  outline: none!important;
+  outline: none !important;
   background: #f1f3f5;
-  border: none!important;
+  border: none !important;
   padding: 8px 18px;
   font-weight: 500;
   transition: all 0.25s ease;
@@ -3951,7 +4036,7 @@ input#switch-close:checked~.register .inner {
 }
 
 /* .pagination .btn{ */
-  /* border: 1px solid #007bff!important; */
+/* border: 1px solid #007bff!important; */
 /* } */
 
 @keyframes fadeIn {
@@ -3959,6 +4044,7 @@ input#switch-close:checked~.register .inner {
     opacity: 0;
     transform: translateY(5px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -3970,6 +4056,7 @@ input#switch-close:checked~.register .inner {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -4008,9 +4095,17 @@ input#switch-close:checked~.register .inner {
   background: #f1f3f5;
 }
 
-.stat-card.orange { border-left: 5px solid #fd7e14; }
-.stat-card.green { border-left: 5px solid #28a745; }
-.stat-card.purple { border-left: 5px solid #6f42c1; }
+.stat-card.orange {
+  border-left: 5px solid #fd7e14;
+}
+
+.stat-card.green {
+  border-left: 5px solid #28a745;
+}
+
+.stat-card.purple {
+  border-left: 5px solid #6f42c1;
+}
 
 /* FILTER */
 .filter-card {
@@ -4061,11 +4156,12 @@ input#switch-close:checked~.register .inner {
   animation: fadeIn 0.35s ease;
 }
 
-.returns-page .table-card .green{
-  border: 1px solid #22c55e!important;
+.returns-page .table-card .green {
+  border: 1px solid #22c55e !important;
 }
-.returns-page .table-card .red{
-  border: 1px solid #ef4444!important;
+
+.returns-page .table-card .red {
+  border: 1px solid #ef4444 !important;
 
 }
 
@@ -4074,6 +4170,7 @@ input#switch-close:checked~.register .inner {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -4085,6 +4182,7 @@ input#switch-close:checked~.register .inner {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
