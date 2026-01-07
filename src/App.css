@@ -715,10 +715,6 @@ header .btn {
   transition: transform 0.3s ease, background 0.3s ease;
 }
 
-.product .product-card:hover .card-actions {
-  transform: translateY(-4px);
-}
-
 .product .card-actions .wishlist {
   width: 42px;
   height: 42px;
