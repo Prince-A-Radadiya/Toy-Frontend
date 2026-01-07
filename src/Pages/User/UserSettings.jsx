@@ -441,7 +441,13 @@ const MyOrders = () => {
 
                   <button
                     className="btn btn-outline-secondary btn-sm me-2"
+                    disabled={order.orderStatus === "cancelled"}
                     onClick={() => downloadInvoice(order.orderId)}
+                    title={
+                      order.orderStatus === "cancelled"
+                        ? "Invoice not available for cancelled orders"
+                        : "Download Invoice"
+                    }
                   >
                     Invoice
                   </button>
