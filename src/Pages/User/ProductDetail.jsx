@@ -282,15 +282,14 @@ const ProductDetail = () => {
                     data-bs-toggle="collapse"
                     data-bs-target="#care"
                   >
-                    Safety & Care
+                    How To Use ?
                   </button>
                 </h2>
                 <div id="care" className="accordion-collapse collapse">
-                  <div className="accordion-body">
-                    Always clean before and after use. Store in a dry place.
-                  </div>
+                  <div className="accordion-body">{product.howToUse}</div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
