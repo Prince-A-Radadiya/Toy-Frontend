@@ -200,7 +200,7 @@ const Home = ({ setCartCount }) => {
                     </div>
                 </section>
 
-                <section className="offer" data-aos="fade-down-left">
+                <section className="offer" data-aos="fade-down-up">
                     <div className="container">
                         <div className="row">
                             <div className="col">
