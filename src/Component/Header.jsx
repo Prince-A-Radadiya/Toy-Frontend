@@ -120,7 +120,7 @@ const Header = ({ cartCount }) => {
 
   return (
     <header className="main-header">
-      <nav className="navbar navbar-expand-lg bg-white shadow-sm">
+      <nav className="navbar navbar-expand-lg bg-white shadow-sm p-1">
         <div className="container">
           {/* Logo */}
           <Link className="navbar-brand" to="/">
