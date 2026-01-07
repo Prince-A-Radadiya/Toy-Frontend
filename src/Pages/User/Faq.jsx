@@ -1,9 +1,22 @@
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js"; // ✅ REQUIRED
 import { FaTruck, FaLock, FaUndo, FaHeart } from "react-icons/fa";
 
 const Faq = () => {
   const [activeTopic, setActiveTopic] = useState("delivery");
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const changeTopic = (topic) => {
+    if (topic === activeTopic) return;
+
+    setIsAnimating(true);
+
+    setTimeout(() => {
+      setActiveTopic(topic);
+      setIsAnimating(false);
+    }, 300);
+  };
 
   const faqData = {
     delivery: {
@@ -72,23 +85,23 @@ Once completed, you will be redirected to the login page.`
       faqs: [
         {
           q: "How do I track my order?",
-          a: "You can check the status of your order by 1. Sign in, then go to 'My account > Order history' and then clicking the order # and then clicking the appropriate tracking link. 2. Simply click here TRACK MY ORDER and enter your email address (that you used for purchasing the order) and the order number in digits, ex: 123456, and the app would display the order status. 3. You can also click the TRACK NOW options in the 'shipping confirmation' email you received. If you haven't received an email yet, most likely your order/package has not shipped yet. 4. If none of the above work, just contact us via email and we will check in the system and get back to you with your order status."
+          a: "You can check the status of your order by signing in and navigating to My Account > Order History."
         },
         {
           q: "Will my order details be visible on the package?",
-          a: "At Toys, we ensure you that your order will arrive in a discreet manner. We value your privacy and understand that you may want to keep your purchases private. Hence, we strictly scrutinize our logistics and and shipping to ensure discretion. Your order is packaged very securely and is covered before it leaves the warehouse. There is no description or indication of the product inside and you cant feel the product either as it is boxed. Hence, you can feel at ease while shopping at Toys."
+          a: "No product or store details are mentioned on the package."
         },
         {
           q: "Is GST included in your orders?",
-          a: "Yes, while shopping at Toys, GST is included in the price of the product. That means you do not have to pay anything on top of what you see for the products."
+          a: "Yes, GST is included in the product price."
         },
         {
           q: "How does the charge appear on my bank statement?",
-          a: "Charges appear under a neutral business name for privacy."
+          a: "Charges appear under a neutral business name."
         },
         {
           q: "Is my payment information secure?",
-          a: "Yes, all payments are processed via encrypted and secure gateways."
+          a: "Yes, all payments are encrypted and secure."
         },
         {
           q: "Do you store my card details?",
@@ -108,11 +121,11 @@ Once completed, you will be redirected to the login page.`
         },
         {
           q: "What if I receive a damaged item?",
-          a: "Contact our support team within 48 hours for a replacement."
+          a: "Contact support within 48 hours."
         },
         {
           q: "How long do refunds take?",
-          a: "Approved refunds are processed within 5–7 business days."
+          a: "Refunds are processed within 5–7 business days."
         }
       ]
     },
@@ -128,15 +141,16 @@ Once completed, you will be redirected to the login page.`
         },
         {
           q: "Which lubricant should I use?",
-          a: "Water-based lubricants are recommended for best compatibility."
+          a: "Water-based lubricants are recommended."
         },
         {
           q: "How do I store it safely?",
-          a: "Store in a clean, dry place away from direct sunlight."
+          a: "Store in a clean, dry place."
         }
       ]
     }
   };
+
 
   const topic = faqData[activeTopic];
 
@@ -145,40 +159,26 @@ Once completed, you will be redirected to the login page.`
       <div className="container">
         <div className="row">
           <div className="col text-center mb-4">
-            <h1>Frequently Asked Quesion</h1>
+            <h1>Frequently Asked Question</h1>
           </div>
         </div>
+
         <div className="row">
           {/* LEFT SIDE */}
           <div className="col-lg-3 mb-4">
             <h6 className="faq__title">HELP TOPICS</h6>
 
             <ul className="list-group faq__topics">
-              <li
-                className={`list-group-item ${activeTopic === "delivery" ? "active" : ""}`}
-                onClick={() => setActiveTopic("delivery")}
-              >
+              <li className={`list-group-item ${activeTopic === "delivery" ? "active" : ""}`} onClick={() => changeTopic("delivery")}>
                 <FaTruck /> Delivery & Shipping
               </li>
-
-              <li
-                className={`list-group-item ${activeTopic === "privacy" ? "active" : ""}`}
-                onClick={() => setActiveTopic("privacy")}
-              >
+              <li className={`list-group-item ${activeTopic === "privacy" ? "active" : ""}`} onClick={() => changeTopic("privacy")}>
                 <FaLock /> Privacy & Billing
               </li>
-
-              <li
-                className={`list-group-item ${activeTopic === "returns" ? "active" : ""}`}
-                onClick={() => setActiveTopic("returns")}
-              >
+              <li className={`list-group-item ${activeTopic === "returns" ? "active" : ""}`} onClick={() => changeTopic("returns")}>
                 <FaUndo /> Returns & Refunds
               </li>
-
-              <li
-                className={`list-group-item ${activeTopic === "care" ? "active" : ""}`}
-                onClick={() => setActiveTopic("care")}
-              >
+              <li className={`list-group-item ${activeTopic === "care" ? "active" : ""}`} onClick={() => changeTopic("care")}>
                 <FaHeart /> Product Care
               </li>
             </ul>
@@ -186,40 +186,45 @@ Once completed, you will be redirected to the login page.`
 
           {/* RIGHT SIDE */}
           <div className="col-lg-9">
-            <p className="faq__breadcrumb">
-              Help Center › <span>{topic.title}</span>
-            </p>
+            <div className={`faq__content ${isAnimating ? "fade-out" : "fade-in"}`}>
+              <p className="faq__breadcrumb">
+                Help Center › <span>{topic.title}</span>
+              </p>
 
-            <h2 className="faq__heading">{topic.title}</h2>
-            <p className="faq__desc">{topic.description}</p>
+              <h2 className="faq__heading">{topic.title}</h2>
+              <p className="faq__desc">{topic.description}</p>
 
-            <div className="accordion faq__accordion" id="faqAccordion" data-aos="fade-up">
-              {topic.faqs.map((item, index) => (
-                <div className="accordion-item faq__item" key={index}>
-                  <h2 className="accordion-header">
-                    <button
-                      className="accordion-button collapsed faq__button"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target={`#faq-${activeTopic}-${index}`}
+              {/* 🔑 key FIX forces fresh accordion */}
+              <div className="accordion faq__accordion" id="faqAccordion" key={activeTopic}>
+                {topic.faqs.map((item, index) => (
+                  <div className="accordion-item faq__item" key={index}>
+                    <h2 className="accordion-header">
+                      <button
+                        className="accordion-button collapsed faq__button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#faq-${activeTopic}-${index}`}
+                      >
+                        {item.q}
+                      </button>
+                    </h2>
+
+                    {/* ❗ FIXED ID (NO #) */}
+                    <div
+                      id={`faq-${activeTopic}-${index}`}
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#faqAccordion"
                     >
-                      {item.q}
-                    </button>
-                  </h2>
-
-                  <div
-                    id={`faq-${activeTopic}-${index}`}
-                    className="accordion-collapse collapse"
-                    data-bs-parent="#faqAccordion"
-                  >
-                    <div className="accordion-body faq__body">
-                      {item.a}
+                      <div className="accordion-body faq__body">
+                        {item.a}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
 
+                  </div>
+                ))}
+              </div>
+
+            </div>
           </div>
         </div>
       </div>

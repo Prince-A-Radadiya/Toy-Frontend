@@ -1514,72 +1514,102 @@ header .btn {
   max-width: 600px;
 }
 
-/* ACCORDION */
-.faq .faq__accordion .accordion-item {
+/* ================= FAQ ACCORDION (PRODUCT DETAILS STYLE) ================= */
+
+.faq__accordion .accordion-item {
   border: none;
-  border-radius: 14px;
-  margin-bottom: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  margin-bottom: 14px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
 }
 
-.faq .faq__button {
+/* HEADER BUTTON */
+.faq__accordion .accordion-button {
+  background: #f9fafb;
   font-weight: 600;
-  border-radius: 14px !important;
+  font-size: 15px;
+  color: #111827;
+  padding: 16px 18px;
+  box-shadow: none;
+  border-radius: 12px !important;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* OPEN STATE */
+.faq__accordion .accordion-button:not(.collapsed) {
+  background: #111827;
+  color: #ffffff;
+}
+
+/* REMOVE DEFAULT BLUE FOCUS */
+.faq__accordion .accordion-button:focus {
+  box-shadow: none;
+  outline: none;
+  border: none;
+}
+
+/* ICON (ARROW) */
+.faq__accordion .accordion-button::after {
+  filter: brightness(0);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* ICON ROTATE WHEN OPEN */
+.faq__accordion .accordion-button:not(.collapsed)::after {
+  filter: brightness(10);
+  transform: rotate(180deg);
+}
+
+/* BODY */
+.faq__accordion .accordion-body {
+  padding: 18px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #4b5563;
   background: #ffffff;
 }
 
-.faq .faq__button:not(.collapsed) {
-  color: #d90429;
-  background: #fff;
+/* REMOVE BORDER BETWEEN HEADER & BODY */
+.faq__accordion .accordion-collapse {
+  border-top: none;
 }
 
-.faq .faq__body {
-  color: #4b5563;
-  line-height: 1.6;
+/* SMOOTH OPEN / CLOSE */
+.faq__accordion .accordion-collapse {
+  transition: height 0.45s ease;
 }
 
-/* MOBILE */
+/* ================= FAQ RIGHT SIDE FADE ================= */
+
+.faq__content {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.faq__content.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.faq__content.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* ================= MOBILE REFINEMENT ================= */
+
 @media (max-width: 768px) {
-  .faq .faq__heading {
-    font-size: 26px;
+  .faq__accordion .accordion-button {
+    font-size: 14px;
+    padding: 14px 16px;
+  }
+
+  .faq__accordion .accordion-body {
+    font-size: 13.5px;
   }
 }
 
-/* REMOVE BLUE BORDER & SHADOW */
-.faq .accordion-button:focus {
-  box-shadow: none;
-  outline: none;
-  border-color: transparent;
-  border: 1px solid var(--col-card-bg);
-}
-
-.faq .accordion-button:not(.collapsed) {
-  box-shadow: none;
-  background-color: #ffffff;
-}
-
-/* REMOVE BORDER AROUND ACCORDION ITEM */
-.faq .accordion-item {
-  border: none;
-}
-
-/* SMOOTH COLLAPSE ANIMATION */
-.faq .accordion-collapse {
-  transition: height 0.45s ease, opacity 0.3s ease;
-}
-
-.faq .accordion-collapse.collapse {
-  opacity: 0;
-}
-
-.faq .accordion-collapse.collapse.show {
-  opacity: 1;
-}
-
-/* BUTTON TRANSITION */
-.faq .accordion-button {
-  transition: color 0.25s ease, background-color 0.25s ease;
-}
 
 
 /* ----- FAQ END ----- */
@@ -2630,43 +2660,50 @@ input#switch-close:checked~.register .inner {
   margin-bottom: 10px;
 }
 
-.product-detail .accordion-button {
-  background-color: #f1f1f1;
-  color: #333;
+
+
+/* Custom Accordion Styling */
+.product-detail .custom-accordion .accordion-item {
+  border: none;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-.product-detail .accordion-button:focus {
+.product-detail .custom-accordion .accordion-button {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #222;
+  padding: 14px 18px;
   box-shadow: none;
-  outline: none;
+}
+
+.product-detail .custom-accordion .accordion-button:not(.collapsed) {
+  background: #212529;
+  color: #fff;
+}
+
+.product-detail .custom-accordion .accordion-button:focus {
+  box-shadow: none;
   border-color: transparent;
 }
 
-.product-detail .accordion-button:not(.collapsed) {
-  box-shadow: none;
-  background-color: #f1f1f1;
+.product-detail .custom-accordion .accordion-button::after {
+  filter: brightness(0);
 }
 
-.product-detail .accordion-item {
-  background-color: #f1f1f1 !important;
-  border: none;
+.product-detail .custom-accordion .accordion-button:not(.collapsed)::after {
+  filter: brightness(10);
 }
 
-.product-detail .accordion-collapse {
-  transition: height 0.45s ease, opacity 0.3s ease;
+.product-detail .custom-accordion .accordion-body {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.7;
+  padding: 16px 18px;
 }
-
-.product-detail .accordion-collapse.collapse {
-  opacity: 0;
-}
-
-.product-detail .accordion-collapse.collapse.show {
-  opacity: 1;
-}
-
-.faq .accordion-button {
-  transition: color 0.25s ease, background-color 0.25s ease;
-}
-
 
 /* ----- PRODUCT DETAILS END ----- */
 
@@ -3083,12 +3120,12 @@ input#switch-close:checked~.register .inner {
 
   .checkout .drawer-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-start!important;
   }
 
   .checkout .drawer-header .close-btn {
     align-self: flex-end;
-    margin-top: -40px;
+    margin-top: -32px;
   }
 
   .checkout .step {

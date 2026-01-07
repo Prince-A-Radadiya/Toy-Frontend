@@ -235,7 +235,8 @@ const ProductDetail = () => {
             </div>
 
             {/* ACCORDION */}
-            <div className="accordion mt-4" id="productAccordion">
+            <div className="accordion mt-4 custom-accordion" id="productAccordion">
+              {/* OVERVIEW */}
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button
@@ -246,11 +247,19 @@ const ProductDetail = () => {
                     Overview
                   </button>
                 </h2>
-                <div id="overview" className="accordion-collapse collapse show">
-                  <div className="accordion-body">{product.description}</div>
+
+                <div
+                  id="overview"
+                  className="accordion-collapse collapse show"
+                  data-bs-parent="#productAccordion"
+                >
+                  <div className="accordion-body">
+                    {product.description}
+                  </div>
                 </div>
               </div>
 
+              {/* FEATURES */}
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button
@@ -261,7 +270,12 @@ const ProductDetail = () => {
                     Features & Specs
                   </button>
                 </h2>
-                <div id="features" className="accordion-collapse collapse">
+
+                <div
+                  id="features"
+                  className="accordion-collapse collapse"
+                  data-bs-parent="#productAccordion"
+                >
                   <div className="accordion-body">
                     <ul>
                       <li>Brand: {product.brand}</li>
@@ -275,6 +289,7 @@ const ProductDetail = () => {
                 </div>
               </div>
 
+              {/* HOW TO USE */}
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button
@@ -285,12 +300,19 @@ const ProductDetail = () => {
                     How To Use ?
                   </button>
                 </h2>
-                <div id="care" className="accordion-collapse collapse">
-                  <div className="accordion-body">{product.howToUse}</div>
+
+                <div
+                  id="care"
+                  className="accordion-collapse collapse"
+                  data-bs-parent="#productAccordion"
+                >
+                  <div className="accordion-body">
+                    {product.howToUse}
+                  </div>
                 </div>
               </div>
-
             </div>
+
           </div>
         </div>
       </div>
