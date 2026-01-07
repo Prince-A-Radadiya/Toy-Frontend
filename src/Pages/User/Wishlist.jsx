@@ -29,22 +29,36 @@ const Wishlist = () => {
 
   const handleAddToCart = async (product) => {
     try {
-      await addToCart({
-        productId: product.id,
-        title: product.title,
-        price: product.price,
-        qty: 1,
-        image: product.image,
-      });
+      const token = localStorage.getItem("userToken");
 
-      // Remove from wishlist after adding to cart
-      await axios.delete(`https://toy-backend-fsek.onrender.com/wishlist/${product.id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("userToken")}` },
-      });
+      // ✅ ADD TO CART (backend format)
+      await axios.post(
+        "https://toy-backend-fsek.onrender.com/cart/add",
+        {
+          productId: product.id,
+          qty: 1,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
+      // ✅ REMOVE FROM WISHLIST
+      await axios.delete(
+        `https://toy-backend-fsek.onrender.com/wishlist/${product.id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // ✅ UPDATE UI
       setWishlist((prev) => prev.filter((item) => item.id !== product.id));
     } catch (err) {
-      console.error("Failed to add to cart or remove from wishlist", err);
+      console.error(
+        "Failed to add to cart",
+        err.response?.data || err.message
+      );
+      alert(err.response?.data?.message || "Failed to add to cart");
     }
   };
 
