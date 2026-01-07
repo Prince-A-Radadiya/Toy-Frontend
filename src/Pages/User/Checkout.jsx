@@ -283,16 +283,7 @@ const Checkout = () => {
               {cart.items.map((item) => (
                 <div key={item.productId} className="summary-item">
                   <img
-                    src={
-                      item.image
-                        ? item.image.startsWith("http")
-                          ? item.image.replace(
-                            "http://localhost:9000",
-                            "https://toy-backend-fsek.onrender.com"
-                          )
-                          : `https://toy-backend-fsek.onrender.com${item.image}`
-                        : "/img/placeholder.png"
-                    }
+                    src={item.image || "/img/placeholder.png"}
                     alt={item.title}
                   />
                   <div>

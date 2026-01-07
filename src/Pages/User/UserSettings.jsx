@@ -26,18 +26,10 @@ const UserSettings = () => {
     if (user) {
       setFullname(user.fullname || "");
       setEmail(user.email || "");
-      setPreview(
-        user.profile
-          ? user.profile.startsWith("http")
-            ? user.profile.replace(
-              "http://localhost:9000",
-              "https://toy-backend-fsek.onrender.com"
-            )
-            : `https://toy-backend-fsek.onrender.com${user.profile}`
-          : "/img/user.webp"
-      );
+      setPreview(user.profile || "/img/user.webp");
     }
   }, [user]);
+
 
   /* UPDATE USER */
   const handleUpdate = async (e) => {
@@ -58,12 +50,7 @@ const UserSettings = () => {
       });
 
       if (res.data.success) {
-        const updatedUser = {
-          ...res.data.user,
-          profile: res.data.user.profile.startsWith("http")
-            ? res.data.user.profile
-            : `https://toy-backend-fsek.onrender.com${res.data.user.profile}`,
-        };
+        const updatedUser = res.data.user;
 
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));

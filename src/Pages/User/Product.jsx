@@ -59,7 +59,7 @@ const ProductCard = ({ product, onAddToCart }) => {
             <span className="discount-badge text-uppercase">{product.discount}</span>
           )}
           <img
-            src={product.images?.[0] || product.image}
+            src={product.image || "/img/default-product.png"}
             alt={product.title}
             className="img-fluid"
           />
@@ -356,9 +356,7 @@ const Product = () => {
             ? `${Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)}% Off`
             : "",
 
-          image: p.images?.length
-            ? `https://toy-backend-fsek.onrender.com${p.images[0]}`
-            : require("../../Img/t1.png"),
+          image: p.images?.[0] || require("../../Img/t1.png"),
 
           freeLube: p.freeLube,
 

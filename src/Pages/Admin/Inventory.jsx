@@ -220,8 +220,8 @@ const Inventory = () => {
                                     <td>
                                         <div className="product-info">
                                             <img
-                                                src={product.images?.[0] ? `https://toy-backend-fsek.onrender.com${product.images[0]}` : "https://via.placeholder.com/40"}
-                                                alt=""
+                                                src={product.images?.[0] || "https://via.placeholder.com/40"}
+                                                alt={product.title}
                                             />
                                             <div>
                                                 <strong>{product.title}</strong>

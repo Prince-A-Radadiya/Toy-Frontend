@@ -273,13 +273,7 @@ const Header = ({ cartCount }) => {
               >
                 {user ? (
                   <img
-                    src={
-                      user.profile
-                        ? user.profile.startsWith("http")
-                          ? user.profile.replace("http://localhost:9000", BASE_URL)
-                          : `${BASE_URL}${user.profile}`
-                        : "/img/user.webp"
-                    }
+                    src={user.profile || "/img/default-user.webp"}
                     alt="profile"
                     className="rounded-circle header-profile-img"
                   />

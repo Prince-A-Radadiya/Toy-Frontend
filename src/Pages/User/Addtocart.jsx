@@ -129,14 +129,9 @@ const Addtocart = () => {
               <div className="cart-item" key={item.productId}>
                 {/* <img src={`https://toy-backend-fsek.onrender.com${item.image}`} alt={item.title} /> */}
                 <img
-                  src={
-                    item.image.startsWith("http")
-                      ? item.image.replace("http://localhost:9000", "https://toy-backend-fsek.onrender.com")
-                      : `https://toy-backend-fsek.onrender.com${item.image}`
-                  }
+                  src={item.image || "/img/default-product.png"}
                   alt={item.title}
                 />
-
                 <div className="cart-info">
                   <h6>{item.title}</h6>
                   <div className="cart-actions">

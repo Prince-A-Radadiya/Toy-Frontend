@@ -220,17 +220,9 @@ const Orders = () => {
                                                 <>
                                                     <img
                                                         src={
-                                                            item.productId?.images?.[0]
-                                                                ? item.productId.images[0].replace(
-                                                                    "http://localhost:9000",
-                                                                    "https://toy-backend-fsek.onrender.com"
-                                                                )
-                                                                : item.image
-                                                                    ? item.image.replace(
-                                                                        "http://localhost:9000",
-                                                                        "https://toy-backend-fsek.onrender.com"
-                                                                    )
-                                                                    : "https://toy-backend-fsek.onrender.com/img/default-product.png"
+                                                            item.productId?.images?.[0] ||
+                                                            item.image ||
+                                                            "/img/default-product.png"
                                                         }
                                                         alt={item.productId?.title || item.title || "Product"}
                                                         style={{ width: "50px", height: "50px", objectFit: "cover" }}

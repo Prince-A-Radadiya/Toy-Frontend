@@ -98,9 +98,6 @@ const ProductDetail = () => {
   if (loading) return <div className="text-center py-5">Loading...</div>;
   if (!product) return <div className="text-center py-5">Product not found</div>;
 
-  // Image URL helper
-  const getImageUrl = (img) =>
-    img ? `https://toy-backend-fsek.onrender.com${img}` : product.image;
 
   const handleAddToCart = () => {
     addToCart(
@@ -108,7 +105,7 @@ const ProductDetail = () => {
         id: product._id,
         title: product.title,
         price: product.price,
-        image: getImageUrl(product.images?.[0]),
+        image: product.images?.[0] || "/img/default-product.png",
       },
       qty
     );
@@ -127,7 +124,7 @@ const ProductDetail = () => {
           <div className="col-lg-6" data-aos="fade-up">
             <div className="main-image mb-3">
               <img
-                src={getImageUrl(product.images?.[activeImg])}
+                src={product.images?.[activeImg] || "/img/default-product.png"}
                 alt={product.title}
                 className="img-fluid rounded"
               />
@@ -136,16 +133,10 @@ const ProductDetail = () => {
             <div className="thumbs d-flex gap-2 flex-wrap">
               {product.images?.map((img, i) => (
                 <img
-                  key={i}
-                  src={getImageUrl(img)}
+                  src={img}
                   alt={`thumb-${i}`}
                   className={`img-thumbnail ${activeImg === i ? "border-primary" : ""}`}
-                  style={{
-                    cursor: "pointer",
-                    width: "70px",
-                    height: "70px",
-                    objectFit: "cover",
-                  }}
+                  style={{ cursor: "pointer", width: "70px", height: "70px", objectFit: "cover" }}
                   onClick={() => setActiveImg(i)}
                 />
               ))}

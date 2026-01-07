@@ -109,7 +109,11 @@ const User = () => {
                                     <tr key={u.id}>
                                         <td>
                                             <div className="d-flex align-items-center">
-                                                <img src={`https://toy-backend-fsek.onrender.com${u.img}`} alt="" className="user-img me-2" />
+                                                <img
+                                                    src={u.img || "/img/user.webp"}
+                                                    alt={u.name}
+                                                    className="user-img me-2"
+                                                />
                                                 <div>
                                                     <p className="mb-0 fw-semibold">{u.name}</p>
                                                     <small className="text-secondary">{u.email}</small>
