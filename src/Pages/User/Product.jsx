@@ -364,7 +364,7 @@ const Product = () => {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    fetch("http://localhost:9000/get-product")
+    fetch("https://toy-backend-fsek.onrender.com/get-product")
       .then((res) => res.json())
       .then((data) => {
         const mapped = data.products.map((p, i) => ({
@@ -396,14 +396,14 @@ const Product = () => {
           isBestSeller: i % 6 === 0,
         }));
 
-        console.log("MAPPED PRODUCTS:", mapped); // 👈 confirm once
+        // console.log("MAPPED PRODUCTS:", mapped); // 👈 confirm once
         setPRODUCTS(mapped);
       });
   }, []);
 
-  useEffect(() => {
-    console.log("FILTER OPTIONS", filterOptions);
-  }, [PRODUCTS]);
+  // useEffect(() => {
+  //   console.log("FILTER OPTIONS", filterOptions);
+  // }, [PRODUCTS]);
 
 
   // Route based filtering
