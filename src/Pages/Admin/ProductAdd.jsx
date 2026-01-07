@@ -106,6 +106,7 @@ const ProductAdd = () => {
             await axios.post("https://toy-backend-fsek.onrender.com/products", formData, {
                 headers: {
                     Authorization: token ? `Bearer ${token}` : "",
+                     "Content-Type": "multipart/form-data",
                 },
             });
 
